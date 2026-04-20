@@ -1,0 +1,421 @@
+[
+  {
+    "day_number": 1,
+    "phase": "Week 1: Clarity",
+    "title": "Day 1 — Lock your Niche & Service",
+    "objective": "Eliminate distraction by committing to one specific audience and one core mechanism.",
+    "tasks": [
+      "Select ONE target niche (e.g., HVAC companies, e-commerce brands under $10k/mo, med spas).",
+      "Select ONE service mechanism you will deliver (e.g., short-form TikTok editing, Meta ads, cold email setup).",
+      "Write your commitment down in the Founder OS profile and do not change it for 30 days."
+    ],
+    "success_criteria": "You can state exactly who you help and what you do in one sentence without hesitating.",
+    "ai_coaching_prompt_template": "The user selected niche: {{niche}} and service: {{service}}. Act as a strict business coach. Evaluate if this combination is profitable and specific enough. If it's too broad (like 'fitness'), ruthlessly tell them to narrow down (e.g., 'crossfit gyms in the UK').",
+    "primary_metric": "setup_completed"
+  },
+  {
+    "day_number": 2,
+    "phase": "Week 1: Clarity",
+    "title": "Day 2 — Craft Your Grand Slam Offer",
+    "objective": "Transform your generic service into a tangible, measurable result.",
+    "tasks": [
+      "Define the specific dream outcome your service delivers (e.g., '10 extra booked appointments').",
+      "Define the timeline for the outcome (e.g., 'within 30 days').",
+      "Draft a risk-reversal guarantee (e.g., 'or you don't pay')."
+    ],
+    "success_criteria": "You have a single, formulated offer statement written in the format: 'I help [niche] achieve [outcome] through [service] in [timeframe].'",
+    "ai_coaching_prompt_template": "User's niche is {{niche}}, service is {{service}}. They drafted this offer: {{user_input}}. Rewrite this offer to make it punchier, more specific, and irresistible according to Alex Hormozi's $100M Offers framework.",
+    "primary_metric": "setup_completed"
+  },
+  {
+    "day_number": 3,
+    "phase": "Week 1: Clarity",
+    "title": "Day 3 — Baseline Pricing Strategy",
+    "objective": "Establish a rigid pricing floor so you don't race to the bottom.",
+    "tasks": [
+      "Research 3 competitors to find the standard market rate for your service.",
+      "Set your minimum acceptable price for the next 30 days (do not set this lower than $500/mo or $500 flat).",
+      "Write down the exact phrase you will use to present your price on a call."
+    ],
+    "success_criteria": "You have a concrete dollar amount pricing floor established in your dashboard.",
+    "ai_coaching_prompt_template": "User wants to charge ${{price}} for {{service}} to {{niche}}. Act as a strict sales coach. Tell them if they are undercharging, and give them a script on how to confidently state a higher price on a sales call without sounding nervous.",
+    "primary_metric": "setup_completed"
+  },
+  {
+    "day_number": 4,
+    "phase": "Week 1: Clarity",
+    "title": "Day 4 — Optimize the Foundation",
+    "objective": "Ensure your primary outbound profile (Twitter, LinkedIn, or IG) looks like a business, not a personal diary.",
+    "tasks": [
+      "Change your profile bio to your exact Offer Statement from Day 2.",
+      "Update your profile picture to a clean, well-lit headshot.",
+      "Remove or archive any unprofessional personal posts that do not establish authority."
+    ],
+    "success_criteria": "If a prospect clicks your profile from a cold DM, they instantly know what you sell within 3 seconds.",
+    "ai_coaching_prompt_template": "User is optimizing their profile on {{platform}} for {{niche}}. Give them 3 strict, non-negotiable rules for how their profile must look to convert {{niche}} clients, specific to {{platform}}.",
+    "primary_metric": "setup_completed"
+  },
+  {
+    "day_number": 5,
+    "phase": "Week 1: Clarity",
+    "title": "Day 5 — Build Your Lead Pipeline",
+    "objective": "Construct the tracking mechanism you will use every day to avoid losing prospects.",
+    "tasks": [
+      "Open the Founder OS Kanban Board (or a simple Google Sheet if unavailable).",
+      "Create columns: Lead, Contacted, Replied, Call Booked, Closed.",
+      "Familiarize yourself with logging a test lead and moving it across the board."
+    ],
+    "success_criteria": "You have a functioning, empty pipeline ready to accept raw data.",
+    "ai_coaching_prompt_template": "User asserts they don't need a CRM and can 'just remember' who they DM'd. Berate this amateur mindset. Briefly explain why pipeline tracking is the only difference between hobbyists and professionals.",
+    "primary_metric": "setup_completed"
+  },
+  {
+    "day_number": 6,
+    "phase": "Week 1: Clarity",
+    "title": "Day 6 — Source the First 50 Targets",
+    "objective": "Gather a highly qualified list of businesses so you aren't hunting for leads *while* doing outreach.",
+    "tasks": [
+      "Identify the best platform to find your niche (e.g., Apollo, Instagram hashtags, Google Maps).",
+      "Scrape or manually find 50 specific companies/founders that fit your exact criteria.",
+      "Log their Name, Company, and Profile Link/Email into your Lead Pipeline."
+    ],
+    "success_criteria": "You have exactly 50 qualified target names locked into your pipeline board in the 'Lead' column.",
+    "ai_coaching_prompt_template": "User's niche is {{niche}}. Give them exactly 3 specific, tactical methods to scrape or find 50 high-quality leads for this exact niche online, step-by-step.",
+    "primary_metric": "leads_sourced"
+  },
+  {
+    "day_number": 7,
+    "phase": "Week 1: Clarity",
+    "title": "Day 7 — Draft the Cold Outreach Script",
+    "objective": "Finalize a low-friction script designed entirely to get a reply, not immediately close a deal.",
+    "tasks": [
+      "Write a one-sentence personalized hook based on the prospect's recent activity.",
+      "Write a one-sentence pitch utilizing your Offer Statement.",
+      "Write a low-friction Call to Action (e.g., 'Mind if I send over a quick video breakdown?')."
+    ],
+    "success_criteria": "You have a base, 3-sentence outreach script ready to copy-paste and slightly modify.",
+    "ai_coaching_prompt_template": "User wrote this outreach script: {{user_input}} for niche: {{niche}}. Tear it down. If it's too long, cut it. If it sounds 'salesy', rewrite it to be casual. Provide them with a finalized, 3-sentence high-converting template.",
+    "primary_metric": "setup_completed"
+  },
+  {
+    "day_number": 8,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 8 — Initiate First Contact",
+    "objective": "Break the ice and transition from planning to execution.",
+    "tasks": [
+      "Select the first 20 leads from your pipeline.",
+      "Customize the hook of your script for each of the 20 leads.",
+      "Send all 20 messages and move them to 'Contacted' in your pipeline."
+    ],
+    "success_criteria": "20 messages are physically sent and tracked.",
+    "ai_coaching_prompt_template": "User is scared to hit send on their first 20 messages. Give them a harsh reality check about volume and rejection. Tell them why their feelings do not matter to the math of business.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 9,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 9 — Feed the Machine",
+    "objective": "Build the daily habit of sourcing and sending.",
+    "tasks": [
+      "Source 20 brand new leads to replace the ones you contacted yesterday.",
+      "Add them to the pipeline.",
+      "Send 20 personalized outreaches to the next batch in your pipeline."
+    ],
+    "success_criteria": "You maintained 50 untouched leads in the pipeline and sent an additional 20 outreaches.",
+    "ai_coaching_prompt_template": "User's niche is {{niche}}. They are complaining that sourcing 20 leads took too long. Give them a workflow optimization tip (a specific tool or search parameter) to cut lead sourcing time in half.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 10,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 10 — Volume & First Follow-ups",
+    "objective": "Learn that the money is in the follow-up.",
+    "tasks": [
+      "Send 20 new outreaches to fresh leads.",
+      "Find the 20 leads from Day 8 who did not respond.",
+      "Send a 1-sentence bump message (e.g., 'Just floating this to the top of your inbox')."
+    ],
+    "success_criteria": "20 new DMs sent + 20 follow-ups executed.",
+    "ai_coaching_prompt_template": "User is afraid to follow up because they feel 'annoying'. Correct this weak mindset. Explain that business owners are busy, not ignoring them, and persistence is a requirement for respect.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 11,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 11 — The 3-Day Review",
+    "objective": "Look at the data and adjust if the script is failing.",
+    "tasks": [
+      "Calculate your Open/Reply rate from the 60 messages sent so far.",
+      "If you have 0 replies, tweak the angle of your initial hook based on the Founder OS templates.",
+      "Send 20 new outreaches using the (potentially adjusted) script."
+    ],
+    "success_criteria": "You tracked your metrics in the dashboard and completed 20 outreaches.",
+    "ai_coaching_prompt_template": "User sent 60 messages with script: {{user_input}} and got {{replies}} replies. If replies are 0, formulate a radically different angle. If replies are >0, tell them not to change anything and just keep sending.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 12,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 12 — Consistent Execution",
+    "objective": "Prove you can execute when the initial excitement fades.",
+    "tasks": [
+      "Source 20 new leads.",
+      "Follow up with the 20 leads from Day 9.",
+      "Send 20 new outreaches."
+    ],
+    "success_criteria": "All pipeline columns updated, 20 initial DMs and 20 follow-ups sent.",
+    "ai_coaching_prompt_template": "User feels bored and unmotivated today. Act as a strict coach. Tell them why motivation is a myth and discipline is the only thing separating them from the founders they watch on YouTube.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 13,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 13 — Objection Defense Setup",
+    "objective": "Prepare to handle replies without panicking or dropping leads.",
+    "tasks": [
+      "Write down the 3 most likely objections your niche will give (e.g., 'We do this in-house', 'No budget').",
+      "Draft a 1-2 sentence rebuttal for each designed to pivot to a phone call.",
+      "Send 20 new outreaches."
+    ],
+    "success_criteria": "You have an objection-handling cheat sheet ready next to your pipeline, and 20 DMs sent.",
+    "ai_coaching_prompt_template": "User expects objections from {{niche}} regarding {{service}}. Provide a high-converting rebuttal script for 'We don't have budget right now' and pivot it to booking a 10-minute discovery call.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 14,
+    "phase": "Week 2: Outreach Launch",
+    "title": "Day 14 — End of Week 2 Review",
+    "objective": "Audit your first full week of volume.",
+    "tasks": [
+      "Log your total Week 2 metrics in the metrics dashboard (DMs sent, Replies, Bookings).",
+      "Follow up with ANY lead from this week that hasn't responded to the 2nd message.",
+      "Send 20 new outreaches."
+    ],
+    "success_criteria": "A completely updated dashboard, zero leads dropped, 20 DMs sent.",
+    "ai_coaching_prompt_template": "User just logged their Week 2 metrics. Give them a brutally honest assessment of their output based on standard SaaS B2B conversion rates. Push them to increase volume next week.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 15,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 15 — Scale Up the Volume",
+    "objective": "Now that you possess the habit, increase the output by 50%.",
+    "tasks": [
+      "Source 40 new leads.",
+      "Send 30 new outreaches.",
+      "Respond to any active replies within 1 hour."
+    ],
+    "success_criteria": "30 new outreaches sent and pipeline fully updated.",
+    "ai_coaching_prompt_template": "User claims they 'don't have time' to send 30 DMs a day. Break down the math. Show them that at 3 minutes per DM, it is only 90 minutes of work. Demand they find the time.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 16,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 16 — Sales Call Preparation",
+    "objective": "Prepare the framework for your first Zoom discovery call.",
+    "tasks": [
+      "Write down a 5-step call framework (Intro, Discovery/Questions, Pitch, Objections, Close).",
+      "Draft 3 deep discovery questions specifically tailored to your niche's pain points.",
+      "Send 30 new outreaches."
+    ],
+    "success_criteria": "You have a physical document/script to look at while conducting your eventual sales call, and 30 DMs sent.",
+    "ai_coaching_prompt_template": "User needs discovery questions for {{niche}} around {{service}}. Generate 3 high-impact, emotionally compelling questions that expose the prospect's pain point and need for the user's service.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 17,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 17 — Volume & Velocity",
+    "objective": "Maintain the new output level.",
+    "tasks": [
+      "Send 30 new outreaches.",
+      "Execute follow-ups on Day 15's unresponded leads.",
+      "Update pipeline."
+    ],
+    "success_criteria": "30 outreaches + required follow-ups executed.",
+    "ai_coaching_prompt_template": "User is starting to hit the 'trough of sorrow' where excitement fades and results might still be low. Give them a harsh reminder that winners execute regardless of their emotional state.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 18,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 18 — Mock Call Rehearsal",
+    "objective": "Remove the initial panic of speaking to a prospect live.",
+    "tasks": [
+      "Record yourself reading your pitch and handling an objection for 5 minutes.",
+      "Review the recording and fix your cadence (slow down, eliminate filler words).",
+      "Send 30 new outreaches."
+    ],
+    "success_criteria": "Audio/video recorded securely, pitch adjusted, 30 DMs sent.",
+    "ai_coaching_prompt_template": "User recorded a mock call and feels awkward. Explain the concept of 'reps' to them. Provide 2 specific techniques to project authority on a Zoom call even if they are young or inexperienced.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 19,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 19 — Replenish the Funnel",
+    "objective": "Never let the pipeline dry up.",
+    "tasks": [
+      "Source 50 new qualified leads to pad out the rest of the week.",
+      "Send 30 new outreaches.",
+      "Follow up with all leads who responded previously but went ghost."
+    ],
+    "success_criteria": "Pipeline loaded with 50 leads, 30 DMs out the door.",
+    "ai_coaching_prompt_template": "User's niche is {{niche}}. Ask them to verify their lead quality. Are they messaging broke businesses? Explain how to identify high-ticket clients vs low-budget headaches just by looking at their profile/website.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 20,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 20 — Follow-Up Friday",
+    "objective": "Capitalize on people clearing out their inboxes before the weekend.",
+    "tasks": [
+      "Send a 3rd follow-up attempt to leads from Week 2 who never replied ('Going to cross you off my list...').",
+      "Send a 'Any thoughts on this?' bump to recent non-responders.",
+      "Send 30 new outreaches."
+    ],
+    "success_criteria": "Aggressive follow-up sweep completed across the entire pipeline. 30 DMs sent.",
+    "ai_coaching_prompt_template": "User doesn't want to send a 'breakup message' follow-up because it feels rude. Explain the psychology of the 'takeaway' close and give them a highly professional breakup template.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 21,
+    "phase": "Week 3: Sales Optimization",
+    "title": "Day 21 — End of Week 3 Audit",
+    "objective": "Assess if the scale-up to 30/day improved outcomes proportionally.",
+    "tasks": [
+      "Log all Week 3 metrics (Sent, Replies, Bookings).",
+      "Identify the #1 bottleneck (e.g., getting replies BUT they don't want to book a call).",
+      "Send 30 new outreaches."
+    ],
+    "success_criteria": "Metrics logged, bottleneck identified, 30 DMs sent.",
+    "ai_coaching_prompt_template": "User's bottleneck is {{user_input}} (e.g., getting replies but no bookings). Act as a strict sales strategist and give them an exact pivot mechanism to fix this specific drop-off point.",
+    "primary_metric": "calls_booked"
+  },
+  {
+    "day_number": 22,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 22 — Push to Absolute Maximum",
+    "objective": "Hit the daily volume peak required to guarantee luck.",
+    "tasks": [
+      "Source 50 new leads.",
+      "Send 40 new outreaches.",
+      "Execute all follow-ups."
+    ],
+    "success_criteria": "You hit the ceiling: 40 cold outreaches sent in one day.",
+    "ai_coaching_prompt_template": "User feels exhausted at the thought of 40 DMs. Reframe their perspective. Tell them about founders who send 150 DMs manually. Remind them why they started.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 23,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 23 — The Feedback Loop",
+    "objective": "Analyze the objections encountered so far and structurally solve them.",
+    "tasks": [
+      "Find the most common objection you've received in replies or calls.",
+      "Modify your Offer Statement or Guarantee to preemptively destroy that objection.",
+      "Send 40 new outreaches."
+    ],
+    "success_criteria": "Offer updated based on real market feedback, 40 DMs sent.",
+    "ai_coaching_prompt_template": "User's most common objection is {{user_input}}. Tell them exactly how to adjust their actual service delivery or guarantee to make this objection completely irrelevant.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 24,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 24 — Closing Technique Mastery",
+    "objective": "Prepare to ask for the money without flinching.",
+    "tasks": [
+      "Write down your exact statement to close (e.g., 'So, based on what we've covered, do you want to move forward for $X?').",
+      "Commit to remaining absolutely silent after asking that question until the prospect speaks.",
+      "Send 40 new outreaches."
+    ],
+    "success_criteria": "Close statement written, silence rule absorbed, 40 DMs sent.",
+    "ai_coaching_prompt_template": "User is afraid of the awkward silence after stating their price. Explain the psychology of silence in sales. Strict instruction: Whoever speaks first, loses.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 25,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 25 — Total Pipeline Saturation",
+    "objective": "Maximizing outbound volume.",
+    "tasks": [
+      "Source 50 new leads.",
+      "Send 40 new outreaches.",
+      "Ensure not a single pipeline lead is 'stuck' without a next defined action."
+    ],
+    "success_criteria": "Deep clean of the pipeline completed, 40 DMs sent.",
+    "ai_coaching_prompt_template": "User complains about pipeline management being boring. Tell them CRM hygiene is the hallmark of a CEO, while disorganized DMs are the hallmark of a freelancer who stays broke.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 26,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 26 — The Unbelievable Follow-Up",
+    "objective": "Use creative methods for cold leads.",
+    "tasks": [
+      "Find 5 highly qualified leads who never replied.",
+      "Record a custom 60-second Loom video for each auditing their business.",
+      "Send the video links and send 35 standard textual outreaches."
+    ],
+    "success_criteria": "5 Loom videos deployed, 35 text DMs sent. 40 total.",
+    "ai_coaching_prompt_template": "User doesn't know what to say in a Loom video for {{niche}}. Give them a 3-part framework: Hook (Why I'm making this), Value (One thing they are doing wrong I found), CTA (Let's fix it on a call).",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 27,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 27 — Volume Commitment",
+    "objective": "Treating the volume as a non-negotiable heartbeat of the business.",
+    "tasks": [
+      "Send 40 new outreaches.",
+      "Run your Follow-Up Friday sweep.",
+      "Update pipeline metrics."
+    ],
+    "success_criteria": "40 outreaches sent, follow-up sweep processed.",
+    "ai_coaching_prompt_template": "Coach the user on the compound effect. Explain that the 40 DMs sent today will likely not pay off for 2-3 weeks, and why they must trust the invisible momentum.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 28,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 28 — Pre-Launch Systematization",
+    "objective": "Document your workflow so you can stop thinking and just execute.",
+    "tasks": [
+      "Write out your exact daily schedule for Day 31+ (e.g., 9AM Source, 10AM Send, 11AM Follow up).",
+      "Send 40 new outreaches."
+    ],
+    "success_criteria": "Schedule rigidly defined on paper, 40 DMs sent.",
+    "ai_coaching_prompt_template": "User wants to 'take a break' after day 30. Destroy this concept. Tell them Day 30 is the starting line, not the finish line.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 29,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 29 — Final Push & Fulfillment Prep",
+    "objective": "Ensure you are ready to actually deliver the service when they pay.",
+    "tasks": [
+      "Draft a 1-page onboarding document or form to send to your first closed client.",
+      "Send 40 new outreaches.",
+      "Follow up with all active conversations."
+    ],
+    "success_criteria": "Onboarding doc created, 40 DMs sent.",
+    "ai_coaching_prompt_template": "User is worried they won't know how to deliver the service once a client pays. Reassure them with the 'sell first, build later' ethos. Strict instruction to focus on revenue, not hypothetical delivery issues.",
+    "primary_metric": "outreach_count"
+  },
+  {
+    "day_number": 30,
+    "phase": "Week 4: Performance Refinement",
+    "title": "Day 30 — The Graduate Review",
+    "objective": "Analyze the entirety of the 30-day sprint and graduate to operational status.",
+    "tasks": [
+      "Log your final 30-day aggregate metrics (Total Sent, Total Replies, Total Books, Total Revenue).",
+      "Acknowledge your success in completing the 30 days regardless of revenue outcome.",
+      "Send 40 new outreaches (The work doesn't stop)."
+    ],
+    "success_criteria": "Final metrics captured in Founder OS dashboard and 40 DMs sent. Graduation achieved.",
+    "ai_coaching_prompt_template": "User just finished Day 30. Look at their metrics: {{metrics}}. If revenue > 0, congratulate them highly but demand they scale. If revenue is 0, give an analytical breakdown that volume must continue for 60 more days to see the lagging ROI.",
+    "primary_metric": "revenue"
+  }
+]

@@ -20,18 +20,19 @@ export async function GET(request: Request) {
     const { data: revLogs } = await supabase.from('revenue_logs').select('amount').eq('user_id', user.id).gte('logged_at', firstDayOfMonth);
     const totalRevenue = revLogs?.reduce((acc, log) => acc + Number(log.amount), 0) || 0;
     
-    const { count: clientsClosedMonth } = await supabase.from('lead_activities').select('*', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'Closed Won').gte('created_at', firstDayOfMonth);
+    const { count: clientsClosedMonth } = await supabase.from('lead_activities').select('*', { count: 'exact', head: true }).eq('user_id', user.id).eq('activity_type', 'closed').gte('created_at', firstDayOfMonth);
     const avgDealSize = clientsClosedMonth && clientsClosedMonth > 0 ? (totalRevenue / clientsClosedMonth) : 0;
 
     // 3. Funnel Stats
     const { data: leads } = await supabase.from('leads').select('status').eq('user_id', user.id);
     const funnel = { prospects: 0, contacted: 0, replied: 0, called: 0, closed: 0 };
     leads?.forEach(l => {
-      if (l.status === 'Prospect') funnel.prospects++;
-      if (l.status === 'Contacted') funnel.contacted++;
-      if (l.status === 'Replied') funnel.replied++;
-      if (l.status === 'Call Booked') funnel.called++;
-      if (l.status === 'Closed Won') funnel.closed++;
+      const status = l.status?.toLowerCase();
+      if (status === 'lead') funnel.prospects++;
+      if (status === 'contacted') funnel.contacted++;
+      if (status === 'replied') funnel.replied++;
+      if (status === 'booked') funnel.called++;
+      if (status === 'closed') funnel.closed++;
     });
 
     // 4. Outreach Timeline

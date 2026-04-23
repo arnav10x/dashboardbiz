@@ -87,7 +87,7 @@ export default async function DashboardPage() {
         <TodayFocus
           dayTitle={dayData.title}
           phase={currentPhase}
-          objective={dayData.description}
+          objective={dayData.description || ''}
         />
         <OutreachCounter initialCount={metricsSnapshot.dmsSent} />
       </div>

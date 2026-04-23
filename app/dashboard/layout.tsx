@@ -28,9 +28,10 @@ export default async function DashboardLayout({
     .eq('user_id', user.id)
     .single();
 
-  // Safely cast generic single object
-  const dayData = progress?.roadmap_days as any;
-  const dayNumber = dayData?.day_number || 1;
+  // Handle Supabase potentially returning roadmap_days as an array or object
+  const rawDayData = progress?.roadmap_days;
+  const dayData = Array.isArray(rawDayData) ? rawDayData[0] : rawDayData;
+  const dayNumber = (dayData as any)?.day_number || 1;
   const streak = 0; // Fixed until daily task streaks are wired up
 
   return (

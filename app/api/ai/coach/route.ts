@@ -66,10 +66,9 @@ export async function POST() {
 
     const metrics = (snapshots || []).reduce((acc, snap) => ({
       dmsSent: acc.dmsSent + (snap.dms_sent || 0),
-      repliesReceived: acc.repliesReceived + (snap.replies_received || 0),
       callsBooked: acc.callsBooked + (snap.calls_booked || 0),
       clientsClosed: acc.clientsClosed + (snap.clients_closed || 0),
-    }), { dmsSent: 0, repliesReceived: 0, callsBooked: 0, clientsClosed: 0 });
+    }), { dmsSent: 0, callsBooked: 0, clientsClosed: 0 });
 
     // Progress
     const { data: progress } = await supabase

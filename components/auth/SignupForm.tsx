@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { createClient } from "@/lib/supabase/client"
 
 const signupSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
@@ -17,7 +16,6 @@ type FormData = z.infer<typeof signupSchema>
 
 export function SignupForm() {
   const router = useRouter()
-  const supabase = createClient()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [serverError, setServerError] = React.useState<string | null>(null)
 
@@ -33,23 +31,23 @@ export function SignupForm() {
     setIsLoading(true)
     setServerError(null)
 
-    const { error } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-      options: {
-        data: {
-          full_name: data.fullName,
-        },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
-      },
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+        fullName: data.fullName,
+      }),
     })
 
-    if (error) {
+    const result = await response.json()
+
+    if (!response.ok) {
       setIsLoading(false)
-      return setServerError(error.message)
+      return setServerError(result.error)
     }
 
-    // Redirect to confirmation info page rather than unprotected onboarding
     router.push("/confirm")
     router.refresh()
   }

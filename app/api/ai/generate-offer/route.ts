@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { openai } from '@/lib/openai';
+import { getOpenAI } from '@/lib/openai';
 import { createClient } from '@/lib/supabase/server';
 
 export async function POST(request: Request) {
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
 
     const { service, niche, result, price } = await request.json();
 
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         {

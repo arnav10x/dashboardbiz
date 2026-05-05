@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { openai } from '@/lib/openai';
+import { getOpenAI } from '@/lib/openai';
 import { COACH_SYSTEM_PROMPT, buildCoachUserPrompt, CoachContext } from '@/lib/ai/coach-prompts';
 
 export async function GET() {
@@ -89,7 +89,7 @@ export async function POST() {
     };
 
     // 3. Call OpenAI
-    const completion = await openai.chat.completions.create({
+    const completion = await getOpenAI().chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: COACH_SYSTEM_PROMPT },

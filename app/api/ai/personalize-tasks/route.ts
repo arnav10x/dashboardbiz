@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { openai } from '@/lib/openai';
+import { getOpenAI } from '@/lib/openai';
 
 export async function POST(request: Request) {
   try {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
     // 2. Map and Parallelize OpenAI Calls
     const personalizedTasks = await Promise.all(tasks.map(async (task: any) => {
-      const completion = await openai.chat.completions.create({
+      const completion = await getOpenAI().chat.completions.create({
         model: "llama-3.3-70b-versatile",
         messages: [
           {

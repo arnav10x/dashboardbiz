@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     // 2. Map and Parallelize OpenAI Calls
     const personalizedTasks = await Promise.all(tasks.map(async (task: any) => {
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "llama-3.3-70b-versatile",
         messages: [
           {
             role: "system",

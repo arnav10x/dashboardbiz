@@ -90,7 +90,7 @@ export async function POST() {
 
     // 3. Call OpenAI
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: COACH_SYSTEM_PROMPT },
         { role: "user", content: buildCoachUserPrompt(context) }

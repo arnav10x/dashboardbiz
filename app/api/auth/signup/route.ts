@@ -2,15 +2,13 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function POST(request: Request) {
   const { email, password, fullName } = await request.json()
+
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
 
   const { data, error } = await supabaseAdmin.auth.admin.generateLink({
     type: 'signup',
@@ -26,6 +24,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 400 })
   }
 
+  const resend = new Resend(process.env.RESEND_API_KEY)
   const confirmationUrl = data.properties.action_link
 
   const { error: emailError } = await resend.emails.send({

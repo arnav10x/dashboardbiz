@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import { createClient } from "@/lib/supabase/client"
 
 const signupSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
@@ -16,6 +17,7 @@ type FormData = z.infer<typeof signupSchema>
 
 export function SignupForm() {
   const router = useRouter()
+  const supabase = createClient()
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [serverError, setServerError] = React.useState<string | null>(null)
 
@@ -31,24 +33,20 @@ export function SignupForm() {
     setIsLoading(true)
     setServerError(null)
 
-    const response = await fetch('/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-        fullName: data.fullName,
-      }),
+    const { error } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
+      options: {
+        data: { full_name: data.fullName },
+      },
     })
 
-    const result = await response.json()
-
-    if (!response.ok) {
+    if (error) {
       setIsLoading(false)
-      return setServerError(result.error)
+      return setServerError(error.message)
     }
 
-    router.push("/confirm")
+    router.push("/onboarding")
     router.refresh()
   }
 

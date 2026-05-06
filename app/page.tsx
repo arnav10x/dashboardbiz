@@ -182,7 +182,7 @@ export default function LandingPage() {
               {
                 num: '01',
                 title: 'Everyone has the idea.',
-                body: 'Nobody has the system. Watching another tutorial won't build your agency. Consistent daily action will.',
+                body: "Nobody has the system. Watching another tutorial won't build your agency. Consistent daily action will.",
               },
               {
                 num: '02',
@@ -192,7 +192,7 @@ export default function LandingPage() {
               {
                 num: '03',
                 title: 'ChatGPT builds things.',
-                body: 'It can't get you clients. A perfect service means nothing if you aren't doing the boring work to sell it.',
+                body: "It can't get you clients. A perfect service means nothing if you aren't doing the boring work to sell it.",
               },
             ].map((item) => (
               <div

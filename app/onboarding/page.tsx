@@ -26,14 +26,9 @@ export default function OnboardingPage() {
 
   const handleComplete = async (offerStatement: string) => {
     const finalData = { ...data, offerStatement } as OnboardingData
-    try {
-      await completeOnboarding(finalData)
-      router.push("/dashboard")
-      router.refresh()
-    } catch (e) {
-      console.error(e)
-      alert("Failed to save profile. Please try again.")
-    }
+    await completeOnboarding(finalData)
+    router.push("/dashboard")
+    router.refresh()
   }
 
   return (

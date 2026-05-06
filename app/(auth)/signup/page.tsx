@@ -1,6 +1,8 @@
 import { SignupForm } from '@/components/auth/SignupForm'
 import { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Sign Up | Founder OS',
   description: 'Start your 30-day journey to your first paying clients.',

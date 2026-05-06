@@ -1,6 +1,8 @@
 import { LoginForm } from '@/components/auth/LoginForm'
 import { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Login | Founder OS',
   description: 'Log into your Founder OS dashboard.',

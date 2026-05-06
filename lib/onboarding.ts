@@ -11,21 +11,21 @@ export async function completeOnboarding(data: OnboardingData) {
     throw new Error('Unauthorized');
   }
 
-  // 1. Insert into business_profiles
-  const { error: profileError } = await supabase.from('business_profiles').insert({
+  // 1. Upsert into business_profiles (handles retries / back-navigation)
+  const { error: profileError } = await supabase.from('business_profiles').upsert({
     user_id: user.id,
     niche: data.niche,
     service: data.service,
     offer_statement: data.offerStatement,
     price: data.price,
     monthly_goal: data.monthlyGoal,
-  });
+  }, { onConflict: 'user_id' });
 
   if (profileError) {
     throw new Error(profileError.message);
   }
 
-  // 2. Initialize roadmap day 1 (Assuming seed data is present, gracefully fail if not but continue onboarding)
+  // 2. Initialize roadmap day 1
   const { data: day1 } = await supabase
     .from('roadmap_days')
     .select('id')
@@ -33,10 +33,10 @@ export async function completeOnboarding(data: OnboardingData) {
     .single();
 
   if (day1) {
-    await supabase.from('user_progress').insert({
+    await supabase.from('user_progress').upsert({
       user_id: user.id,
       current_roadmap_day_id: day1.id,
-    });
+    }, { onConflict: 'user_id' });
   }
 
   return { success: true };

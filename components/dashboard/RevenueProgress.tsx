@@ -1,39 +1,37 @@
-export function RevenueProgress({ currentRevenue, goalRevenue }: { currentRevenue: number, goalRevenue: number }) {
+export function RevenueProgress({
+  currentRevenue,
+  goalRevenue,
+}: {
+  currentRevenue: number;
+  goalRevenue: number;
+}) {
   const percentage = Math.min((currentRevenue / goalRevenue) * 100, 100);
   const remaining = goalRevenue - currentRevenue;
 
   return (
-    <div className="bg-[#18181b] border border-zinc-800 rounded-lg p-6 flex flex-col justify-between">
-      <div className="flex justify-between items-end mb-6">
-        <div>
-          <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-2">Monthly Target</h3>
-          <p className="text-3xl font-bold text-white font-mono">
-            ${currentRevenue.toLocaleString()} 
-            <span className="text-base text-zinc-500 font-sans font-medium ml-1">/ ${goalRevenue.toLocaleString()}</span>
-          </p>
-        </div>
-        <div className="text-right">
-          {remaining > 0 ? (
-            <div className="text-sm font-medium text-zinc-400 bg-zinc-900/50 border border-zinc-800 px-3 py-1.5 rounded-md inline-block">
-              <span className="text-indigo-400 font-bold">${remaining.toLocaleString()}</span> away
-            </div>
-          ) : (
-            <div className="text-sm font-bold text-emerald-400 bg-emerald-950/30 border border-emerald-900/50 px-3 py-1.5 rounded-md inline-block">
-              Goal Achieved! 🏆
-            </div>
-          )}
-        </div>
+    <div className="bg-white/[0.02] border border-white/[0.07] rounded-2xl p-6">
+      <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.15em] mb-4">Monthly Target</p>
+      <div className="flex justify-between items-end mb-5">
+        <p className="text-2xl font-bold text-white font-mono">
+          ${currentRevenue.toLocaleString()}
+          <span className="text-sm text-zinc-600 font-sans font-normal ml-1.5">/ ${goalRevenue.toLocaleString()}</span>
+        </p>
+        {remaining > 0 ? (
+          <span className="text-xs font-medium text-zinc-500">
+            <span className="text-emerald-400 font-bold">${remaining.toLocaleString()}</span> to go
+          </span>
+        ) : (
+          <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg">
+            Goal hit ✓
+          </span>
+        )}
       </div>
-      
-      <div className="h-4 w-full bg-[#09090b] rounded-full overflow-hidden border border-zinc-800">
-        <div 
-          className="h-full bg-indigo-500 relative transition-all duration-1000 ease-in-out"
-          style={{ width: `${Math.max(percentage, 2)}%` }}
-        >
-          {percentage > 5 && (
-             <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.15)25%,transparent_25%,transparent_50%,rgba(255,255,255,0.15)_50%,rgba(255,255,255,0.15)_75%,transparent_75%,transparent)] bg-[length:1rem_1rem] opacity-50" />
-          )}
-        </div>
+
+      <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
+        <div
+          className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-in-out shadow-[0_0_8px_#10b981]"
+          style={{ width: `${Math.max(percentage, 1)}%` }}
+        />
       </div>
     </div>
   );

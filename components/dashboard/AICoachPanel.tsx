@@ -1,7 +1,7 @@
 "use client"
 import * as React from 'react';
 import { CoachRecommendationCard, RecommendationType } from './CoachRecommendationCard';
-import { Sparkles, RefreshCcw, Loader2, AlertCircle, Quote } from 'lucide-react';
+import { Sparkles, RefreshCcw, Loader2, AlertCircle } from 'lucide-react';
 
 interface Recommendation {
   type: RecommendationType;
@@ -35,7 +35,6 @@ export function AICoachPanel() {
       const data = await res.json();
 
       if (data.needsRegeneration) {
-        // Automatically trigger first generation if cache empty
         await fetchReport(true);
         return;
       }
@@ -58,10 +57,7 @@ export function AICoachPanel() {
 
   const timeAgoLabel = React.useMemo(() => {
     if (!generatedAt) return '';
-    const now = new Date();
-    const then = new Date(generatedAt);
-    const diffMins = Math.floor((now.getTime() - then.getTime()) / (1000 * 60));
-    
+    const diffMins = Math.floor((Date.now() - new Date(generatedAt).getTime()) / 60000);
     if (diffMins < 60) return `${diffMins}m ago`;
     const diffHours = Math.floor(diffMins / 60);
     if (diffHours < 24) return `${diffHours}h ago`;
@@ -70,11 +66,11 @@ export function AICoachPanel() {
 
   if (loading) {
     return (
-      <div className="bg-[#18181b] border border-zinc-800 rounded-xl p-8 flex flex-col items-center justify-center space-y-4 min-h-[400px]">
-        <Loader2 className="h-8 w-8 text-indigo-500 animate-spin" />
-        <div className="text-center space-y-2">
-          <p className="text-sm font-bold text-white tracking-tight">Consulting AI Performance Coach...</p>
-          <p className="text-xs text-zinc-500 max-w-[200px]">Analyzing 7 days of raw outreach data and your business offer.</p>
+      <div className="bg-white/[0.02] border border-white/[0.07] rounded-2xl p-10 flex flex-col items-center justify-center gap-4 min-h-[320px]">
+        <Loader2 className="h-7 w-7 text-emerald-500 animate-spin" />
+        <div className="text-center">
+          <p className="text-sm font-semibold text-white mb-1">Consulting AI Coach...</p>
+          <p className="text-xs text-zinc-600 max-w-[180px]">Analyzing your outreach data and offer.</p>
         </div>
       </div>
     );
@@ -82,15 +78,15 @@ export function AICoachPanel() {
 
   if (error) {
     return (
-      <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-6 flex items-start gap-4">
-        <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+      <div className="bg-red-500/[0.05] border border-red-500/20 rounded-2xl p-6 flex items-start gap-4">
+        <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
         <div className="space-y-3">
-          <p className="text-sm text-red-200 font-medium">{error}</p>
-          <button 
+          <p className="text-sm text-red-300 font-medium">{error}</p>
+          <button
             onClick={() => fetchReport(true)}
-            className="text-xs font-bold text-white bg-red-500/20 px-3 py-1.5 rounded hover:bg-red-500/30 transition-colors uppercase tracking-widest"
+            className="text-[10px] font-bold text-white bg-red-500/20 px-3 py-1.5 rounded-lg hover:bg-red-500/30 transition-colors uppercase tracking-widest"
           >
-            Retry Connection
+            Retry
           </button>
         </div>
       </div>
@@ -98,54 +94,47 @@ export function AICoachPanel() {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700">
-      
-      {/* Header Widget */}
-      <div className="bg-gradient-to-br from-indigo-900/40 to-[#09090b] border border-indigo-500/20 rounded-xl p-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-           <Quote className="h-24 w-24 text-white" />
-        </div>
-        
+    <div className="space-y-5 animate-in fade-in duration-700">
+      {/* Header */}
+      <div className="bg-white/[0.02] border border-white/[0.07] rounded-2xl p-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-emerald-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-indigo-400" />
-            <h2 className="text-xl font-bold text-white tracking-tight italic">Brutal Accountability</h2>
+          <div className="flex items-center gap-2.5">
+            <div className="h-7 w-7 bg-emerald-500/10 border border-emerald-500/20 rounded-lg flex items-center justify-center">
+              <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+            </div>
+            <h2 className="text-base font-bold text-white">Brutal Accountability</h2>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-              Last Analysis: {timeAgoLabel}
-            </span>
-            <button 
+            <span className="text-[10px] font-medium text-zinc-600 hidden sm:block">{timeAgoLabel}</span>
+            <button
               onClick={() => fetchReport(true)}
               disabled={regenerating}
-              className="p-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-md transition-all active:scale-95 disabled:opacity-50"
-              title="Regenerate Report"
+              className="p-2 bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.06] text-zinc-400 rounded-lg transition-all active:scale-95 disabled:opacity-40"
+              title="Regenerate"
             >
-              <RefreshCcw className={`h-4 w-4 ${regenerating ? 'animate-spin' : ''}`} />
+              <RefreshCcw className={`h-3.5 w-3.5 ${regenerating ? 'animate-spin' : ''}`} />
             </button>
           </div>
         </div>
 
         <div className="space-y-4 relative z-10">
-          <div className="space-y-1">
-             <span className="text-[10px] uppercase font-bold text-indigo-400 tracking-widest">Performance Summary</span>
-             <p className="text-lg font-medium text-white leading-relaxed">
-               {report?.performance_summary}
-             </p>
+          <div>
+            <p className="text-[9px] uppercase font-bold text-emerald-400 tracking-[0.15em] mb-2">Performance Summary</p>
+            <p className="text-base font-medium text-white leading-relaxed">{report?.performance_summary}</p>
           </div>
-          <div className="bg-[#09090b]/60 border border-zinc-800/80 p-4 rounded-lg">
-             <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest block mb-1">Primary ROI Lever</span>
-             <p className="text-sm font-bold text-zinc-200">
-               {report?.primary_issue}
-             </p>
+          <div className="bg-black/40 border border-white/[0.06] p-4 rounded-xl">
+            <p className="text-[9px] uppercase font-bold text-zinc-600 tracking-[0.15em] mb-1.5">Primary ROI Lever</p>
+            <p className="text-sm font-semibold text-zinc-200">{report?.primary_issue}</p>
           </div>
         </div>
       </div>
 
-      {/* Recommendations Grid */}
+      {/* Recommendations */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {report?.recommendations.map((rec, i) => (
-          <CoachRecommendationCard 
+          <CoachRecommendationCard
             key={i}
             type={rec.type}
             diagnosis={rec.diagnosis}
@@ -155,7 +144,6 @@ export function AICoachPanel() {
           />
         ))}
       </div>
-
     </div>
   );
 }

@@ -35,7 +35,7 @@ export default async function DashboardLayout({
   const streak = 0; // Fixed until daily task streaks are wired up
 
   return (
-    <div className="flex h-screen bg-[#09090b] overflow-hidden text-[#fafafa] font-sans selection:bg-indigo-500/30">
+    <div className="flex h-screen bg-[#050505] overflow-hidden text-[#fafafa] font-sans selection:bg-emerald-500/20">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <TopBar dayNumber={dayNumber} streak={streak} />

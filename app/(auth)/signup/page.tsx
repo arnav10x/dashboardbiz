@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function SignupPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[#09090b] px-4 py-12 text-[#fafafa]">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#050505] px-4 py-12 text-[#fafafa]">
       <div className="mx-auto w-full max-w-[400px] space-y-6">
         <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-3xl font-bold tracking-tight">Founder OS</h1>

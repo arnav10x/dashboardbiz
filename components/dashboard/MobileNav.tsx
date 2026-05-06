@@ -10,12 +10,16 @@ export function MobileNav() {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 w-full bg-[#09090b] border-t border-zinc-800 z-50 padding-safe-bottom">
-      <div className="flex items-center justify-around p-3">
+    <div className="md:hidden fixed bottom-0 w-full bg-[#050505]/95 backdrop-blur-xl border-t border-white/[0.06] z-50">
+      <div className="flex items-center justify-around p-3 pb-safe">
         {navItems.map((item) => (
-          <Link key={item.name} href={item.href} className="flex flex-col items-center gap-1 text-zinc-400 hover:text-indigo-400 transition-colors">
+          <Link
+            key={item.name}
+            href={item.href}
+            className="flex flex-col items-center gap-1 text-zinc-600 hover:text-emerald-400 transition-colors"
+          >
             <item.icon className="h-5 w-5" />
-            <span className="text-[10px] font-medium">{item.name}</span>
+            <span className="text-[9px] font-semibold tracking-wide">{item.name}</span>
           </Link>
         ))}
       </div>

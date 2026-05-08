@@ -1,10 +1,11 @@
 import Link from 'next/link';
-import { Home, CheckSquare, Users, TrendingUp, Award, Zap } from 'lucide-react';
+import { Home, CheckSquare, Users, TrendingUp, Award, Zap, CalendarDays } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: "Today's Tasks", href: '/dashboard/tasks', icon: CheckSquare },
   { name: 'Lead Tracker', href: '/dashboard/leads', icon: Users },
+  { name: 'Calendar', href: '/dashboard/calendar', icon: CalendarDays },
   { name: 'Progress', href: '/dashboard/progress', icon: TrendingUp },
   { name: 'Achievements', href: '/dashboard/achievements', icon: Award },
 ];

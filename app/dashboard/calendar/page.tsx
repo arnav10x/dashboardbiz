@@ -1,10 +1,21 @@
 "use client"
 import * as React from 'react';
 import {
-  ChevronLeft, ChevronRight, Plus, X, Calendar, Phone,
-  RefreshCcw, AlertTriangle, CheckCircle2, Loader2, Trash2,
-  ExternalLink, MapPin, AlignLeft, Link2, Clock,
+  ChevronLeft, ChevronRight, Plus, X, Calendar,
+  RefreshCcw, AlertTriangle, Loader2, Trash2,
+  ExternalLink, MapPin, AlignLeft, Link2, Clock, Settings,
 } from 'lucide-react';
+
+function GoogleIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+    </svg>
+  );
+}
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -438,6 +449,8 @@ export default function CalendarPage() {
   const [showModal, setShowModal] = React.useState(false);
   const [editingEvent, setEditingEvent] = React.useState<CalEvent | undefined>();
   const [modalDate, setModalDate] = React.useState<Date | undefined>();
+  const [showGoogleSetup, setShowGoogleSetup] = React.useState(false);
+  const [googleError, setGoogleError] = React.useState<string | null>(null);
 
   // Handle Google OAuth return params
   React.useEffect(() => {
@@ -448,6 +461,7 @@ export default function CalendarPage() {
       fetchGoogleEvents();
     }
     if (params.get('google_error')) {
+      setGoogleError(decodeURIComponent(params.get('google_error')!));
       window.history.replaceState({}, '', '/dashboard/calendar');
     }
   }, []);
@@ -562,31 +576,34 @@ export default function CalendarPage() {
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           {/* Google Calendar connect */}
-          {googleStatus && (
-            googleStatus.connected ? (
-              <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] border border-white/[0.06] rounded-xl">
-                <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                <span className="text-[10px] text-zinc-400">Google Calendar synced</span>
-                <button onClick={disconnectGoogle} className="text-[9px] text-zinc-600 hover:text-red-400 transition-colors ml-1">
-                  Disconnect
-                </button>
-                <button onClick={fetchGoogleEvents} disabled={googleLoading} className="text-zinc-600 hover:text-zinc-300 transition-colors disabled:opacity-40">
-                  <RefreshCcw className={`h-3 w-3 ${googleLoading ? 'animate-spin' : ''}`} />
-                </button>
-              </div>
-            ) : googleStatus.configured ? (
-              <a
-                href="/api/calendar/google/auth"
-                className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] rounded-xl text-[10px] text-zinc-400 hover:text-white transition-all"
-              >
-                <ExternalLink className="h-3 w-3" />
-                Connect Google Calendar
-              </a>
-            ) : (
-              <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] border border-white/[0.06] rounded-xl">
-                <span className="text-[10px] text-zinc-600">Google Calendar (not configured)</span>
-              </div>
-            )
+          {googleStatus?.connected ? (
+            <div className="flex items-center gap-2 px-3 py-2 bg-white/[0.02] border border-white/[0.06] rounded-xl">
+              <GoogleIcon />
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              <span className="text-[10px] text-zinc-400">Google Calendar synced</span>
+              <button onClick={fetchGoogleEvents} disabled={googleLoading} className="text-zinc-600 hover:text-zinc-300 transition-colors disabled:opacity-40 ml-1">
+                <RefreshCcw className={`h-3 w-3 ${googleLoading ? 'animate-spin' : ''}`} />
+              </button>
+              <button onClick={disconnectGoogle} className="text-[9px] text-zinc-600 hover:text-red-400 transition-colors">
+                Disconnect
+              </button>
+            </div>
+          ) : googleStatus?.configured ? (
+            <a
+              href="/api/calendar/google/auth"
+              className="flex items-center gap-2 px-3 py-2 bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.16] rounded-xl text-[10px] text-zinc-300 hover:text-white transition-all cursor-pointer"
+            >
+              <GoogleIcon />
+              Connect Google Calendar
+            </a>
+          ) : (
+            <button
+              onClick={() => setShowGoogleSetup(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-white/[0.03] border border-white/[0.08] hover:border-white/[0.16] rounded-xl text-[10px] text-zinc-300 hover:text-white transition-all cursor-pointer"
+            >
+              <GoogleIcon />
+              Connect Google Calendar
+            </button>
           )}
 
           <button
@@ -795,6 +812,87 @@ export default function CalendarPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Google OAuth error banner ── */}
+      {googleError && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3 bg-red-500/10 border border-red-500/30 rounded-2xl shadow-2xl">
+          <AlertTriangle className="h-4 w-4 text-red-400 flex-shrink-0" />
+          <p className="text-xs text-red-300">{googleError}</p>
+          <button onClick={() => setGoogleError(null)} className="text-red-500 hover:text-red-300 transition-colors ml-1">
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
+
+      {/* ── Google Setup Modal ── */}
+      {showGoogleSetup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setShowGoogleSetup(false)}>
+          <div className="bg-[#0d0d0d] border border-white/[0.08] rounded-2xl w-full max-w-lg shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06]">
+              <div className="flex items-center gap-2.5">
+                <GoogleIcon />
+                <p className="font-bold text-white text-sm">Connect Google Calendar</p>
+              </div>
+              <button onClick={() => setShowGoogleSetup(false)} className="text-zinc-600 hover:text-zinc-300 transition-colors">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="px-6 py-5 space-y-5">
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                To sync Google Calendar events, add your Google OAuth credentials to your environment variables. Follow these steps:
+              </p>
+              <ol className="space-y-4">
+                {[
+                  { n: 1, title: 'Go to Google Cloud Console', body: 'Visit console.cloud.google.com → Create a new project (or select an existing one).' },
+                  { n: 2, title: 'Enable Google Calendar API', body: 'APIs & Services → Library → search "Google Calendar API" → Enable.' },
+                  { n: 3, title: 'Create OAuth credentials', body: 'APIs & Services → Credentials → Create Credentials → OAuth 2.0 Client ID → Web application.' },
+                  { n: 4, title: 'Set the redirect URI', body: null },
+                  { n: 5, title: 'Add credentials to your environment', body: null },
+                ].map(step => (
+                  <li key={step.n} className="flex gap-3">
+                    <span className="h-5 w-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                      {step.n}
+                    </span>
+                    <div className="space-y-1.5 flex-1">
+                      <p className="text-[11px] font-semibold text-zinc-200">{step.title}</p>
+                      {step.n === 4 && (
+                        <>
+                          <p className="text-[11px] text-zinc-500">Under "Authorized redirect URIs" add:</p>
+                          <code className="block text-[10px] bg-white/[0.04] border border-white/[0.06] px-3 py-2 rounded-lg text-emerald-400 break-all">
+                            {typeof window !== 'undefined' ? window.location.origin : 'https://your-domain.com'}/api/calendar/google/callback
+                          </code>
+                        </>
+                      )}
+                      {step.n === 5 && (
+                        <>
+                          <p className="text-[11px] text-zinc-500">Add to your <code className="text-zinc-300">.env.local</code> and Vercel environment variables:</p>
+                          <div className="bg-white/[0.04] border border-white/[0.06] rounded-lg px-3 py-2.5 space-y-1">
+                            <code className="block text-[10px] text-zinc-300">GOOGLE_CLIENT_ID=<span className="text-zinc-600">your_client_id_here</span></code>
+                            <code className="block text-[10px] text-zinc-300">GOOGLE_CLIENT_SECRET=<span className="text-zinc-600">your_client_secret_here</span></code>
+                          </div>
+                          <p className="text-[10px] text-zinc-600">Then redeploy (or restart dev server) and the Connect button will work.</p>
+                        </>
+                      )}
+                      {step.body && <p className="text-[11px] text-zinc-500 leading-relaxed">{step.body}</p>}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+              <div className="flex justify-end pt-1">
+                <a
+                  href="https://console.cloud.google.com/apis/credentials"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-xl transition-all"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" />
+                  Open Google Cloud Console
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Event Modal ── */}
       {showModal && (

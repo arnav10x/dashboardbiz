@@ -45,8 +45,8 @@ export function Sidebar() {
       {/* Logo */}
       <div className="px-4 py-5 border-b" style={{ borderColor: 'var(--border)' }}>
         <Link href="/dashboard" className="flex items-center gap-2.5 group">
-          <div className="h-8 w-8 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-500/20 transition-colors">
-            <Zap className="h-4 w-4 text-emerald-500" />
+          <div className="h-8 w-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors" style={{ background: 'var(--accent-muted)', border: '1px solid var(--accent-border)' }}>
+            <Zap className="h-4 w-4" style={{ color: 'var(--accent)' }} />
           </div>
           <div>
             <p className="text-sm font-bold leading-none" style={{ color: 'var(--text-primary)' }}>Founder OS</p>
@@ -69,16 +69,15 @@ export function Sidebar() {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                      active
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                        : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.04]'
-                    }`}
-                    style={active ? undefined : { color: 'var(--text-secondary)' }}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:opacity-90"
+                    style={active
+                      ? { background: 'var(--accent-muted)', color: 'var(--accent)' }
+                      : { color: 'var(--text-secondary)' }
+                    }
                   >
-                    <item.icon className={`h-4 w-4 flex-shrink-0 ${active ? 'text-emerald-500' : ''}`} />
+                    <item.icon className="h-4 w-4 flex-shrink-0" />
                     <span className="truncate">{item.name}</span>
-                    {active && <div className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500 flex-shrink-0" />}
+                    {active && <div className="ml-auto h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--accent)' }} />}
                   </Link>
                 );
               })}
@@ -91,16 +90,15 @@ export function Sidebar() {
       <div className="px-3 py-4 border-t" style={{ borderColor: 'var(--border)' }}>
         <Link
           href="/dashboard/settings"
-          className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-            isActive('/dashboard/settings')
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-              : 'hover:bg-black/[0.04] dark:hover:bg-white/[0.04]'
-          }`}
-          style={isActive('/dashboard/settings') ? undefined : { color: 'var(--text-secondary)' }}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all hover:opacity-90"
+          style={isActive('/dashboard/settings')
+            ? { background: 'var(--accent-muted)', color: 'var(--accent)' }
+            : { color: 'var(--text-secondary)' }
+          }
         >
-          <Settings className={`h-4 w-4 flex-shrink-0 ${isActive('/dashboard/settings') ? 'text-emerald-500' : ''}`} />
+          <Settings className="h-4 w-4 flex-shrink-0" />
           <span>Settings</span>
-          {isActive('/dashboard/settings') && <div className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500 flex-shrink-0" />}
+          {isActive('/dashboard/settings') && <div className="ml-auto h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--accent)' }} />}
         </Link>
       </div>
     </div>

@@ -17,6 +17,9 @@
     --text-muted: #a1a1aa;
     --background: #f4f4f5;
     --foreground: #09090b;
+    --accent: #10b981;
+    --accent-muted: rgba(16, 185, 129, 0.15);
+    --accent-border: rgba(16, 185, 129, 0.3);
   }
 
   /* ── Dark mode ── */
@@ -33,6 +36,9 @@
     --text-muted: #52525b;
     --background: #111111;
     --foreground: #fafafa;
+    --accent: #10b981;
+    --accent-muted: rgba(16, 185, 129, 0.15);
+    --accent-border: rgba(16, 185, 129, 0.3);
   }
 
   * {

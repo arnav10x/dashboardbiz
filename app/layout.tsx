@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Space_Grotesk } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
+import { AccentProvider } from '@/components/providers/AccentProvider'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -23,7 +24,9 @@ export default function RootLayout({
     <html lang="en" className={spaceGrotesk.variable} suppressHydrationWarning>
       <body className="antialiased font-sans">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {children}
+          <AccentProvider>
+            {children}
+          </AccentProvider>
         </ThemeProvider>
       </body>
     </html>

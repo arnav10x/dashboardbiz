@@ -99,10 +99,10 @@ export function AICoachSidebar() {
   };
 
   return (
-    <div className="hidden lg:flex w-72 xl:w-80 flex-col bg-[#050505] border-l border-white/[0.06] h-screen sticky top-0 flex-shrink-0">
+    <div className="hidden lg:flex w-72 xl:w-80 flex-col h-screen sticky top-0 flex-shrink-0 border-l transition-colors duration-200" style={{ background: 'var(--sidebar-bg)', borderColor: 'var(--border)' }}>
 
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06] flex-shrink-0">
+      <div className="flex items-center justify-between px-5 py-4 flex-shrink-0 border-b" style={{ borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-2.5">
           <div className="h-8 w-8 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center">
             <Sparkles className="h-4 w-4 text-emerald-400" />
@@ -231,7 +231,7 @@ export function AICoachSidebar() {
       </div>
 
       {/* Input */}
-      <div className="px-4 py-4 border-t border-white/[0.06] flex-shrink-0">
+      <div className="px-4 py-4 flex-shrink-0 border-t" style={{ borderColor: 'var(--border)' }}>
         <div className="flex items-center gap-2 bg-white/[0.03] border border-white/[0.08] focus-within:border-emerald-500/30 rounded-xl px-3 py-2.5 transition-colors">
           <input
             ref={inputRef}

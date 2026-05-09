@@ -1,26 +1,29 @@
-import { LogoutButton } from '../auth/LogoutButton';
 import { ClockPills, GreetingWord } from './ClockPills';
-import { User, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import Link from 'next/link';
 
 export function TopBar({ userName, dayNumber }: { userName: string; dayNumber: number }) {
   const firstName = userName?.split(' ')[0] || 'Founder';
 
   return (
-    <div className="h-14 border-b border-white/[0.06] bg-[#050505] flex items-center justify-between px-6 flex-shrink-0">
+    <div
+      className="h-14 border-b flex items-center justify-between px-6 flex-shrink-0 transition-colors duration-200"
+      style={{ background: 'var(--topbar-bg)', borderColor: 'var(--border)' }}
+    >
       {/* Left: Greeting + time pills */}
-      <div className="flex flex-col gap-1.5 min-w-0">
-        <h1 className="text-sm font-bold text-white leading-none truncate">
+      <div className="flex flex-col gap-1 min-w-0">
+        <h1 className="text-sm font-bold leading-none truncate" style={{ color: 'var(--text-primary)' }}>
           <GreetingWord />, {firstName}
         </h1>
         <ClockPills />
       </div>
 
-      {/* Right: actions + user */}
-      <div className="flex items-center gap-3 flex-shrink-0">
+      {/* Right: actions */}
+      <div className="flex items-center gap-2 flex-shrink-0">
         <Link
           href="/dashboard/leads"
-          className="hidden sm:flex items-center gap-1.5 h-8 px-3 bg-white/[0.04] hover:bg-white/[0.07] border border-white/[0.07] text-zinc-300 hover:text-white rounded-lg text-xs font-semibold transition-all"
+          className="hidden sm:flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold transition-all border hover:opacity-80"
+          style={{ background: 'var(--card-bg)', borderColor: 'var(--border)', color: 'var(--text-secondary)' }}
         >
           <Plus className="h-3 w-3" />
           New Lead
@@ -32,13 +35,6 @@ export function TopBar({ userName, dayNumber }: { userName: string; dayNumber: n
           <Plus className="h-3 w-3" />
           Log Action
         </Link>
-
-        <div className="flex items-center gap-2 border-l border-white/[0.06] pl-3">
-          <LogoutButton />
-          <div className="h-7 w-7 bg-white/[0.04] border border-white/[0.07] flex items-center justify-center rounded-full">
-            <User className="h-3.5 w-3.5 text-zinc-400" />
-          </div>
-        </div>
       </div>
     </div>
   );

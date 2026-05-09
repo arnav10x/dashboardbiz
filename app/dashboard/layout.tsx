@@ -28,8 +28,8 @@ export default async function DashboardLayout({
   const userName = (user.user_metadata?.full_name as string) || user.email || '';
 
   return (
-    <div className="flex h-screen bg-[#050505] overflow-hidden text-[#fafafa] font-sans selection:bg-emerald-500/20">
-      {/* Narrow icon sidebar */}
+    <div className="flex h-screen overflow-hidden font-sans selection:bg-emerald-500/20 transition-colors duration-200" style={{ background: 'var(--app-bg)', color: 'var(--text-primary)' }}>
+      {/* Sidebar with labels and sections */}
       <Sidebar />
 
       {/* Main column */}

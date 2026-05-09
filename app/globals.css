@@ -3,8 +3,35 @@
 @tailwind utilities;
 
 @layer base {
+  /* ── Light mode (default) ── */
   :root {
-    --background: #050505;
+    --app-bg: #f4f4f5;
+    --sidebar-bg: #ffffff;
+    --surface-bg: #ffffff;
+    --topbar-bg: #ffffff;
+    --card-bg: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.07);
+    --border: rgba(0, 0, 0, 0.07);
+    --text-primary: #09090b;
+    --text-secondary: #52525b;
+    --text-muted: #a1a1aa;
+    --background: #f4f4f5;
+    --foreground: #09090b;
+  }
+
+  /* ── Dark mode ── */
+  .dark {
+    --app-bg: #111111;
+    --sidebar-bg: #0d0d0d;
+    --surface-bg: #161616;
+    --topbar-bg: #0d0d0d;
+    --card-bg: rgba(255, 255, 255, 0.02);
+    --card-border: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 255, 255, 0.06);
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #52525b;
+    --background: #111111;
     --foreground: #fafafa;
   }
 
@@ -17,8 +44,9 @@
   }
 
   body {
-    background-color: var(--background);
+    background-color: var(--app-bg);
     color: var(--foreground);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   /* Refined scrollbar */
@@ -31,6 +59,9 @@
   ::-webkit-scrollbar-thumb {
     background: #27272a;
     border-radius: 4px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #27272a;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #10b981;
@@ -69,10 +100,9 @@
     box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.3);
   }
 
-  /* Glass card */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+  /* Theme-aware card */
+  .app-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
   }
 }

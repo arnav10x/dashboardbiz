@@ -39,6 +39,30 @@ export const ACHIEVEMENT_DEFINITIONS: AchievementDef[] = [
   { name: 'Three-Peat',      description: 'Close 3 paying clients.',                    category: 'Performance', badge_image_url: '🤝', rarity: 'rare',      xp: 200 },
   { name: 'Sharp Shooter',   description: 'Maintain a 10%+ reply rate for a full week.',category: 'Performance', badge_image_url: '🎖️', rarity: 'rare',     xp: 150 },
   { name: 'Converter',       description: 'Reach a 20%+ call-to-close rate.',           category: 'Performance', badge_image_url: '📊', rarity: 'epic',      xp: 300 },
+
+  // ── Revenue (new) ─────────────────────────────────────────────────────────
+  { name: '$1K Month',       description: 'Hit $1,000 in revenue.',                     category: 'Revenue',     badge_image_url: '💸', rarity: 'uncommon',  xp: 100 },
+  { name: '$100K Month',     description: 'Hit $100,000 in revenue. Legendary territory.', category: 'Revenue', badge_image_url: '🦁', rarity: 'legendary', xp: 2000 },
+
+  // ── Outreach (new) ────────────────────────────────────────────────────────
+  { name: 'Icebreaker',      description: 'Send 10 DMs in a single day.',               category: 'Outreach',    badge_image_url: '🧊', rarity: 'common',    xp: 50  },
+  { name: 'Volume King',     description: 'Send 50 DMs in a single week.',              category: 'Outreach',    badge_image_url: '⚡', rarity: 'uncommon',  xp: 100 },
+  { name: '1K Club',         description: 'Send 1,000 total DMs.',                      category: 'Outreach',    badge_image_url: '🎰', rarity: 'epic',      xp: 500 },
+
+  // ── Pipeline (new) ────────────────────────────────────────────────────────
+  { name: 'Network Effect',  description: 'Build a pipeline of 25+ leads.',             category: 'Pipeline',    badge_image_url: '🕸️', rarity: 'uncommon',  xp: 100 },
+  { name: 'Deal Machine',    description: 'Close 10 total clients.',                    category: 'Pipeline',    badge_image_url: '🤖', rarity: 'epic',      xp: 400 },
+  { name: 'High Ticket',     description: 'Close a client for $5,000 or more.',         category: 'Pipeline',    badge_image_url: '💎', rarity: 'legendary', xp: 800 },
+
+  // ── Consistency (new) ─────────────────────────────────────────────────────
+  { name: 'Day 1',           description: 'Begin your 30-day sprint.',                  category: 'Consistency', badge_image_url: '🌱', rarity: 'common',    xp: 25  },
+  { name: 'Three Weeks',     description: 'Reach Day 21 of the Roadmap.',              category: 'Consistency', badge_image_url: '📅', rarity: 'uncommon',  xp: 150 },
+  { name: 'Streak Week',     description: 'Log activity 7 days in a row.',              category: 'Consistency', badge_image_url: '🗓️', rarity: 'uncommon',  xp: 100 },
+
+  // ── Performance (new) ─────────────────────────────────────────────────────
+  { name: 'Reply Machine',   description: 'Receive 25 replies from cold prospects.',    category: 'Performance', badge_image_url: '💬', rarity: 'uncommon',  xp: 100 },
+  { name: 'Call King',       description: 'Book 20 sales calls.',                       category: 'Performance', badge_image_url: '📞', rarity: 'rare',      xp: 200 },
+  { name: 'The 1%',          description: 'Maintain a 30%+ close rate for a week.',     category: 'Performance', badge_image_url: '🏅', rarity: 'epic',      xp: 500 },
 ];
 
 export async function ensureAchievementsSeeded(supabase: any) {

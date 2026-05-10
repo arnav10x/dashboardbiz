@@ -261,13 +261,16 @@ function GoalsTab({ userId }: { userId: string }) {
   });
 
   React.useEffect(() => {
-    supabase.from('user_settings').select('*').eq('user_id', userId).single().then(({ data }) => {
-      if (data) setForm({
-        primary_goal: data.primary_goal || 'Hit $10k/month',
-        revenue_target: data.revenue_target?.toString() || '4500',
-        profit_margin_target: data.profit_margin_target?.toString() || '60',
-        monthly_client_target: data.monthly_client_target?.toString() || '5',
-        max_hours_month: data.max_hours_month?.toString() || '80',
+    Promise.all([
+      supabase.from('user_settings').select('*').eq('user_id', userId).single(),
+      supabase.from('business_profiles').select('monthly_goal').eq('user_id', userId).single(),
+    ]).then(([{ data }, { data: bp }]) => {
+      setForm({
+        primary_goal: data?.primary_goal || 'Hit $10k/month',
+        revenue_target: (data?.revenue_target ?? bp?.monthly_goal ?? 4500).toString(),
+        profit_margin_target: (data?.profit_margin_target ?? 60).toString(),
+        monthly_client_target: (data?.monthly_client_target ?? 5).toString(),
+        max_hours_month: (data?.max_hours_month ?? 80).toString(),
       });
     });
   }, [userId]);
@@ -277,15 +280,23 @@ function GoalsTab({ userId }: { userId: string }) {
 
   async function save() {
     setSaving(true);
-    await supabase.from('user_settings').upsert({
-      user_id: userId,
-      primary_goal: form.primary_goal,
-      revenue_target: Number(form.revenue_target),
-      profit_margin_target: Number(form.profit_margin_target),
-      monthly_client_target: Number(form.monthly_client_target),
-      max_hours_month: Number(form.max_hours_month),
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'user_id' });
+    const revenueTarget = Number(form.revenue_target);
+    await Promise.all([
+      supabase.from('user_settings').upsert({
+        user_id: userId,
+        primary_goal: form.primary_goal,
+        revenue_target: revenueTarget,
+        profit_margin_target: Number(form.profit_margin_target),
+        monthly_client_target: Number(form.monthly_client_target),
+        max_hours_month: Number(form.max_hours_month),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id' }),
+      // Sync to business_profiles.monthly_goal so dashboard KPIs use the updated target
+      supabase.from('business_profiles').upsert(
+        { user_id: userId, monthly_goal: revenueTarget },
+        { onConflict: 'user_id' }
+      ),
+    ]);
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);

@@ -14,16 +14,16 @@ export function ClockPills() {
   const day = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="px-2.5 py-1 bg-white/[0.04] border border-white/[0.07] rounded-md text-[10px] font-semibold text-zinc-400 tracking-wide">
-        {date}
-      </span>
-      <span className="px-2.5 py-1 bg-white/[0.04] border border-white/[0.07] rounded-md text-[10px] font-semibold text-zinc-400 tracking-wide">
-        {time}
-      </span>
-      <span className="px-2.5 py-1 bg-white/[0.04] border border-white/[0.07] rounded-md text-[10px] font-semibold text-zinc-400 tracking-wide">
-        {day}
-      </span>
+    <div className="flex items-center gap-1.5">
+      {[date, time, day].map((val) => (
+        <span
+          key={val}
+          className="px-2.5 py-1 rounded-md text-[10px] font-semibold tracking-wide"
+          style={{ background: 'var(--app-bg)', border: '1px solid var(--border)', color: 'var(--text-muted)' }}
+        >
+          {val}
+        </span>
+      ))}
     </div>
   );
 }

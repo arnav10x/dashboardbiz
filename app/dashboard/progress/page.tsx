@@ -65,13 +65,13 @@ export default async function ProgressPage() {
     <div className="max-w-6xl mx-auto p-6 md:p-8 space-y-8 animate-in fade-in duration-500">
       
       {/* Header section */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-zinc-800 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-6" style={{ borderColor: 'var(--border)' }}>
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">Performance Record</h1>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>Performance Record</h1>
           <div className="flex items-center gap-4 mt-2">
-            <span className="text-sm font-bold text-indigo-400">Day {metricsData.summary.daysActive} of 30</span>
-            <span className="text-zinc-600">|</span>
-            <span className="text-sm font-medium text-zinc-400">
+            <span className="text-sm font-bold" style={{ color: 'var(--accent)' }}>Day {metricsData.summary.daysActive} of 30</span>
+            <span style={{ color: 'var(--border)' }}>|</span>
+            <span className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>
               Task Execution: {metricsData.summary.completionScore.completed}/{metricsData.summary.completionScore.total}
             </span>
           </div>

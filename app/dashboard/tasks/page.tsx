@@ -67,16 +67,16 @@ export default function TasksPage() {
   const isDayWon = completedCount >= 2;
 
   if (loading) {
-     return <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-zinc-600 h-8 w-8" /></div>
+    return <div className="p-8 flex justify-center"><Loader2 className="animate-spin h-8 w-8" style={{ color: 'var(--text-muted)' }} /></div>
   }
 
   return (
     <div className="max-w-3xl mx-auto p-4 md:p-8 space-y-8 animate-in fade-in">
-      
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-zinc-800">
+
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b" style={{ borderColor: 'var(--border)' }}>
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-white tracking-tight">Today's Executions</h1>
-          <p className="text-zinc-400">Complete 2 out of 3 actions to maintain your active streak.</p>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>Today's Executions</h1>
+          <p style={{ color: 'var(--text-muted)' }}>Complete 2 out of 3 actions to maintain your active streak.</p>
           <div className="max-w-[200px]">
             <DailyScore completed={completedCount} total={tasks.length} />
           </div>

@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import {
   Home, CheckSquare, Users, TrendingUp, Award,
-  Zap, CalendarDays, Settings,
+  Zap, CalendarDays, Settings, BrainCircuit,
 } from 'lucide-react';
 
 const sections = [
@@ -27,6 +27,12 @@ const sections = [
     items: [
       { name: 'Progress', href: '/dashboard/progress', icon: TrendingUp },
       { name: 'Achievements', href: '/dashboard/achievements', icon: Award },
+    ],
+  },
+  {
+    label: 'AI',
+    items: [
+      { name: 'Business Advisor', href: '/dashboard/copilot', icon: BrainCircuit },
     ],
   },
 ];

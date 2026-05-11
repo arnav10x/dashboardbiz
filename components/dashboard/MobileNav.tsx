@@ -1,13 +1,13 @@
 import Link from 'next/link';
-import { Home, CheckSquare, Users, TrendingUp, CalendarDays } from 'lucide-react';
+import { Home, CheckSquare, Users, TrendingUp, BrainCircuit } from 'lucide-react';
 
 export function MobileNav() {
   const navItems = [
     { name: 'Home', href: '/dashboard', icon: Home },
     { name: 'Tasks', href: '/dashboard/tasks', icon: CheckSquare },
     { name: 'Leads', href: '/dashboard/leads', icon: Users },
-    { name: 'Calendar', href: '/dashboard/calendar', icon: CalendarDays },
     { name: 'Progress', href: '/dashboard/progress', icon: TrendingUp },
+    { name: 'Advisor', href: '/dashboard/copilot', icon: BrainCircuit },
   ];
 
   return (

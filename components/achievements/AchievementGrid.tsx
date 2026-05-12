@@ -67,15 +67,14 @@ export function AchievementGrid({ initialData }: { initialData: Achievement[] })
             
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {catBadges.map(badge => (
-                <AchievementBadge
+                <AchievementBadge 
                   key={badge.id}
                   name={badge.name}
                   description={badge.description}
+                  category={badge.category}
                   isEarned={badge.isEarned}
                   earnedAt={badge.earnedAt}
-                  emoji={badge.badge_image_url}
-                  rarity={(badge as any).rarity || 'common'}
-                  xp={(badge as any).xp || 50}
+                  emoji={badge.badge_image_url} // Seed stores emoji directly
                 />
               ))}
             </div>

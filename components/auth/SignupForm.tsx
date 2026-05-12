@@ -9,6 +9,10 @@ import { createClient } from "@/lib/supabase/client"
 
 const signupSchema = z.object({
   fullName: z.string().min(2, "Full name must be at least 2 characters."),
+  username: z.string()
+    .min(3, "Username must be at least 3 characters.")
+    .max(24, "Username must be 24 characters or less.")
+    .regex(/^[a-zA-Z0-9_]+$/, "Use only letters, numbers, and underscores."),
   email: z.string().email("Please enter a valid email address."),
   password: z.string().min(8, "Password must be at least 8 characters."),
 })
@@ -32,18 +36,39 @@ export function SignupForm() {
   async function onSubmit(data: FormData) {
     setIsLoading(true)
     setServerError(null)
+    const username = data.username.trim().toLowerCase()
 
-    const { error } = await supabase.auth.signUp({
+    const { data: existing } = await supabase
+      .from("user_profiles")
+      .select("user_id")
+      .eq("username", username)
+      .maybeSingle()
+
+    if (existing) {
+      setIsLoading(false)
+      return setServerError("That username is taken. Try another one.")
+    }
+
+    const { data: signupData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
-        data: { full_name: data.fullName },
+        data: { full_name: data.fullName, username },
       },
     })
 
     if (error) {
       setIsLoading(false)
       return setServerError(error.message)
+    }
+
+    if (signupData.user?.id) {
+      await supabase.from("user_profiles").upsert({
+        user_id: signupData.user.id,
+        full_name: data.fullName.trim(),
+        username,
+        email: data.email.trim().toLowerCase(),
+      }, { onConflict: "user_id" })
     }
 
     router.push("/onboarding")
@@ -71,6 +96,27 @@ export function SignupForm() {
             {errors?.fullName && (
               <p className="px-1 text-xs text-red-500">
                 {errors.fullName.message}
+              </p>
+            )}
+          </div>
+
+          <div className="grid gap-2">
+            <label className="text-sm font-medium leading-none text-zinc-300" htmlFor="username">
+              Unique Username
+            </label>
+            <input
+              id="username"
+              placeholder="akhil_founder"
+              type="text"
+              autoCapitalize="none"
+              autoCorrect="off"
+              disabled={isLoading}
+              className="flex h-10 w-full rounded-md border border-zinc-800 bg-[#18181b] px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              {...register("username")}
+            />
+            {errors?.username && (
+              <p className="px-1 text-xs text-red-500">
+                {errors.username.message}
               </p>
             )}
           </div>

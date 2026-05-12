@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     password,
     options: {
       data: { full_name: fullName },
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/onboarding`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     },
   })
 

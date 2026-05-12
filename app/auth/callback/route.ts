@@ -11,26 +11,8 @@ export async function GET(request: Request) {
     const { error, data } = await supabase.auth.exchangeCodeForSession(code)
     
     if (!error) {
-      // Check onboarding to determine redirect logically
-      const { user } = data
-      let redirectPath = next
-      
-      if (user) {
-        const { data: profile } = await supabase
-          .from('business_profiles')
-          .select('id')
-          .eq('user_id', user.id)
-          .single()
-          
-        if (!profile) {
-          redirectPath = '/onboarding'
-        } else if (next === '/onboarding') {
-          // If profile exists but next is onboarding (like an old confirmation link), force dashboard
-          redirectPath = '/dashboard'
-        }
-      }
-
-      const forwardedHost = request.headers.get('x-forwarded-host') 
+      const redirectPath = '/dashboard'
+      const forwardedHost = request.headers.get('x-forwarded-host')
       const isLocalhost = process.env.NODE_ENV === 'development'
 
       if (isLocalhost) {

@@ -1,30 +1,36 @@
-export function RevenueProgress({ currentRevenue, goalRevenue }: { currentRevenue: number; goalRevenue: number }) {
+export function RevenueProgress({
+  currentRevenue,
+  goalRevenue,
+}: {
+  currentRevenue: number;
+  goalRevenue: number;
+}) {
   const percentage = Math.min((currentRevenue / goalRevenue) * 100, 100);
   const remaining = goalRevenue - currentRevenue;
 
   return (
-    <div className="app-card rounded-2xl p-6 shadow-sm dark:shadow-none">
-      <p className="text-[9px] font-bold uppercase tracking-[0.15em] mb-4" style={{ color: 'var(--text-secondary)' }}>Monthly Target</p>
+    <div className="bg-white/[0.02] border border-white/[0.07] rounded-2xl p-6">
+      <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.15em] mb-4">Monthly Target</p>
       <div className="flex justify-between items-end mb-5">
-        <p className="text-2xl font-bold font-mono" style={{ color: 'var(--text-primary)' }}>
+        <p className="text-2xl font-bold text-white font-mono">
           ${currentRevenue.toLocaleString()}
-          <span className="text-sm font-sans font-normal ml-1.5" style={{ color: 'var(--text-muted)' }}>/ ${goalRevenue.toLocaleString()}</span>
+          <span className="text-sm text-zinc-600 font-sans font-normal ml-1.5">/ ${goalRevenue.toLocaleString()}</span>
         </p>
         {remaining > 0 ? (
-          <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-            <span className="font-bold" style={{ color: 'var(--accent)' }}>${remaining.toLocaleString()}</span> to go
+          <span className="text-xs font-medium text-zinc-500">
+            <span className="text-emerald-400 font-bold">${remaining.toLocaleString()}</span> to go
           </span>
         ) : (
-          <span className="text-xs font-bold px-2.5 py-1 rounded-lg border" style={{ color: 'var(--accent)', background: 'var(--accent-muted)', borderColor: 'var(--accent-border)' }}>
+          <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg">
             Goal hit ✓
           </span>
         )}
       </div>
 
-      <div className="h-1.5 w-full rounded-full overflow-hidden" style={{ background: 'var(--app-bg)' }}>
+      <div className="h-1.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
         <div
-          className="h-full rounded-full transition-all duration-1000 ease-in-out"
-          style={{ width: `${Math.max(percentage, 1)}%`, background: 'var(--accent)' }}
+          className="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-in-out shadow-[0_0_8px_#10b981]"
+          style={{ width: `${Math.max(percentage, 1)}%` }}
         />
       </div>
     </div>

@@ -32,14 +32,14 @@ export function DailyLogTile({ label, initialValue, goal, prefix = '', endpoint 
   };
 
   return (
-    <div className="app-card rounded-2xl p-6 flex flex-col gap-4 shadow-sm dark:shadow-none">
+    <div className="bg-white/[0.02] border border-white/[0.07] rounded-2xl p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--text-muted)]">{label}</p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-zinc-600">{label}</p>
         {endpoint && (
           <button
             onClick={handleIncrement}
             disabled={saving}
-            className="h-6 w-6 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-500 rounded-lg transition-all disabled:opacity-40"
+            className="h-6 w-6 flex items-center justify-center bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 rounded-lg transition-all disabled:opacity-40"
           >
             <Plus className="h-3 w-3" />
           </button>
@@ -47,16 +47,16 @@ export function DailyLogTile({ label, initialValue, goal, prefix = '', endpoint 
       </div>
 
       <div className="flex items-baseline gap-1">
-        {prefix && <span className="text-lg font-bold text-[var(--text-muted)]">{prefix}</span>}
-        <span className={`text-3xl font-black font-mono tracking-tight ${isGood ? 'text-emerald-500' : isBehind ? 'text-red-500' : 'text-[var(--text-primary)]'}`}>
+        {prefix && <span className="text-lg font-bold text-zinc-500">{prefix}</span>}
+        <span className={`text-3xl font-black font-mono tracking-tight ${isGood ? 'text-emerald-400' : isBehind ? 'text-red-400' : 'text-white'}`}>
           {count.toLocaleString()}
         </span>
-        <span className="text-sm text-[var(--text-muted)] font-mono">
+        <span className="text-sm text-zinc-700 font-mono">
           / {prefix}{goal.toLocaleString()}
         </span>
       </div>
 
-      <div className="h-0.5 w-full rounded-full overflow-hidden" style={{ background: 'var(--app-bg)' }}>
+      <div className="h-0.5 w-full bg-white/[0.04] rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-500 ${isGood ? 'bg-emerald-500' : isBehind ? 'bg-red-500/40' : 'bg-emerald-500/60'}`}
           style={{ width: `${Math.max(percentage, count > 0 ? 4 : 0)}%` }}

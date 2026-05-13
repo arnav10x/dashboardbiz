@@ -128,7 +128,7 @@ const TYPE_STYLES = {
   urgent: { bg: 'rgba(244,63,94,0.08)', border: 'rgba(244,63,94,0.2)', icon: '#f43f5e', dot: '#f43f5e' },
   warning: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.2)', icon: '#f59e0b', dot: '#f59e0b' },
   info: { bg: 'rgba(96,165,250,0.08)', border: 'rgba(96,165,250,0.2)', icon: '#60a5fa', dot: '#60a5fa' },
-  success: { bg: 'rgba(34,197,94,0.08)', border: 'rgba(34,197,94,0.2)', icon: 'var(--accent)', dot: 'var(--accent)' },
+  success: { bg: 'var(--accent-faint)', border: 'var(--accent-ring)', icon: 'var(--accent)', dot: 'var(--accent)' },
 }
 
 export function NotificationBell() {

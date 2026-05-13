@@ -30,7 +30,7 @@ interface Props {
 const TYPE_STYLES = {
   critical:    { bg: 'rgba(244,63,94,0.07)',    border: 'rgba(244,63,94,0.18)',    color: '#f43f5e',   badge: 'rgba(244,63,94,0.12)' },
   warning:     { bg: 'rgba(245,158,11,0.07)',   border: 'rgba(245,158,11,0.18)',   color: '#f59e0b',   badge: 'rgba(245,158,11,0.12)' },
-  opportunity: { bg: 'rgba(34,197,94,0.07)',    border: 'rgba(34,197,94,0.16)',    color: '#22c55e',   badge: 'rgba(34,197,94,0.12)' },
+  opportunity: { bg: 'var(--accent-faint)',    border: 'var(--accent-ring)',    color: 'var(--accent)',   badge: 'var(--accent-muted)' },
   nudge:       { bg: 'rgba(96,165,250,0.07)',   border: 'rgba(96,165,250,0.16)',   color: '#60a5fa',   badge: 'rgba(96,165,250,0.12)' },
 }
 
@@ -223,7 +223,7 @@ export function ProactiveAlerts(props: Props) {
     ? '#f59e0b'
     : countsByType.nudge
     ? '#60a5fa'
-    : '#22c55e'
+    : 'var(--accent)'
 
   return (
     <div className="rounded-xl overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>

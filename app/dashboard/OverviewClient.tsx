@@ -148,7 +148,7 @@ function QuickLogModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
             Cancel
           </button>
           <button onClick={handleSave} disabled={saving} className="flex-1 py-2 rounded-lg text-xs font-bold disabled:opacity-50"
-            style={{ background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008' }}>
+            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008' }}>
             {saving ? 'Saving…' : 'Save entry'}
           </button>
         </div>
@@ -292,12 +292,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
   ]
 
   const S = {
-    card: {
-      background: 'linear-gradient(145deg, rgba(17,20,23,0.98), rgba(5,6,7,0.98))',
-      border: '1px solid rgba(255,255,255,0.065)',
-      borderRadius: 13,
-      boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.028), 0 18px 45px rgba(0,0,0,0.24)',
-    } as React.CSSProperties,
+    card: {} as React.CSSProperties, // unused — all cards use .app-card class now
     label: { fontSize: 10, fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.16em', color: 'rgba(196,201,197,0.62)' },
     value: { fontSize: 30, fontWeight: 950, fontVariantNumeric: 'tabular-nums' as const, lineHeight: 1.05, letterSpacing: '-0.045em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' },
     sub: { fontSize: 11, color: 'var(--text-muted)' },
@@ -351,25 +346,29 @@ export function OverviewClient({ userName, workspaceName, businessType, business
           { label: 'Pipeline Leads', value: animLeads.toString(), sub: `${conversionRate}% conv. rate`, icon: Users, color: 'var(--text-primary)', bar: false },
           { label: 'Tasks Done', value: `${completedCount}/${tasks.length}`, sub: 'today', icon: CheckSquare, color: tasks.length > 0 && completedCount === tasks.length ? 'var(--accent)' : 'var(--text-primary)', bar: false },
         ].map(card => (
-          <div key={card.label} style={{ ...S.card, padding: '18px 18px 16px', minHeight: 126 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-              <span style={S.label}>{card.label}</span>
-              <card.icon style={{ width: 14, height: 14, color: 'var(--accent)', opacity: 0.85, flexShrink: 0 }} />
-            </div>
-            <p style={{ ...S.value, color: card.color, marginBottom: 3 }}>{card.value}</p>
-            <p style={S.sub}>{card.sub}</p>
-            {card.bar && (
-              <div style={{ ...S.bar, marginTop: 16 }}>
-                <div style={{ height: '100%', width: `${card.barPct}%`, background: 'linear-gradient(90deg,#22c763,#4be588)', borderRadius: 999, transition: 'width 1s ease' }} />
+          <div key={card.label} className="app-card" style={{ minHeight: 126 }}>
+            <div className="app-card-inner" style={{ padding: '18px 18px 16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                <span style={S.label}>{card.label}</span>
+                <card.icon style={{ width: 14, height: 14, color: 'var(--accent)', opacity: 0.85, flexShrink: 0 }} />
               </div>
-            )}
+              <p style={{ ...S.value, color: card.color, marginBottom: 3 }}>{card.value}</p>
+              <p style={S.sub}>{card.sub}</p>
+              {card.bar && (
+                <div style={{ ...S.bar, marginTop: 16 }}>
+                  <div style={{ height: '100%', width: `${card.barPct}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', borderRadius: 999, transition: 'width 1s ease' }} />
+                </div>
+              )}
+            </div>
+            <div className="app-card-glow" />
           </div>
         ))}
       </div>
 
       {/* Business health */}
       {hasData && (
-        <div style={{ ...S.card, padding: '18px 20px' }}>
+        <div className="app-card">
+        <div className="app-card-inner" style={{ padding: '18px 20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
               <div style={{ position: 'relative' }}>
@@ -409,123 +408,134 @@ export function OverviewClient({ userName, workspaceName, businessType, business
             </div>
           </div>
         </div>
+        <div className="app-card-glow" />
+        </div>
       )}
 
       {/* 3-col: Revenue History | Monthly Target | Lead Pipeline */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1.1fr 0.8fr', gap: 14 }}>
 
         {/* Revenue History */}
-        <div style={{ ...S.card, padding: '20px 20px 18px', minHeight: 226 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={S.label}>Revenue History</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              {growth !== null && (
-                <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 4, color: isUp ? 'var(--accent)' : '#f43f5e', background: isUp ? 'rgba(34,197,94,0.08)' : 'rgba(244,63,94,0.08)' }}>
-                  {isUp ? <TrendingUp style={{ width: 10, height: 10 }} /> : <TrendingDown style={{ width: 10, height: 10 }} />}
-                  {isUp ? '+' : ''}{growth}%
-                </span>
-              )}
-              {hasData && (
-                <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 5, overflow: 'hidden' }}>
-                  {(['monthly', 'yearly'] as const).map((v, i) => (
-                    <button key={v} onClick={() => setChartView(v)} style={{ padding: '2px 7px', fontSize: 9, fontWeight: 700, cursor: 'pointer', background: chartView === v ? 'rgba(34,197,94,0.1)' : 'transparent', color: chartView === v ? 'var(--accent)' : 'var(--text-muted)', border: 'none', borderLeft: i > 0 ? '1px solid var(--border)' : 'none' }}>
-                      {v === 'monthly' ? 'MO' : 'YR'}
-                    </button>
-                  ))}
-                </div>
-              )}
+        <div className="app-card">
+          <div className="app-card-inner" style={{ padding: '20px 20px 18px', minHeight: 226 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+              <span style={S.label}>Revenue History</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                {growth !== null && (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 10, fontWeight: 600, padding: '2px 6px', borderRadius: 4, color: isUp ? 'var(--accent)' : '#f43f5e', background: isUp ? 'var(--accent-faint)' : 'rgba(244,63,94,0.08)' }}>
+                    {isUp ? <TrendingUp style={{ width: 10, height: 10 }} /> : <TrendingDown style={{ width: 10, height: 10 }} />}
+                    {isUp ? '+' : ''}{growth}%
+                  </span>
+                )}
+                {hasData && (
+                  <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 5, overflow: 'hidden' }}>
+                    {(['monthly', 'yearly'] as const).map((v, i) => (
+                      <button key={v} onClick={() => setChartView(v)} style={{ padding: '2px 7px', fontSize: 9, fontWeight: 700, cursor: 'pointer', background: chartView === v ? 'var(--accent-faint)' : 'transparent', color: chartView === v ? 'var(--accent)' : 'var(--text-muted)', border: 'none', borderLeft: i > 0 ? '1px solid var(--border)' : 'none' }}>
+                        {v === 'monthly' ? 'MO' : 'YR'}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
+            <p style={{ ...S.value, fontSize: 26, color: 'var(--text-primary)', marginBottom: 10 }}>${animRevenue.toLocaleString()}</p>
+            {chartData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={128}>
+                <AreaChart data={chartData} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.18} />
+                      <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="2 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                  <XAxis dataKey="label" tick={{ fill: 'var(--text-muted)', fontSize: 8 }} axisLine={false} tickLine={false} />
+                  <YAxis hide />
+                  <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
+                  <Area type="monotone" dataKey="revenue" stroke="var(--accent)" strokeWidth={1.5} fill="url(#revGrad)" dot={false}
+                    activeDot={{ r: 2.5, fill: 'var(--accent)', stroke: 'var(--bg-card)', strokeWidth: 1.5 }} />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div style={{ height: 128, borderRadius: 8, background: 'var(--bg-raised)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                <p style={S.sub}>Log first entry to unlock chart</p>
+                <button onClick={() => setShowModal(true)} style={{ fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 5, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer' }}>
+                  + Quick log
+                </button>
+              </div>
+            )}
           </div>
-          <p style={{ ...S.value, fontSize: 26, color: 'var(--text-primary)', marginBottom: 10 }}>${animRevenue.toLocaleString()}</p>
-          {chartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={128}>
-              <AreaChart data={chartData} margin={{ top: 4, right: 0, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#22c55e" stopOpacity={0.18} />
-                    <stop offset="100%" stopColor="#22c55e" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="2 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                <XAxis dataKey="label" tick={{ fill: 'var(--text-muted)', fontSize: 8 }} axisLine={false} tickLine={false} />
-                <YAxis hide />
-                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
-                <Area type="monotone" dataKey="revenue" stroke="#22c55e" strokeWidth={1.5} fill="url(#revGrad)" dot={false}
-                  activeDot={{ r: 2.5, fill: '#22c55e', stroke: 'var(--bg-card)', strokeWidth: 1.5 }} />
-              </AreaChart>
-            </ResponsiveContainer>
-          ) : (
-            <div style={{ height: 128, borderRadius: 8, background: 'var(--bg-raised)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-              <p style={S.sub}>Log first entry to unlock chart</p>
-              <button onClick={() => setShowModal(true)} style={{ fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 5, background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008', border: 'none', cursor: 'pointer' }}>
-                + Quick log
-              </button>
-            </div>
-          )}
+          <div className="app-card-glow" />
         </div>
 
         {/* Monthly Target */}
-        <div style={{ ...S.card, padding: '20px 20px 18px', minHeight: 226, display: 'flex', flexDirection: 'column' }}>
-          <p style={{ ...S.label, marginBottom: 14 }}>Monthly Target</p>
-          {revenueTarget > 0 ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
-              <div style={{ position: 'relative', flexShrink: 0 }}>
-                <Ring pct={goalPct} size={118} stroke={9} color={'#22c55e'} />
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: 28, fontWeight: 950, color: '#22c55e', lineHeight: 1 }}>{goalPct}%</span>
-                  <span style={{ fontSize: 8, color: 'var(--text-muted)' }}>of goal</span>
+        <div className="app-card">
+          <div className="app-card-inner" style={{ padding: '20px 20px 18px', minHeight: 226, display: 'flex', flexDirection: 'column' }}>
+            <p style={{ ...S.label, marginBottom: 14 }}>Monthly Target</p>
+            {revenueTarget > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16, flex: 1 }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
+                  <Ring pct={goalPct} size={118} stroke={9} color={'var(--accent)'} />
+                  <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: 28, fontWeight: 950, color: 'var(--accent)', lineHeight: 1 }}>{goalPct}%</span>
+                    <span style={{ fontSize: 8, color: 'var(--text-muted)' }}>of goal</span>
+                  </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontSize: 30, fontWeight: 950, fontVariantNumeric: 'tabular-nums', color: 'var(--text-primary)', marginBottom: 2 }}>${animRevenue.toLocaleString()}</p>
+                  <p style={{ ...S.sub, marginBottom: 10 }}>/ ${revenueTarget.toLocaleString()} goal</p>
+                  <p style={{ fontSize: 10, fontWeight: 600, marginBottom: 7, color: 'var(--accent)' }}>
+                    {goalPct >= 100 ? 'Goal achieved!' : `$${Math.max(0, revenueTarget - revenue).toLocaleString()} remaining`}
+                  </p>
+                  <div style={{ height: 2, background: 'rgba(255,255,255,0.07)', borderRadius: 1, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${goalPct}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', borderRadius: 999, transition: 'width 1s ease' }} />
+                  </div>
                 </div>
               </div>
-              <div style={{ flex: 1 }}>
-                <p style={{ fontSize: 30, fontWeight: 950, fontVariantNumeric: 'tabular-nums', color: 'var(--text-primary)', marginBottom: 2 }}>${animRevenue.toLocaleString()}</p>
-                <p style={{ ...S.sub, marginBottom: 10 }}>/ ${revenueTarget.toLocaleString()} goal</p>
-                <p style={{ fontSize: 10, fontWeight: 600, marginBottom: 7, color: 'var(--accent)' }}>
-                  {goalPct >= 100 ? 'Goal achieved!' : `$${Math.max(0, revenueTarget - revenue).toLocaleString()} remaining`}
-                </p>
-                <div style={{ height: 2, background: 'rgba(255,255,255,0.07)', borderRadius: 1, overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: `${goalPct}%`, background: goalPct >= 100 ? 'linear-gradient(90deg,#22c763,#4be588)' : 'linear-gradient(90deg,#22c763,#4be588)', borderRadius: 999, transition: 'width 1s ease' }} />
-                </div>
+            ) : (
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, textAlign: 'center' }}>
+                <Target style={{ width: 22, height: 22, color: 'var(--text-muted)', opacity: 0.35 }} />
+                <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 0 }}>No revenue target</p>
+                <p style={{ ...S.sub, marginBottom: 8 }}>Set a monthly goal to track pacing.</p>
+                <Link href="/dashboard/settings" style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none' }}>
+                  Set target →
+                </Link>
               </div>
-            </div>
-          ) : (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, textAlign: 'center' }}>
-              <Target style={{ width: 22, height: 22, color: 'var(--text-muted)', opacity: 0.35 }} />
-              <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 0 }}>No revenue target</p>
-              <p style={{ ...S.sub, marginBottom: 8 }}>Set a monthly goal to track pacing.</p>
-              <Link href="/dashboard/settings" style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008', textDecoration: 'none' }}>
-                Set target →
-              </Link>
-            </div>
-          )}
+            )}
+          </div>
+          <div className="app-card-glow" />
         </div>
 
         {/* Lead Pipeline */}
-        <div style={{ ...S.card, padding: '20px 20px 18px', minHeight: 226, display: 'flex', flexDirection: 'column' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-            <span style={S.label}>Lead Pipeline</span>
-            <Link href="/dashboard/pipeline" style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'none' }}>View all →</Link>
-          </div>
-          {leads > 0 ? (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9 }}>
-              {pipelineStages.map(s => (
-                <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontSize: 18, fontWeight: 900, fontVariantNumeric: 'tabular-nums', width: 28, textAlign: 'right', flexShrink: 0, color: s.color }}>{s.count}</span>
-                  <span style={{ fontSize: 11, width: 62, flexShrink: 0, color: 'var(--text-muted)' }}>{s.label}</span>
-                  <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.07)', borderRadius: 1, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${Math.round((s.count / leads) * 100)}%`, background: s.color, borderRadius: 1 }} />
+        <div className="app-card">
+          <div className="app-card-inner" style={{ padding: '20px 20px 18px', minHeight: 226, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+              <span style={S.label}>Lead Pipeline</span>
+              <Link href="/dashboard/pipeline" style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'none' }}>View all →</Link>
+            </div>
+            {leads > 0 ? (
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9 }}>
+                {pipelineStages.map(s => (
+                  <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 18, fontWeight: 900, fontVariantNumeric: 'tabular-nums', width: 28, textAlign: 'right', flexShrink: 0, color: s.color }}>{s.count}</span>
+                    <span style={{ fontSize: 11, width: 62, flexShrink: 0, color: 'var(--text-muted)' }}>{s.label}</span>
+                    <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.07)', borderRadius: 1, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${Math.round((s.count / leads) * 100)}%`, background: s.color, borderRadius: 1 }} />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 7, textAlign: 'center' }}>
-              <Users style={{ width: 20, height: 20, color: 'var(--text-muted)', opacity: 0.35 }} />
-              <p style={S.sub}>Pipeline empty</p>
-              <Link href="/dashboard/pipeline" style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008', textDecoration: 'none' }}>
-                Add first lead →
-              </Link>
-            </div>
-          )}
+                ))}
+              </div>
+            ) : (
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 7, textAlign: 'center' }}>
+                <Users style={{ width: 20, height: 20, color: 'var(--text-muted)', opacity: 0.35 }} />
+                <p style={S.sub}>Pipeline empty</p>
+                <Link href="/dashboard/pipeline" style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none' }}>
+                  Add first lead →
+                </Link>
+              </div>
+            )}
+          </div>
+          <div className="app-card-glow" />
         </div>
       </div>
 
@@ -533,12 +543,13 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1.45fr', gap: 14, alignItems: 'stretch' }}>
 
         {/* Tasks */}
-        <div style={{ ...S.card, padding: '18px 18px 16px', display: 'flex', flexDirection: 'column', minHeight: 318 }}>
+        <div className="app-card">
+        <div className="app-card-inner" style={{ padding: '18px 18px 16px', display: 'flex', flexDirection: 'column', minHeight: 318 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>Today&apos;s Tasks</span>
               {tasks.length > 0 && completedCount === tasks.length && (
-                <span style={{ fontSize: 9, fontWeight: 800, padding: '2px 5px', borderRadius: 3, background: 'rgba(34,197,94,0.1)', color: 'var(--accent)' }}>ALL DONE</span>
+                <span style={{ fontSize: 9, fontWeight: 800, padding: '2px 5px', borderRadius: 3, background: 'var(--accent-faint)', color: 'var(--accent)' }}>ALL DONE</span>
               )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -563,7 +574,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                     {task.title}
                   </p>
                   {task.is_completed && (
-                    <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 4px', borderRadius: 3, color: 'var(--accent)', background: 'rgba(34,197,94,0.1)' }}>DONE</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 4px', borderRadius: 3, color: 'var(--accent)', background: 'var(--accent-faint)' }}>DONE</span>
                   )}
                 </div>
               ))}
@@ -584,12 +595,12 @@ export function OverviewClient({ userName, workspaceName, businessType, business
               const isAdded = addedTasks.has(task)
               const isAdding = addingTask === task
               return (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 4px', borderRadius: 5, background: isAdded ? 'rgba(34,197,94,0.05)' : 'transparent' }}>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 4px', borderRadius: 5, background: isAdded ? 'var(--accent-faint)' : 'transparent' }}>
                   <button onClick={(e) => { e.stopPropagation(); addSuggestedTask(task) }} disabled={isAdded || !!addingTask}
-                    style={{ width: 15, height: 15, borderRadius: 3, border: `1px solid ${isAdded ? 'var(--accent)' : 'rgba(34,197,94,0.2)'}`, background: isAdded ? 'rgba(39,211,110,0.05)' : 'rgba(39,211,110,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: isAdded ? 'not-allowed' : 'pointer', opacity: isAdded ? 0.65 : 1 }}>
+                    style={{ width: 15, height: 15, borderRadius: 3, border: `1px solid ${isAdded ? 'var(--accent)' : 'var(--accent-muted)'}`, background: 'var(--accent-faint)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: isAdded ? 'not-allowed' : 'pointer', opacity: isAdded ? 0.65 : 1 }}>
                     {isAdding
                       ? <Loader2 style={{ width: 7, height: 7, color: 'var(--accent)' }} className="animate-spin" />
-                      : <Plus style={{ width: 7, height: 7, color: isAdded ? 'rgba(39,211,110,0.45)' : 'var(--accent)' }} />}
+                      : <Plus style={{ width: 7, height: 7, color: isAdded ? 'var(--accent-glow)' : 'var(--accent)' }} />}
                   </button>
                   <p style={{ fontSize: 11, flex: 1, color: 'var(--text-secondary)', textDecoration: 'none' }}>
                     {task}
@@ -598,9 +609,11 @@ export function OverviewClient({ userName, workspaceName, businessType, business
               )
             })}
           </div>
-          <Link href="/dashboard/tasks" style={{ marginTop: 10, fontSize: 10, fontWeight: 500, padding: '6px', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', border: '1px solid rgba(34,197,94,0.14)', background: 'rgba(34,197,94,0.04)', textDecoration: 'none' }}>
+          <Link href="/dashboard/tasks" style={{ marginTop: 10, fontSize: 10, fontWeight: 500, padding: '6px', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', border: '1px solid var(--accent-muted)', background: 'var(--accent-faint)', textDecoration: 'none' }}>
             View all tasks
           </Link>
+        </div>
+        <div className="app-card-glow" />
         </div>
 
         <TodaysFocus
@@ -620,13 +633,13 @@ export function OverviewClient({ userName, workspaceName, businessType, business
 
       </div>
 
-      <div style={{ ...S.card, padding: '13px 16px', display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div className="app-card"><div className="app-card-inner" style={{ padding: '13px 16px', display: 'flex', alignItems: 'center', gap: 14 }}>
         <Bell style={{ width: 16, height: 16, color: '#fbbf24' }} />
         <span style={{ ...S.label, color: 'var(--text-primary)' }}>AI Alerts</span>
-        <span style={{ fontSize: 10, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)', background: conversionRate === 0 && leads > 0 ? 'rgba(251,191,36,.08)' : 'rgba(39,211,110,.08)', border: conversionRate === 0 && leads > 0 ? '1px solid rgba(251,191,36,.2)' : '1px solid rgba(39,211,110,.2)', borderRadius: 999, padding: '3px 8px' }}>{conversionRate === 0 && leads > 0 ? 'warning' : 'live'}</span>
+        <span style={{ fontSize: 10, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)', background: conversionRate === 0 && leads > 0 ? 'rgba(251,191,36,.08)' : 'var(--accent-faint)', border: conversionRate === 0 && leads > 0 ? '1px solid rgba(251,191,36,.2)' : '1px solid var(--accent-ring)', borderRadius: 999, padding: '3px 8px' }}>{conversionRate === 0 && leads > 0 ? 'warning' : 'live'}</span>
         <span style={{ fontSize: 12, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)' }}>{leads > 0 ? `${conversionRate}% conversion rate across ${leads} logged leads` : tasks.length ? `${completedCount}/${tasks.length} tasks completed today` : 'Log leads, revenue, or tasks to generate alerts'}</span>
         <ChevronRight style={{ marginLeft: 'auto', width: 14, height: 14, color: 'var(--text-muted)', transform: 'rotate(90deg)' }} />
-      </div>
+      </div><div className="app-card-glow" /></div>
 
       <div style={{ display: 'none' }}>
       <ProactiveAlerts
@@ -648,18 +661,21 @@ export function OverviewClient({ userName, workspaceName, businessType, business
 
       {!hasData && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '12px 0' }}>
-          <div style={{ ...S.card, padding: 24, textAlign: 'center', width: '100%', maxWidth: 360 }}>
+          <div className="app-card" style={{ width: '100%', maxWidth: 360 }}>
+          <div className="app-card-inner" style={{ padding: 24, textAlign: 'center' }}>
             <Zap style={{ width: 28, height: 28, color: 'var(--accent)', margin: '0 auto 10px', opacity: 0.75 }} />
             <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>Log your first period</p>
             <p style={{ ...S.sub, marginBottom: 16, lineHeight: 1.5 }}>Enter revenue, expenses, leads, and customers to unlock your full dashboard.</p>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={() => setShowModal(true)} style={{ flex: 1, padding: '9px', borderRadius: 7, fontSize: 12, fontWeight: 600, background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008', border: 'none', cursor: 'pointer' }}>
+              <button onClick={() => setShowModal(true)} style={{ flex: 1, padding: '9px', borderRadius: 7, fontSize: 12, fontWeight: 600, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer' }}>
                 Quick log
               </button>
               <Link href="/dashboard/period-entry" style={{ flex: 1, padding: '9px', borderRadius: 7, fontSize: 12, fontWeight: 600, background: 'var(--bg-raised)', color: 'var(--text-secondary)', border: '1px solid var(--border)', textDecoration: 'none', textAlign: 'center' }}>
                 Full entry →
               </Link>
             </div>
+          </div>
+          <div className="app-card-glow" />
           </div>
         </div>
       )}

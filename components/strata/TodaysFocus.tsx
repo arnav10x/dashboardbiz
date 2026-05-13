@@ -127,7 +127,7 @@ export function TodaysFocus({ userName, businessType, hasData, revenue, expenses
           </div>
 
           {/* Priority block */}
-          <div style={{ padding: '10px 12px', borderRadius: 8, marginBottom: 10, background: 'rgba(34,197,94,0.07)', border: '1px solid rgba(34,197,94,0.14)' }}>
+          <div style={{ padding: '10px 12px', borderRadius: 8, marginBottom: 10, background: 'var(--accent-faint)', border: '1px solid var(--accent-ring)' }}>
             <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--accent)', marginBottom: 4, opacity: 0.8 }}>#1 Priority</p>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.4, marginBottom: 4 }}>
               {focus.priority}
@@ -142,7 +142,7 @@ export function TodaysFocus({ userName, businessType, hasData, revenue, expenses
                 style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 7, background: 'var(--bg-raised)', border: '1px solid var(--border)', textDecoration: 'none', transition: 'opacity 0.15s' }}
                 onMouseEnter={e => (e.currentTarget.style.opacity = '0.75')}
                 onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                <div style={{ width: 16, height: 16, borderRadius: 4, background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <div style={{ width: 16, height: 16, borderRadius: 4, background: 'var(--accent-faint)', border: '1px solid var(--accent-ring)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <span style={{ fontSize: 8, fontWeight: 900, color: 'var(--accent)' }}>{i + 1}</span>
                 </div>
                 <p style={{ fontSize: 11, flex: 1, color: 'var(--text-secondary)' }}>{task.label}</p>

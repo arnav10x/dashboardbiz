@@ -152,7 +152,7 @@ export function AICoachPanel({ userName }: AICoachPanelProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-4 flex-shrink-0" style={{ height: 56, borderBottom: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 5, background: 'var(--accent-muted)', border: '1px solid rgba(34,197,94,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 20, height: 20, borderRadius: 5, background: 'var(--accent-muted)', border: '1px solid var(--accent-ring)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <TrendingUp style={{ width: 10, height: 10, color: 'var(--accent)' }} />
           </div>
           <div>
@@ -214,7 +214,7 @@ export function AICoachPanel({ userName }: AICoachPanelProps) {
           <div style={{ borderTop: '1px solid var(--border)', paddingTop: 8, marginTop: 2, display: 'flex', flexDirection: 'column', gap: 5 }}>
             <p style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)' }}>Chat</p>
             {messages.slice(-4).map((m, i) => (
-              <div key={i} style={{ padding: '8px 10px', borderRadius: 7, marginLeft: m.role === 'user' ? 16 : 0, marginRight: m.role === 'assistant' ? 16 : 0, background: m.role === 'user' ? 'var(--accent-muted)' : 'var(--bg-card)', border: `1px solid ${m.role === 'user' ? 'rgba(34,197,94,0.2)' : 'var(--border)'}` }}>
+              <div key={i} style={{ padding: '8px 10px', borderRadius: 7, marginLeft: m.role === 'user' ? 16 : 0, marginRight: m.role === 'assistant' ? 16 : 0, background: m.role === 'user' ? 'var(--accent-muted)' : 'var(--bg-card)', border: `1px solid ${m.role === 'user' ? 'var(--accent-ring)' : 'var(--border)'}` }}>
                 <p style={{ fontSize: 11, lineHeight: 1.5, color: m.role === 'user' ? 'var(--accent)' : 'var(--text-secondary)' }}>{m.content}</p>
               </div>
             ))}

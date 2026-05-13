@@ -13,7 +13,7 @@ const STAGE_CFG: Record<Stage, { label: string; color: string; accent: string; b
   contacted: { label: 'Contacted',     color: '#a78bfa', accent: 'rgba(167,139,250,0.22)', bg: 'rgba(167,139,250,0.07)', actionLabel: 'Contacted' },
   qualified: { label: 'Qualified',     color: '#06b6d4', accent: 'rgba(6,182,212,0.22)',   bg: 'rgba(6,182,212,0.07)',   actionLabel: 'Qualified' },
   proposal:  { label: 'Proposal Sent', color: '#f59e0b', accent: 'rgba(245,158,11,0.22)',  bg: 'rgba(245,158,11,0.07)',  actionLabel: 'Sent'      },
-  won:       { label: 'Won',           color: '#22c55e', accent: 'rgba(34,197,94,0.22)',   bg: 'rgba(34,197,94,0.07)',   actionLabel: 'Won'       },
+  won:       { label: 'Won',           color: 'var(--accent)', accent: 'var(--accent-ring)',   bg: 'var(--accent-faint)',   actionLabel: 'Won'       },
   lost:      { label: 'Lost',          color: '#f43f5e', accent: 'rgba(244,63,94,0.22)',   bg: 'rgba(244,63,94,0.07)',   actionLabel: 'Lost'      },
 }
 const STAGES: Stage[]        = ['new_lead', 'contacted', 'qualified', 'proposal', 'won', 'lost']
@@ -23,7 +23,7 @@ const AVATAR_COLORS = [
   { bg: 'rgba(96,165,250,0.18)',  text: '#60a5fa', border: 'rgba(96,165,250,0.35)'  },
   { bg: 'rgba(167,139,250,0.18)', text: '#a78bfa', border: 'rgba(167,139,250,0.35)' },
   { bg: 'rgba(245,158,11,0.18)',  text: '#f59e0b', border: 'rgba(245,158,11,0.35)'  },
-  { bg: 'rgba(34,197,94,0.18)',   text: '#22c55e', border: 'rgba(34,197,94,0.35)'   },
+  { bg: 'var(--accent-muted)',   text: 'var(--accent)', border: 'var(--accent-glow)'   },
   { bg: 'rgba(244,63,94,0.18)',   text: '#f43f5e', border: 'rgba(244,63,94,0.35)'   },
   { bg: 'rgba(6,182,212,0.18)',   text: '#06b6d4', border: 'rgba(6,182,212,0.35)'   },
   { bg: 'rgba(234,179,8,0.18)',   text: '#eab308', border: 'rgba(234,179,8,0.35)'   },
@@ -239,7 +239,7 @@ function LeadPanel({ lead, onClose, onMove, onDelete, onSave }: {
           {dirty && (
             <button onClick={save}
               className="w-full py-2 text-xs font-bold transition-all"
-              style={{ borderRadius: 7, background: status === 'saved' ? 'rgba(34,197,94,0.15)' : 'var(--accent)', color: status === 'saved' ? 'var(--accent)' : 'white' }}>
+              style={{ borderRadius: 7, background: status === 'saved' ? 'var(--accent-muted)' : 'var(--accent)', color: status === 'saved' ? 'var(--accent)' : 'white' }}>
               {status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved' : 'Save changes'}
             </button>
           )}
@@ -461,10 +461,10 @@ export default function PipelinePage() {
 
   const stats = [
     { label: 'Total Pipeline Value', value: totalPipelineVal > 0 ? fmt(totalPipelineVal) : '$0',     sub: `${active.length} active deals`,          color: '#60a5fa', icon: DollarSign  },
-    { label: 'Pipeline Growth',      value: `${growthPct > 0 ? '+' : ''}${growthPct}%`,              sub: 'vs previous 30 days',                    color: '#22c55e', icon: TrendingUp  },
+    { label: 'Pipeline Growth',      value: `${growthPct > 0 ? '+' : ''}${growthPct}%`,              sub: 'vs previous 30 days',                    color: 'var(--accent)', icon: TrendingUp  },
     { label: 'Win Rate',             value: winRate !== null ? `${winRate}%` : '—',                   sub: `${won.length} won · ${lost.length} lost`, color: '#a78bfa', icon: Target      },
     { label: 'Avg Deal Value',       value: avgDealVal ? fmt(avgDealVal) : '—',                      sub: `from ${leadsWithVal.length} deals`,       color: '#f59e0b', icon: BarChart2   },
-    { label: 'Total Won Value',      value: totalWonVal > 0 ? fmt(totalWonVal) : '$0',               sub: `${won.length} closed deals`,              color: '#22c55e', icon: TrendingUp  },
+    { label: 'Total Won Value',      value: totalWonVal > 0 ? fmt(totalWonVal) : '$0',               sub: `${won.length} closed deals`,              color: 'var(--accent)', icon: TrendingUp  },
   ]
 
   // Display rows: search, filter, and tabs now drive both board and table.
@@ -481,7 +481,7 @@ export default function PipelinePage() {
   // Sidebar stats
   const advancedLeads = leads.filter(l => ['contacted','qualified','proposal','won'].includes(l.stage))
   const healthPct   = leads.length > 0 ? Math.round((advancedLeads.length / leads.length) * 100) : 0
-  const healthColor = healthPct >= 60 ? '#22c55e' : healthPct >= 30 ? '#f59e0b' : '#f43f5e'
+  const healthColor = healthPct >= 60 ? 'var(--accent)' : healthPct >= 30 ? '#f59e0b' : '#f43f5e'
   const healthLabel = healthPct >= 60 ? 'Healthy' : healthPct >= 30 ? 'Moderate' : 'Needs Work'
   const r = 36, circ = 2 * Math.PI * r
   const offset = circ * (1 - healthPct / 100)
@@ -493,7 +493,7 @@ export default function PipelinePage() {
   if (newLeadCount > 0) actions.push({ icon: '📞', text: `Reach out to ${newLeadCount} new lead${newLeadCount > 1 ? 's' : ''}`, color: '#60a5fa' })
   const proposalCount = leads.filter(l => l.stage === 'proposal').length
   if (proposalCount > 0) actions.push({ icon: '💼', text: `${proposalCount} proposal${proposalCount > 1 ? 's' : ''} awaiting response`, color: '#f59e0b' })
-  if (actions.length === 0) actions.push({ icon: '✅', text: 'Pipeline looks healthy — keep it moving!', color: '#22c55e' })
+  if (actions.length === 0) actions.push({ icon: '✅', text: 'Pipeline looks healthy — keep it moving!', color: 'var(--accent)' })
   while (actions.length < 3) actions.push({ icon: '📈', text: `${won.length} deal${won.length !== 1 ? 's' : ''} won · ${winRate ?? 0}% win rate`, color: 'var(--accent)' })
 
   return (
@@ -515,8 +515,8 @@ export default function PipelinePage() {
               <Filter className="h-4 w-4" /> Filters
             </button>
             <div className="flex overflow-hidden fo-card-2">
-              <button onClick={() => setViewMode('table')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'table' ? 'var(--accent)' : 'rgba(34,197,94,.08)', color: viewMode === 'table' ? '#06140b' : 'var(--accent)' }}><Rows3 className="h-4 w-4" /></button>
-              <button onClick={() => setViewMode('board')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'board' ? 'var(--accent)' : 'rgba(34,197,94,.08)', color: viewMode === 'board' ? '#06140b' : 'var(--accent)' }}><Grid2X2 className="h-4 w-4" /></button>
+              <button onClick={() => setViewMode('table')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'table' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'table' ? '#06140b' : 'var(--accent)' }}><Rows3 className="h-4 w-4" /></button>
+              <button onClick={() => setViewMode('board')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'board' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'board' ? '#06140b' : 'var(--accent)' }}><Grid2X2 className="h-4 w-4" /></button>
             </div>
             <button onClick={() => setShowAdd(true)} className="h-9 px-5 flex items-center gap-2 rounded-lg text-xs font-black fo-green-btn">
               <Plus className="h-4 w-4" /> Add Lead
@@ -527,13 +527,13 @@ export default function PipelinePage() {
         {showFilters && (
           <div className="absolute right-24 top-[74px] z-30 w-56 rounded-xl p-3 fo-card" style={{ boxShadow: '0 20px 60px rgba(0,0,0,.45)' }}>
             <p className="mb-2 text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>Filter stage</p>
-            <button onClick={() => { setStageFilter('all'); setShowFilters(false) }} className="mb-1 w-full rounded-md px-3 py-2 text-left text-xs font-bold" style={{ color: stageFilter === 'all' ? 'var(--accent)' : 'var(--text-secondary)', background: stageFilter === 'all' ? 'rgba(34,197,94,.10)' : 'transparent' }}>All active stages</button>
+            <button onClick={() => { setStageFilter('all'); setShowFilters(false) }} className="mb-1 w-full rounded-md px-3 py-2 text-left text-xs font-bold" style={{ color: stageFilter === 'all' ? 'var(--accent)' : 'var(--text-secondary)', background: stageFilter === 'all' ? 'var(--accent-faint)' : 'transparent' }}>All active stages</button>
             {STAGES.map(s => <button key={s} onClick={() => { setStageFilter(s); if (s === 'lost') setTableTab('archived'); else if (tableTab === 'archived') setTableTab('all'); setShowFilters(false) }} className="mb-1 flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs font-bold" style={{ color: stageFilter === s ? STAGE_CFG[s].color : 'var(--text-secondary)', background: stageFilter === s ? STAGE_CFG[s].bg : 'transparent' }}><span className="h-2 w-2 rounded-full" style={{ background: STAGE_CFG[s].color }} />{STAGE_CFG[s].label}</button>)}
           </div>
         )}
 
         {(stageFilter !== 'all' || searchQuery.trim()) && (
-          <div className="mb-4 flex items-center justify-between rounded-lg px-4 py-2 text-xs font-bold" style={{ background: 'rgba(34,197,94,.07)', border: '1px solid rgba(34,197,94,.18)', color: 'var(--text-secondary)' }}>
+          <div className="mb-4 flex items-center justify-between rounded-lg px-4 py-2 text-xs font-bold" style={{ background: 'var(--accent-faint)', border: '1px solid var(--accent-muted)', color: 'var(--text-secondary)' }}>
             <span>Showing {filteredLeads.length} lead{filteredLeads.length === 1 ? '' : 's'}{stageFilter !== 'all' ? ` in ${STAGE_CFG[stageFilter].label}` : ''}{searchQuery.trim() ? ` matching \"${searchQuery.trim()}\"` : ''}</span>
             <button onClick={() => { setStageFilter('all'); setSearchQuery('') }} style={{ color: 'var(--accent)' }}>Clear filters</button>
           </div>
@@ -541,14 +541,19 @@ export default function PipelinePage() {
 
         <div className="grid grid-cols-5 gap-3 mb-5">
           {stats.map((s, idx) => (
-            <div key={s.label} className="fo-card p-4 min-h-[108px]">
-              <div className="flex items-start justify-between mb-3">
-                <p className="fo-kicker">{idx === 0 ? 'Total Pipeline Value' : s.label}</p>
-                {idx === 1 ? <TrendingUp className="h-4 w-4" style={{ color: 'var(--accent)' }} /> : idx === 4 ? null : <s.icon className="h-4 w-4" style={{ color: s.color }} />}
+            <div key={s.label} className="app-card" style={{ minHeight: 108 }}>
+              <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
+                <div className="flex items-start justify-between mb-3">
+                  <p className="fo-kicker">{s.label}</p>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.08)' }}>
+                    <s.icon className="w-4 h-4" style={{ color: s.color }} />
+                  </div>
+                </div>
+                <p className="text-2xl font-black fo-num" style={{ color: idx === 1 ? 'var(--accent)' : 'var(--text-primary)' }}>{s.value}</p>
+                <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{s.sub}</p>
+                {idx === 0 && <div className="mt-3 fo-soft-line"><span style={{ width: '55%' }} /></div>}
               </div>
-              <p className="text-2xl font-black fo-num" style={{ color: idx === 1 ? 'var(--accent)' : 'var(--text-primary)' }}>{s.value}</p>
-              <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{s.sub}</p>
-              {idx === 0 && <div className="mt-3 fo-soft-line"><span style={{ width: '55%' }} /></div>}
+              <div className="app-card-glow" />
             </div>
           ))}
         </div>
@@ -636,7 +641,7 @@ export default function PipelinePage() {
           })}
           <div className="flex items-center justify-between px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>
             <span>Showing 1 to {Math.min(tableLeads.length, 7)} of {tableLeads.length} leads</span>
-            <div className="flex items-center gap-3"><ChevronRight className="h-4 w-4 rotate-180"/><span className="px-2 py-1 rounded-md" style={{ background: 'rgba(34,197,94,.12)', color: 'var(--accent)' }}>1</span><span>2</span><ChevronRight className="h-4 w-4"/></div>
+            <div className="flex items-center gap-3"><ChevronRight className="h-4 w-4 rotate-180"/><span className="px-2 py-1 rounded-md" style={{ background: 'var(--accent-muted)', color: 'var(--accent)' }}>1</span><span>2</span><ChevronRight className="h-4 w-4"/></div>
           </div>
         </div>
       </div>

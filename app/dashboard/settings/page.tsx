@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { TopBar } from '@/components/strata/TopBar'
-import { Upload, Check, AlertTriangle, X, Trash2, UserRound } from 'lucide-react'
+import { Upload, Check, AlertTriangle, X, Trash2, UserRound, LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 type Tab = 'profile' | 'preferences' | 'goals' | 'appearance' | 'account'
@@ -32,6 +33,7 @@ const STAGES = ['Pre-revenue', 'Early Stage', 'Growing', 'Established', 'Scaling
 const FREQUENCIES = ['Weekly', 'Monthly', 'Quarterly']
 
 export default function SettingsPage() {
+  const router = useRouter()
   const [tab, setTab] = useState<Tab>('profile')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -243,6 +245,12 @@ export default function SettingsPage() {
     setSaved(true); setTimeout(() => setSaved(false), 2000)
   }
 
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
   const deleteAccount = async () => {
     if (deleteAccountInput !== 'DELETE ACCOUNT') return
     setDeletingAccount(true)
@@ -271,6 +279,10 @@ export default function SettingsPage() {
     document.documentElement.style.setProperty('--accent', color)
     document.documentElement.style.setProperty('--accent-hover', color)
     document.documentElement.style.setProperty('--accent-muted', color + '20')
+    document.documentElement.style.setProperty('--accent-ring', color + '38')
+    document.documentElement.style.setProperty('--accent-faint', color + '14')
+    document.documentElement.style.setProperty('--accent-glow', color + '6B')
+    document.documentElement.style.setProperty('--accent-subtle', color + '09')
   }
 
   const applyTheme = (theme: string) => {
@@ -325,7 +337,7 @@ export default function SettingsPage() {
   )
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" style={{ background: 'var(--bg-base)' }}>
       <TopBar title="Settings" workspaceName={workspaceName} hasData={true} showGreeting />
 
       {/* ── Clear data confirmation modal ─────────────────────────────── */}
@@ -479,7 +491,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="p-5" style={{ borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-                  <div className="flex items-start gap-3"><div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{background:'rgba(39,211,110,.1)',border:'1px solid rgba(39,211,110,.25)'}}><UserRound className="h-4 w-4" style={{color:'var(--accent)'}} /></div><div className="flex-1"><p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Unique username</p><p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>Teammates can invite you by this username. You can change it 3 times per month.</p><div className="flex gap-2"><input className="input-base" value={username} onChange={e=>setUsername(e.target.value.toLowerCase())} placeholder="akhil_founder" /><button onClick={saveUsername} className="px-4 rounded-lg text-xs font-bold" style={{background:'var(--accent)', color:'#041008'}}>Save</button></div><p className="text-[10px] mt-2" style={{ color: usernameError ? '#f43f5e' : 'var(--text-muted)' }}>{usernameError || `${usernameMonth === new Date().toISOString().slice(0,7) ? usernameChanges : 0}/3 changes used this month`}</p></div></div>
+                  <div className="flex items-start gap-3"><div className="h-9 w-9 rounded-lg flex items-center justify-center" style={{background:'var(--accent-faint)',border:'1px solid var(--accent-ring)'}}><UserRound className="h-4 w-4" style={{color:'var(--accent)'}} /></div><div className="flex-1"><p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Unique username</p><p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>Teammates can invite you by this username. You can change it 3 times per month.</p><div className="flex gap-2"><input className="input-base" value={username} onChange={e=>setUsername(e.target.value.toLowerCase())} placeholder="akhil_founder" /><button onClick={saveUsername} className="px-4 rounded-lg text-xs font-bold" style={{background:'var(--accent)', color:'#041008'}}>Save</button></div><p className="text-[10px] mt-2" style={{ color: usernameError ? '#f43f5e' : 'var(--text-muted)' }}>{usernameError || `${usernameMonth === new Date().toISOString().slice(0,7) ? usernameChanges : 0}/3 changes used this month`}</p></div></div>
                 </div>
 
                 {/* Business profile form */}
@@ -738,6 +750,23 @@ export default function SettingsPage() {
                         </span>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                <div className="p-5" style={{ borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Sign out</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Sign out of your Strata account on this device.</p>
+                    </div>
+                    <button
+                      onClick={handleSignOut}
+                      className="flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg"
+                      style={{ background: 'var(--bg-raised)', color: 'var(--text-secondary)', border: '1px solid var(--border-strong)' }}
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
+                      Sign out
+                    </button>
                   </div>
                 </div>
 

@@ -30,11 +30,16 @@ export function ThemeLoader() {
         localStorage.setItem('strata-theme', 'dark')
       }
 
-      // Restore saved accent color
+      // Restore saved accent color + derived opacity variants
       if (data?.accent_color) {
-        document.documentElement.style.setProperty('--accent', data.accent_color)
-        document.documentElement.style.setProperty('--accent-hover', data.accent_color)
-        document.documentElement.style.setProperty('--accent-muted', data.accent_color + '20')
+        const c = data.accent_color
+        document.documentElement.style.setProperty('--accent', c)
+        document.documentElement.style.setProperty('--accent-hover', c)
+        document.documentElement.style.setProperty('--accent-muted', c + '20')   // ~13%
+        document.documentElement.style.setProperty('--accent-ring', c + '38')    // ~22%
+        document.documentElement.style.setProperty('--accent-faint', c + '14')   // ~8%
+        document.documentElement.style.setProperty('--accent-glow', c + '6B')    // ~42%
+        document.documentElement.style.setProperty('--accent-subtle', c + '09')  // ~3.5%
       }
     }
     apply()

@@ -36,7 +36,7 @@ export function LogoPreloader() {
             className="h-20 w-20 rounded-3xl flex items-center justify-center"
             style={{
               background: 'var(--accent)',
-              boxShadow: '0 0 60px rgba(34,197,94,0.45), 0 0 120px rgba(34,197,94,0.2)',
+              boxShadow: '0 0 60px var(--accent-glow), 0 0 120px var(--accent-muted)',
             }}
           >
             <Zap className="h-10 w-10 text-white" strokeWidth={2.5} />
@@ -51,7 +51,7 @@ export function LogoPreloader() {
             animation: 'logoReveal 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both',
           }}
         >
-          Founder<span style={{ color: 'var(--accent)' }}>OS</span>
+          <span style={{ color: 'var(--text-primary)' }}>Strat</span><span style={{ color: 'var(--accent)' }}>a</span>
         </div>
 
         {/* Pulse dots */}

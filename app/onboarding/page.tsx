@@ -30,6 +30,7 @@ export default function OnboardingPage() {
   const [summary, setSummary] = useState('')
   const [goal, setGoal] = useState('Hit $10k/month')
   const [revenueTarget, setRevenueTarget] = useState('')
+  const [saveError, setSaveError] = useState('')
 
   useEffect(() => {
     const check = async () => {
@@ -62,23 +63,48 @@ export default function OnboardingPage() {
 
   const handleFinish = async () => {
     setSaving(true)
+    setSaveError('')
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { setSaving(false); return }
 
-    await supabase.from('workspaces').update({
-      name: businessName || 'My Workspace',
-      business_type: businessType,
-      stage,
-      business_summary: summary.trim(),
-    }).eq('owner_id', user.id)
+    // Upsert workspace — insert for new users, update for returning users
+    const { data: existingWs } = await supabase
+      .from('workspaces')
+      .select('id')
+      .eq('owner_id', user.id)
+      .maybeSingle()
 
-    await supabase.from('user_settings').upsert({
+    if (existingWs) {
+      await supabase.from('workspaces').update({
+        name: businessName || 'My Workspace',
+        business_type: businessType,
+        stage,
+        business_summary: summary.trim(),
+      }).eq('id', existingWs.id)
+    } else {
+      await supabase.from('workspaces').insert({
+        owner_id: user.id,
+        name: businessName || 'My Workspace',
+        business_type: businessType,
+        stage,
+        business_summary: summary.trim(),
+        invite_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
+      })
+    }
+
+    const { error: settingsError } = await supabase.from('user_settings').upsert({
       user_id: user.id,
       primary_goal: goal,
       revenue_target: Number(revenueTarget) || null,
       onboarding_completed: true,
     }, { onConflict: 'user_id' })
+
+    if (settingsError) {
+      setSaveError('Something went wrong saving your settings. Please try again.')
+      setSaving(false)
+      return
+    }
 
     router.push('/dashboard')
   }
@@ -323,7 +349,10 @@ export default function OnboardingPage() {
                 </div>
               </div>
 
-              <div className="flex gap-3 mt-8">
+              {saveError && (
+                <p className="mt-4 text-xs text-center" style={{ color: '#f87171' }}>{saveError}</p>
+              )}
+              <div className="flex gap-3 mt-4">
                 <button
                   onClick={() => setStep(2)}
                   className="flex-shrink-0 px-5 py-3 rounded-xl text-sm font-semibold"

@@ -15,8 +15,8 @@ function rarityColor(label: string) {
   if (label.includes('Legendary')) return '#f6c343'
   if (label.includes('Epic')) return '#bf5af2'
   if (label.includes('Rare')) return '#3b82f6'
-  if (label.includes('Uncommon')) return '#22c55e'
-  return '#22c55e'
+  if (label.includes('Uncommon')) return 'var(--accent)'
+  return 'var(--accent)'
 }
 
 export function BadgeCategoryDialog({
@@ -72,7 +72,7 @@ export function BadgeCategoryDialog({
                             <path d="M50 32 L57 46 L72 47 L60 58 L64 74 L50 65 L36 74 L40 58 L28 47 L43 46 Z" fill={isEarned ? color : 'rgba(255,255,255,.14)'} stroke="rgba(255,255,255,.45)" strokeWidth="1.5" />
                           </svg>
                         </div>
-                        {isEarned ? <CheckCircle2 className="h-5 w-5" style={{ color: '#22c55e' }} /> : <Lock className="h-5 w-5" style={{ color: 'rgba(255,255,255,.45)' }} />}
+                        {isEarned ? <CheckCircle2 className="h-5 w-5" style={{ color: 'var(--accent)' }} /> : <Lock className="h-5 w-5" style={{ color: 'rgba(255,255,255,.45)' }} />}
                       </div>
                       <h4 className="font-black">{item.title}</h4>
                       <p className="mt-1 text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,.58)' }}>{item.desc}</p>

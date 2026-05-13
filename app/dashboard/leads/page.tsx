@@ -65,26 +65,28 @@ export default function LeadsPage() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#09090b] text-white">
+    <div className="flex flex-col h-full" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       {/* Sticky Header Layer */}
-      <div className="px-6 py-6 border-b border-zinc-800 bg-[#09090b] sticky top-0 z-30">
+      <div className="px-6 py-6 sticky top-0 z-30" style={{ background: 'var(--bg-base)', borderBottom: '1px solid var(--border)' }}>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-zinc-100">Pipeline</h1>
-            <p className="text-zinc-500 text-sm mt-1">If they aren't on the board, they don't exist.</p>
+            <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>Pipeline</h1>
+            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>If they aren't on the board, they don't exist.</p>
           </div>
-          
+
           <div className="flex items-center gap-4">
-            <div className="flex items-center bg-[#18181b] rounded-md border border-zinc-800 p-1">
-              <button 
+            <div className="flex items-center rounded-md p-1" style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)' }}>
+              <button
                 onClick={() => setView('kanban')}
-                className={`p-1.5 rounded ${view === 'kanban' ? 'bg-zinc-800 text-indigo-400' : 'text-zinc-500 hover:text-zinc-300'}`}
+                className="p-1.5 rounded"
+                style={{ background: view === 'kanban' ? 'var(--bg-hover)' : 'transparent', color: view === 'kanban' ? 'var(--accent)' : 'var(--text-muted)' }}
               >
                 <LayoutGrid className="h-4 w-4" />
               </button>
-              <button 
+              <button
                 onClick={() => setView('list')}
-                className={`p-1.5 rounded ${view === 'list' ? 'bg-zinc-800 text-indigo-400' : 'text-zinc-500 hover:text-zinc-300'}`}
+                className="p-1.5 rounded"
+                style={{ background: view === 'list' ? 'var(--bg-hover)' : 'transparent', color: view === 'list' ? 'var(--accent)' : 'var(--text-muted)' }}
               >
                 <List className="h-4 w-4" />
               </button>

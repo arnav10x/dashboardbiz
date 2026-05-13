@@ -135,7 +135,7 @@ const BASE_RANKS = ['Rookie','Silver','Gold','Diamond','Elite','Founder'].map((b
     minLevel: firstIdx + 1,
     maxLevel: lastIdx + 1,
     xpRange: base === 'Radiant' ? `${minXp.toLocaleString()}+ XP` : `${minXp.toLocaleString()} - ${maxXp.toLocaleString()} XP`,
-    solid: rank?.color || '#22c55e',
+    solid: rank?.color || 'var(--accent)',
     desc: base === 'Rookie' ? 'Start the climb' : base === 'Silver' ? 'Sharpen execution' : base === 'Gold' ? 'Prove momentum' : base === 'Diamond' ? 'Elite discipline' : base === 'Elite' ? 'Dominant operator' : 'Top-tier founder',
   }
 })
@@ -487,7 +487,7 @@ export default async function AchievementsPage() {
   ]
 
   const badgeColors: Record<string, string> = {
-    Revenue: '#22c55e', Outreach: '#22c55e', Pipeline: '#22c55e', Consistency: '#3b82f6', Milestones: '#22c55e'
+    Revenue: 'var(--accent)', Outreach: 'var(--accent)', Pipeline: 'var(--accent)', Consistency: '#3b82f6', Milestones: 'var(--accent)'
   }
 
   const badgeSub: Record<string, string> = {
@@ -507,8 +507,8 @@ export default async function AchievementsPage() {
     <div className="min-h-full" style={{ background: '#050607', color: '#f7f7f7' }}>
       <style>{`
         .rank-preview-card, .achievement-hover-row { transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease, opacity .18s ease; }
-        .rank-preview-card:hover { transform: translateY(-4px) scale(1.015); opacity: 1 !important; box-shadow: 0 18px 55px rgba(0,0,0,.35), inset 0 0 32px rgba(34,197,94,.055) !important; }
-        .achievement-hover-row:hover { transform: translateX(4px); background: rgba(34,197,94,.055) !important; border-color: rgba(34,197,94,.18) !important; }
+        .rank-preview-card:hover { transform: translateY(-4px) scale(1.015); opacity: 1 !important; box-shadow: 0 18px 55px rgba(0,0,0,.35), inset 0 0 32px var(--accent-faint) !important; }
+        .achievement-hover-row:hover { transform: translateX(4px); background: var(--accent-faint) !important; border-color: var(--accent-muted) !important; }
         .rank-preview-card:hover .rank-hover-note { opacity: 1 !important; }
       `}</style>
       <div className="px-6 pt-4 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,.035)' }}>
@@ -526,7 +526,7 @@ export default async function AchievementsPage() {
           <div className="hidden md:flex items-center gap-6 pr-1" style={{ color: 'rgba(255,255,255,.66)' }}>
             <div className="relative">
               <Bell style={{ width: 18, height: 18, color: 'rgba(255,255,255,.72)' }} />
-              <span style={{ position: 'absolute', right: -7, top: -7, width: 15, height: 15, borderRadius: 99, background: '#22c55e', color: '#fff', fontSize: 9, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
+              <span style={{ position: 'absolute', right: -7, top: -7, width: 15, height: 15, borderRadius: 99, background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
             </div>
             <span style={{ fontSize: 12, fontWeight: 600 }}>Log out</span>
             <div style={{ width: 28, height: 28, borderRadius: 99, border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.025)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -538,7 +538,7 @@ export default async function AchievementsPage() {
 
       <div className="px-5 pb-4" style={{ width: '100%', maxWidth: 'none' }}>
         <div className="grid gap-3" style={{ gridTemplateColumns: '286px 1fr' }}>
-          <div className="panel-card p-6" style={{ minHeight: 226 }}>
+          <div className="app-card" style={{ minHeight: 226 }}><div className="app-card-inner" style={{ padding: '24px' }}>
             <p className="kicker">Current Rank</p>
             <h2 className="mt-4" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.045em', color: '#fff' }}>{rank.label}</h2>
             <div className="mt-3 flex items-center justify-between gap-3">
@@ -546,19 +546,19 @@ export default async function AchievementsPage() {
               <RankBadge color={rank.solid} label={rankInfo(xpProg.level).base} size={82} active division={((xpProg.level - 1) % 3) + 1} />
             </div>
             <div className="mt-2 flex items-end gap-2">
-              <span style={{ fontSize: 43, lineHeight: 1, fontWeight: 900, letterSpacing: '-.06em', color: '#22c55e' }}>{ovr}</span>
-              <span style={{ marginBottom: 7, fontSize: 12, fontWeight: 800, color: '#22c55e' }}>OVR</span>
+              <span style={{ fontSize: 43, lineHeight: 1, fontWeight: 900, letterSpacing: '-.06em', color: 'var(--accent)' }}>{ovr}</span>
+              <span style={{ marginBottom: 7, fontSize: 12, fontWeight: 800, color: 'var(--accent)' }}>OVR</span>
             </div>
             <div className="mt-5 h-1.5 overflow-hidden" style={{ borderRadius: 99, background: 'rgba(255,255,255,.085)' }}>
-              <div className="h-full" style={{ width: `${Math.min(100, Math.round((xpProg.xpInLevel / Math.max(1, xpProg.xpForNext)) * 100))}%`, borderRadius: 99, background: '#22c55e', boxShadow: '0 0 14px rgba(34,197,94,.5)' }} />
+              <div className="h-full" style={{ width: `${Math.min(100, Math.round((xpProg.xpInLevel / Math.max(1, xpProg.xpForNext)) * 100))}%`, borderRadius: 99, background: 'var(--accent)', boxShadow: '0 0 14px var(--accent-muted)' }} />
             </div>
             <div className="mt-3 flex items-center justify-between" style={{ fontSize: 12 }}>
               <span style={{ color: 'rgba(255,255,255,.62)' }}>{xpProg.xpInLevel.toLocaleString()} / {xpProg.xpForNext.toLocaleString()} XP</span>
-              <span style={{ color: '#22c55e', fontWeight: 800 }}>{rank.label}</span>
+              <span style={{ color: 'var(--accent)', fontWeight: 800 }}>{rank.label}</span>
             </div>
-          </div>
+          </div><div className="app-card-glow" /></div>
 
-          <div className="panel-card p-4" style={{ minHeight: 226 }}>
+          <div className="app-card" style={{ minHeight: 226 }}><div className="app-card-inner" style={{ padding: '16px' }}>
             <p className="kicker mb-3">Rank Progression</p>
             <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' }}>
               {BASE_RANKS.map((r) => {
@@ -566,41 +566,47 @@ export default async function AchievementsPage() {
                 const isCurrent = currentBase === r.label
                 const active = xpProg.level >= r.minLevel
                 return (
-                  <div key={r.label} title={`Preview ${r.label} rank`} className="rank-preview-card relative flex flex-col items-center justify-between" style={{ minHeight: 184, padding: '18px 12px 18px', borderRadius: 9, background: 'linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012))', border: `1px solid ${isCurrent ? '#22c55e' : r.solid}`, opacity: active || isCurrent ? 1 : .58, boxShadow: isCurrent ? '0 0 0 1px rgba(34,197,94,.18), inset 0 0 26px rgba(34,197,94,.045)' : 'inset 0 1px 0 rgba(255,255,255,.025)' }}>
+                  <div key={r.label} title={`Preview ${r.label} rank`} className="rank-preview-card relative flex flex-col items-center justify-between" style={{ minHeight: 184, padding: '18px 12px 18px', borderRadius: 9, background: 'linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012))', border: `1px solid ${isCurrent ? 'var(--accent)' : r.solid}`, opacity: active || isCurrent ? 1 : .58, boxShadow: isCurrent ? '0 0 0 1px var(--accent-muted), inset 0 0 26px var(--accent-faint)' : 'inset 0 1px 0 rgba(255,255,255,.025)' }}>
                     <p style={{ fontSize: 12, fontWeight: 800, color: '#fff' }}>{r.label}</p>
                     <RankBadge color={r.solid} label={r.label} size={102} active={true} division={isCurrent ? ((xpProg.level - 1) % 3) + 1 : 3} />
                     <div className="text-center" style={{ lineHeight: 1.55 }}>
                       <p style={{ fontSize: 10, color: 'rgba(255,255,255,.58)' }}>{r.xpRange}</p>
                       <p style={{ fontSize: 10, color: 'rgba(255,255,255,.58)' }}>Levels {r.minLevel}{r.maxLevel !== r.minLevel ? `-${r.maxLevel}` : ''}</p><p className="rank-hover-note" style={{ fontSize: 9, color: r.solid, opacity: 0, fontWeight: 800 }}>Hover preview</p>
                     </div>
-                    {isCurrent && <div style={{ position: 'absolute', bottom: -5, width: 8, height: 8, borderRadius: 99, background: '#22c55e', boxShadow: '0 0 14px #22c55e' }} />}
+                    {isCurrent && <div style={{ position: 'absolute', bottom: -5, width: 8, height: 8, borderRadius: 99, background: 'var(--accent)', boxShadow: '0 0 14px var(--accent)' }} />}
                   </div>
                 )
               })}
             </div>
-          </div>
+          </div><div className="app-card-glow" /></div>
         </div>
 
         <div className="grid gap-3 mt-3" style={{ gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' }}>
           {scoreCards.map((s) => (
-            <div key={s.label} className="panel-card p-4" style={{ minHeight: 100 }}>
-              <p className="kicker">{s.label}</p>
-              <div className="mt-3 flex items-end gap-2">
-                <span style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.05em', color: '#fff' }}>{s.val}</span>
-                <span style={{ marginBottom: 3, fontSize: 12, color: 'rgba(255,255,255,.48)' }}>/{s.max}</span>
+            <div key={s.label} className="app-card" style={{ minHeight: 100 }}>
+              <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
+                <p className="fo-kicker">{s.label}</p>
+                <div className="mt-3 flex items-end gap-2">
+                  <span className="fo-num" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.05em', color: '#fff' }}>{s.val}</span>
+                  <span style={{ marginBottom: 3, fontSize: 12, color: 'rgba(255,255,255,.48)' }}>/{s.max}</span>
+                </div>
+                <div className="mt-4 fo-soft-line">
+                  <span style={{ width: `${Math.min(100, Math.round((s.val / Math.max(1, s.max)) * 100))}%` }} />
+                </div>
               </div>
-              <div className="mt-4 h-1.5 overflow-hidden" style={{ borderRadius: 99, background: 'rgba(255,255,255,.075)' }}>
-                <div className="h-full" style={{ width: `${Math.min(100, Math.round((s.val / Math.max(1, s.max)) * 100))}%`, borderRadius: 99, background: '#22c55e' }} />
-              </div>
+              <div className="app-card-glow" />
             </div>
           ))}
-          <div className="panel-card p-4" style={{ minHeight: 100, borderLeft: '1px solid rgba(255,255,255,.10)' }}>
-            <p className="kicker">Total Badges</p>
-            <div className="mt-3 flex items-end gap-2">
-              <span style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, color: '#fff' }}>{totalEarned}</span>
-              <span style={{ marginBottom: 3, fontSize: 12, color: 'rgba(255,255,255,.48)' }}>/{ACHIEVEMENTS.length}</span>
+          <div className="app-card" style={{ minHeight: 100 }}>
+            <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
+              <p className="fo-kicker">Total Badges</p>
+              <div className="mt-3 flex items-end gap-2">
+                <span className="fo-num" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, color: '#fff' }}>{totalEarned}</span>
+                <span style={{ marginBottom: 3, fontSize: 12, color: 'rgba(255,255,255,.48)' }}>/{ACHIEVEMENTS.length}</span>
+              </div>
+              <Trophy className="mt-2" style={{ width: 18, height: 18, color: 'rgba(255,255,255,.42)' }} />
             </div>
-            <Trophy className="mt-2" style={{ width: 18, height: 18, color: 'rgba(255,255,255,.42)' }} />
+            <div className="app-card-glow" />
           </div>
         </div>
 
@@ -612,7 +618,7 @@ export default async function AchievementsPage() {
             </div>
             <div className="flex items-center gap-1.5 pr-2">
               <span style={{ fontSize: 10, color: 'rgba(255,255,255,.48)' }}>Less</span>
-              {['rgba(255,255,255,.055)', 'rgba(34,197,94,.22)', 'rgba(34,197,94,.5)', '#22c55e'].map(c => <div key={c} style={{ width: 13, height: 13, borderRadius: 3, background: c }} />)}
+              {['rgba(255,255,255,.055)', 'var(--accent-muted)', 'var(--accent-glow)', 'var(--accent)'].map((c, i) => <div key={i} style={{ width: 13, height: 13, borderRadius: 3, background: c }} />)}
               <span style={{ fontSize: 10, color: 'rgba(255,255,255,.48)' }}>More</span>
             </div>
           </div>
@@ -641,7 +647,7 @@ export default async function AchievementsPage() {
             </div>
             <div className="text-right">
               <p className="kicker">Completion</p>
-              <p style={{ fontSize: 22, lineHeight: 1, fontWeight: 900, color: '#22c55e' }}>{totalEarned}<span style={{ fontSize: 16, fontWeight: 500, color: 'rgba(255,255,255,.65)' }}>/{ACHIEVEMENTS.length}</span></p>
+              <p style={{ fontSize: 22, lineHeight: 1, fontWeight: 900, color: 'var(--accent)' }}>{totalEarned}<span style={{ fontSize: 16, fontWeight: 500, color: 'rgba(255,255,255,.65)' }}>/{ACHIEVEMENTS.length}</span></p>
             </div>
           </div>
           <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' }}>
@@ -665,7 +671,7 @@ export default async function AchievementsPage() {
                     {items.map(a => {
                       const isEarned = earned.has(a.id)
                       const sub = badgeSub[a.id] || 'Common'
-                      const rarityColor = sub.includes('Legendary') ? '#f6c343' : sub.includes('Epic') ? '#bf5af2' : sub.includes('Rare') ? '#3b82f6' : sub.includes('Uncommon') ? '#22c55e' : '#22c55e'
+                      const rarityColor = sub.includes('Legendary') ? '#f6c343' : sub.includes('Epic') ? '#bf5af2' : sub.includes('Rare') ? '#3b82f6' : 'var(--accent)'
                       return (
                         <div key={a.id} className="achievement-hover-row flex items-center gap-2 px-3 py-1.5" style={{ borderTop: '1px solid rgba(255,255,255,.04)', borderLeft: '1px solid transparent', cursor: 'default' }} title={`${a.title}: ${sub}` }>
                           <SmallBadge color={rarityColor} earned={isEarned} />
@@ -675,7 +681,7 @@ export default async function AchievementsPage() {
                               <span style={{ fontSize: 9, color: rarityColor, whiteSpace: 'nowrap' }}>{sub}</span>
                             </div>
                           </div>
-                          {isEarned ? <CheckCircle2 style={{ width: 15, height: 15, color: '#22c55e', flexShrink: 0 }} /> : <Lock style={{ width: 14, height: 14, color: 'rgba(255,255,255,.42)', flexShrink: 0 }} />}
+                          {isEarned ? <CheckCircle2 style={{ width: 15, height: 15, color: 'var(--accent)', flexShrink: 0 }} /> : <Lock style={{ width: 14, height: 14, color: 'rgba(255,255,255,.42)', flexShrink: 0 }} />}
                         </div>
                       )
                     })}

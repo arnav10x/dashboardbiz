@@ -21,7 +21,7 @@ function CircularProgress({ pct, size = 96, stroke = 8 }: { pct: number; size?: 
         stroke="var(--accent)" strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={circ} strokeDashoffset={offset}
         className="progress-ring-circle"
-        style={{ filter: 'drop-shadow(0 0 6px rgba(34,197,94,0.6))' }}
+        style={{ filter: 'drop-shadow(0 0 6px var(--accent-glow))' }}
       />
     </svg>
   )
@@ -252,7 +252,7 @@ export default function ProgressPage() {
             {/* Cash Collected */}
             <div className="rounded-2xl p-6 relative overflow-hidden" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
               <div className="absolute inset-0 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse at 90% 50%, rgba(34,197,94,0.06) 0%, transparent 60%)' }} />
+                style={{ background: 'radial-gradient(ellipse at 90% 50%, var(--accent-faint) 0%, transparent 60%)' }} />
               <div className="relative flex items-center justify-between">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--text-muted)' }}>Cash Collected</p>
@@ -273,7 +273,7 @@ export default function ProgressPage() {
                   <div className="flex items-center gap-2">
                     <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--bg-raised)' }}>
                       <div className="h-full rounded-full transition-all duration-1000"
-                        style={{ width: `${goalPct}%`, background: 'var(--accent)', boxShadow: '0 0 8px rgba(34,197,94,0.6)' }} />
+                        style={{ width: `${goalPct}%`, background: 'var(--accent)', boxShadow: '0 0 8px var(--accent-glow)' }} />
                     </div>
                     <span className="text-xs font-bold tabular-nums" style={{ color: 'var(--text-secondary)' }}>
                       ${revenue.toLocaleString()} / ${goal.toLocaleString()}
@@ -409,12 +409,15 @@ export default function ProgressPage() {
                 { label: 'Tasks Done', value: `${tasksDone}/${tasksTotal}`, icon: CheckSquare, color: 'var(--accent)' },
                 { label: 'Pipeline Leads', value: (funnel.prospects + funnel.replied + funnel.booked + funnel.closed).toString(), icon: Users, color: '#60a5fa' },
               ].map(s => (
-                <div key={s.label} className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>{s.label}</p>
-                    <s.icon className="h-3.5 w-3.5" style={{ color: s.color }} />
+                <div key={s.label} className="app-card" style={{ minHeight: 100 }}>
+                  <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="fo-kicker">{s.label}</p>
+                      <s.icon className="h-3.5 w-3.5" style={{ color: s.color }} />
+                    </div>
+                    <p className="text-2xl font-black" style={{ color: s.color, fontVariantNumeric: 'tabular-nums' }}>{s.value}</p>
                   </div>
-                  <p className="text-2xl font-black" style={{ color: s.color, fontVariantNumeric: 'tabular-nums' }}>{s.value}</p>
+                  <div className="app-card-glow" />
                 </div>
               ))}
             </div>

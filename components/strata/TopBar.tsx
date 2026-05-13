@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Plus, LogOut, User, Briefcase, Trash2 } from 'lucide-react'
+import { Plus, User, Briefcase, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -54,7 +54,7 @@ function WorkspaceSwitcher({ currentName }: { currentName: string }) {
       <button onClick={()=>setOpen(o=>!o)} className="rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-2" style={{background:'var(--bg-card)',border:'1px solid var(--border)',color:'var(--text-secondary)'}}><Briefcase className="h-3.5 w-3.5" />{active}</button>
       {open && <div className="absolute left-0 top-full mt-2 w-56 rounded-xl p-2 z-50" style={{background:'var(--bg-card)',border:'1px solid var(--border-strong)',boxShadow:'0 20px 50px rgba(0,0,0,.4)'}}>
         {workspaces.map(w=><div key={w.id} className="group flex items-center gap-1 rounded-lg hover:bg-white/[.06]"><button onClick={()=>{localStorage.setItem('active-workspace-id',w.id);setActive(w.name);setOpen(false);location.reload()}} className="flex-1 text-left px-3 py-2 text-xs" style={{color:w.name===active?'var(--accent)':'var(--text-secondary)'}}>{w.name}<span className="block text-[10px]" style={{color:'var(--text-muted)'}}>{w.business_type||'Workspace'}</span></button><button title="Delete workspace" onClick={async(e)=>{e.stopPropagation(); if(!confirm(`Delete workspace ${w.name}?`)) return; const res=await fetch('/api/founderos/workspaces',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({workspaceId:w.id})}); if(res.ok){const left=workspaces.filter(x=>x.id!==w.id); setWorkspaces(left); if(localStorage.getItem('active-workspace-id')===w.id){localStorage.removeItem('active-workspace-id'); location.reload()}} else {alert('Only workspace owners can delete workspaces.')}}} className="mr-1 hidden h-7 w-7 place-items-center rounded-md text-red-400 hover:bg-red-500/10 group-hover:grid"><Trash2 className="h-3.5 w-3.5" /></button></div>)}
-        <button onClick={createWorkspace} className="mt-1 w-full rounded-lg px-3 py-2 text-xs font-bold" style={{border:'1px solid rgba(39,211,110,.25)',color:'var(--accent)',background:'rgba(39,211,110,.06)'}}>+ Create workspace</button>
+        <button onClick={createWorkspace} className="mt-1 w-full rounded-lg px-3 py-2 text-xs font-bold" style={{border:'1px solid var(--accent-ring)',color:'var(--accent)',background:'var(--accent-faint)'}}>+ Create workspace</button>
       </div>}
     </div>
   )
@@ -152,7 +152,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
           actionHref ? (
             <Link
               href={actionHref}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 18px', borderRadius: 10, background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px rgba(39,211,110,.18)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 18px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)' }}
             >
               <Plus style={{ width: 13, height: 13 }} />
               {actionLabel}
@@ -160,21 +160,13 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
           ) : (
             <button
               onClick={onAction}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 18px', borderRadius: 10, background: 'linear-gradient(180deg,#35e680,#22bf63)', color: '#031008', border: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px rgba(39,211,110,.18)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 18px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)' }}
             >
               <Plus style={{ width: 13, height: 13 }} />
               {actionLabel}
             </button>
           )
         )}
-
-        <button
-          onClick={handleSignOut}
-          style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 500, padding: '5px 10px', borderRadius: 6, background: 'transparent', color: 'var(--text-muted)', border: 'none', cursor: 'pointer' }}
-        >
-          <LogOut style={{ width: 12, height: 12 }} />
-          Log out
-        </button>
 
         <div className="relative" onMouseEnter={() => setProfileOpen(true)} onMouseLeave={() => setProfileOpen(false)}>
           <button onClick={() => setProfileOpen(o => !o)} style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>

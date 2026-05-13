@@ -186,7 +186,7 @@ function MessageBubble({ message, isLatest, onFollowUp }: {
     <div className="mb-5" style={isLatest ? { animation: 'fadeSlideIn 0.35s ease both' } : {}}>
       <div className="flex gap-3 group">
         <div className="h-9 w-9 flex items-center justify-center flex-shrink-0 mt-0.5"
-          style={{ borderRadius: 8, background: 'var(--accent-muted)', border: '1px solid rgba(34,197,94,0.2)' }}>
+          style={{ borderRadius: 8, background: 'var(--accent-muted)', border: '1px solid var(--accent-ring)' }}>
           <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
         </div>
         <div className="flex-1 px-5 py-4"
@@ -204,7 +204,7 @@ function MessageBubble({ message, isLatest, onFollowUp }: {
         <div className="flex flex-wrap gap-2 mt-2.5 ml-12">
           {actionBtns.map(btn => (
             <a key={btn.href} href={btn.href}
-              className="flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 transition-all hover:opacity-80" style={{borderRadius: 6, background: 'rgba(34,197,94,0.10)', color: 'var(--accent)', border: '1px solid rgba(34,197,94,0.22)'}}>
+              className="flex items-center gap-1.5 text-[11px] font-bold px-3 py-1.5 transition-all hover:opacity-80" style={{borderRadius: 6, background: 'var(--accent-faint)', color: 'var(--accent)', border: '1px solid var(--accent-ring)'}}>
               <btn.Icon className="h-3 w-3" />
               {btn.label}
             </a>
@@ -231,7 +231,7 @@ function TypingIndicator() {
   return (
     <div className="flex gap-3 mb-4">
       <div className="h-9 w-9 flex items-center justify-center flex-shrink-0"
-        style={{ borderRadius: 8, background: 'var(--accent-muted)', border: '1px solid rgba(34,197,94,0.2)' }}>
+        style={{ borderRadius: 8, background: 'var(--accent-muted)', border: '1px solid var(--accent-ring)' }}>
         <Zap className="h-4 w-4 text-white" strokeWidth={2.5} />
       </div>
       <div className="px-5 py-4"
@@ -376,7 +376,7 @@ export default function AICopilotPage() {
             style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)' }}>
             <div className="flex items-center gap-3">
               <div className="h-9 w-9 flex items-center justify-center"
-                style={{ borderRadius: 8, background: 'var(--accent-muted)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                style={{ borderRadius: 8, background: 'var(--accent-muted)', border: '1px solid var(--accent-ring)' }}>
                 <Zap className="h-4.5 w-4.5 text-white" strokeWidth={2.5} />
               </div>
               <div>

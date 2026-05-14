@@ -109,9 +109,9 @@ export default function SettingsPage() {
           ...g,
           primaryGoal: settings.primary_goal || 'Hit $10k/month',
           revenueTarget: settings.revenue_target?.toString() || '',
-          profitMargin: settings.target_profit_margin?.toString() || '60',
+          profitMargin: settings.profit_margin_target?.toString() || '60',
           monthlyClients: settings.monthly_client_target?.toString() || '5',
-          maxHours: settings.max_hours_per_month?.toString() || '80',
+          maxHours: settings.max_hours_month?.toString() || '80',
         }))
         setAppearance({
           theme: settings.theme || 'dark',
@@ -185,9 +185,9 @@ export default function SettingsPage() {
           user_id: user.id,
           primary_goal: goals.primaryGoal,
           revenue_target: Number(goals.revenueTarget) || null,
-          target_profit_margin: Number(goals.profitMargin) || 60,
+          profit_margin_target: Number(goals.profitMargin) || 60,
           monthly_client_target: Number(goals.monthlyClients) || 5,
-          max_hours_per_month: Number(goals.maxHours) || 80,
+          max_hours_month: Number(goals.maxHours) || 80,
         }, { onConflict: 'user_id' })
         err = e
       } else if (tab === 'appearance') {

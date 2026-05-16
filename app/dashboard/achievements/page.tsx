@@ -511,26 +511,26 @@ export default async function AchievementsPage() {
         .achievement-hover-row:hover { transform: translateX(4px); background: var(--accent-faint) !important; border-color: var(--accent-muted) !important; }
         .rank-preview-card:hover .rank-hover-note { opacity: 1 !important; }
       `}</style>
-      <div className="px-6 pt-4 pb-3" style={{ borderBottom: '1px solid rgba(255,255,255,.035)' }}>
+      <div className="px-6 pt-4 pb-3" style={{ borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 style={{ fontSize: 22, lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.045em', color: '#f6f6f6' }}>Good afternoon, {displayName}</h1>
+            <h1 style={{ fontSize: 22, lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.045em', color: 'var(--text-primary)' }}>Good afternoon, {displayName}</h1>
             <div className="mt-3 flex items-center gap-2">
               {[prettyDate, prettyTime, prettyDay].map((pill) => (
-                <div key={pill} style={{ height: 28, minWidth: 78, padding: '0 15px', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025))', border: '1px solid rgba(255,255,255,.07)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.035)' }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,.78)' }}>{pill}</span>
+                <div key={pill} style={{ height: 28, minWidth: 78, padding: '0 15px', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(180deg, var(--glass-bg-a), var(--glass-bg-b))', border: '1px solid var(--glass-border)', boxShadow: 'inset 0 1px 0 var(--glass-inset)' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>{pill}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-6 pr-1" style={{ color: 'rgba(255,255,255,.66)' }}>
+          <div className="hidden md:flex items-center gap-6 pr-1" style={{ color: 'var(--text-muted)' }}>
             <div className="relative">
-              <Bell style={{ width: 18, height: 18, color: 'rgba(255,255,255,.72)' }} />
+              <Bell style={{ width: 18, height: 18, color: 'var(--text-muted)' }} />
               <span style={{ position: 'absolute', right: -7, top: -7, width: 15, height: 15, borderRadius: 99, background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
             </div>
             <span style={{ fontSize: 12, fontWeight: 600 }}>Log out</span>
-            <div style={{ width: 28, height: 28, borderRadius: 99, border: '1px solid rgba(255,255,255,.1)', background: 'rgba(255,255,255,.025)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Users style={{ width: 14, height: 14, color: 'rgba(255,255,255,.75)' }} />
+            <div style={{ width: 28, height: 28, borderRadius: 99, border: '1px solid var(--glass-border)', background: 'var(--overlay-faint)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Users style={{ width: 14, height: 14, color: 'var(--text-muted)' }} />
             </div>
           </div>
         </div>
@@ -540,20 +540,20 @@ export default async function AchievementsPage() {
         <div className="grid gap-3" style={{ gridTemplateColumns: '286px 1fr' }}>
           <div className="app-card" style={{ minHeight: 226 }}><div className="app-card-inner" style={{ padding: '24px' }}>
             <p className="kicker">Current Rank</p>
-            <h2 className="mt-4" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.045em', color: '#fff' }}>{rank.label}</h2>
+            <h2 className="mt-4" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.045em', color: 'var(--text-primary)' }}>{rank.label}</h2>
             <div className="mt-3 flex items-center justify-between gap-3">
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,.55)' }}>{rank.desc}</p>
+              <p style={{ fontSize: 14, color: 'var(--text-muted)' }}>{rank.desc}</p>
               <RankBadge color={rank.solid} label={rankInfo(xpProg.level).base} size={82} active division={((xpProg.level - 1) % 3) + 1} />
             </div>
             <div className="mt-2 flex items-end gap-2">
               <span style={{ fontSize: 43, lineHeight: 1, fontWeight: 900, letterSpacing: '-.06em', color: 'var(--accent)' }}>{ovr}</span>
               <span style={{ marginBottom: 7, fontSize: 12, fontWeight: 800, color: 'var(--accent)' }}>OVR</span>
             </div>
-            <div className="mt-5 h-1.5 overflow-hidden" style={{ borderRadius: 99, background: 'rgba(255,255,255,.085)' }}>
+            <div className="mt-5 h-1.5 overflow-hidden" style={{ borderRadius: 99, background: 'var(--fo-soft-line-bg)' }}>
               <div className="h-full" style={{ width: `${Math.min(100, Math.round((xpProg.xpInLevel / Math.max(1, xpProg.xpForNext)) * 100))}%`, borderRadius: 99, background: 'var(--accent)', boxShadow: '0 0 14px var(--accent-muted)' }} />
             </div>
             <div className="mt-3 flex items-center justify-between" style={{ fontSize: 12 }}>
-              <span style={{ color: 'rgba(255,255,255,.62)' }}>{xpProg.xpInLevel.toLocaleString()} / {xpProg.xpForNext.toLocaleString()} XP</span>
+              <span style={{ color: 'var(--text-muted)' }}>{xpProg.xpInLevel.toLocaleString()} / {xpProg.xpForNext.toLocaleString()} XP</span>
               <span style={{ color: 'var(--accent)', fontWeight: 800 }}>{rank.label}</span>
             </div>
           </div><div className="app-card-glow" /></div>
@@ -566,12 +566,12 @@ export default async function AchievementsPage() {
                 const isCurrent = currentBase === r.label
                 const active = xpProg.level >= r.minLevel
                 return (
-                  <div key={r.label} title={`Preview ${r.label} rank`} className="rank-preview-card relative flex flex-col items-center justify-between" style={{ minHeight: 184, padding: '18px 12px 18px', borderRadius: 9, background: 'linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012))', border: `1px solid ${isCurrent ? 'var(--accent)' : r.solid}`, opacity: active || isCurrent ? 1 : .58, boxShadow: isCurrent ? '0 0 0 1px var(--accent-muted), inset 0 0 26px var(--accent-faint)' : 'inset 0 1px 0 rgba(255,255,255,.025)' }}>
-                    <p style={{ fontSize: 12, fontWeight: 800, color: '#fff' }}>{r.label}</p>
+                  <div key={r.label} title={`Preview ${r.label} rank`} className="rank-preview-card relative flex flex-col items-center justify-between" style={{ minHeight: 184, padding: '18px 12px 18px', borderRadius: 9, background: 'linear-gradient(180deg, var(--glass-bg-a), var(--glass-bg-b))', border: `1px solid ${isCurrent ? 'var(--accent)' : r.solid}`, opacity: active || isCurrent ? 1 : .58, boxShadow: isCurrent ? '0 0 0 1px var(--accent-muted), inset 0 0 26px var(--accent-faint)' : 'inset 0 1px 0 var(--glass-inset)' }}>
+                    <p style={{ fontSize: 12, fontWeight: 800, color: 'var(--text-primary)' }}>{r.label}</p>
                     <RankBadge color={r.solid} label={r.label} size={102} active={true} division={isCurrent ? ((xpProg.level - 1) % 3) + 1 : 3} />
                     <div className="text-center" style={{ lineHeight: 1.55 }}>
-                      <p style={{ fontSize: 10, color: 'rgba(255,255,255,.58)' }}>{r.xpRange}</p>
-                      <p style={{ fontSize: 10, color: 'rgba(255,255,255,.58)' }}>Levels {r.minLevel}{r.maxLevel !== r.minLevel ? `-${r.maxLevel}` : ''}</p><p className="rank-hover-note" style={{ fontSize: 9, color: r.solid, opacity: 0, fontWeight: 800 }}>Hover preview</p>
+                      <p style={{ fontSize: 10, color: 'var(--text-muted)' }}>{r.xpRange}</p>
+                      <p style={{ fontSize: 10, color: 'var(--text-muted)' }}>Levels {r.minLevel}{r.maxLevel !== r.minLevel ? `-${r.maxLevel}` : ''}</p><p className="rank-hover-note" style={{ fontSize: 9, color: r.solid, opacity: 0, fontWeight: 800 }}>Hover preview</p>
                     </div>
                     {isCurrent && <div style={{ position: 'absolute', bottom: -5, width: 8, height: 8, borderRadius: 99, background: 'var(--accent)', boxShadow: '0 0 14px var(--accent)' }} />}
                   </div>
@@ -587,8 +587,8 @@ export default async function AchievementsPage() {
               <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
                 <p className="fo-kicker">{s.label}</p>
                 <div className="mt-3 flex items-end gap-2">
-                  <span className="fo-num" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.05em', color: '#fff' }}>{s.val}</span>
-                  <span style={{ marginBottom: 3, fontSize: 12, color: 'rgba(255,255,255,.48)' }}>/{s.max}</span>
+                  <span className="fo-num" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, letterSpacing: '-.05em', color: 'var(--text-primary)' }}>{s.val}</span>
+                  <span style={{ marginBottom: 3, fontSize: 12, color: 'var(--text-muted)' }}>/{s.max}</span>
                 </div>
                 <div className="mt-4 fo-soft-line">
                   <span style={{ width: `${Math.min(100, Math.round((s.val / Math.max(1, s.max)) * 100))}%` }} />
@@ -601,10 +601,10 @@ export default async function AchievementsPage() {
             <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
               <p className="fo-kicker">Total Badges</p>
               <div className="mt-3 flex items-end gap-2">
-                <span className="fo-num" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, color: '#fff' }}>{totalEarned}</span>
-                <span style={{ marginBottom: 3, fontSize: 12, color: 'rgba(255,255,255,.48)' }}>/{ACHIEVEMENTS.length}</span>
+                <span className="fo-num" style={{ fontSize: 31, lineHeight: 1, fontWeight: 850, color: 'var(--text-primary)' }}>{totalEarned}</span>
+                <span style={{ marginBottom: 3, fontSize: 12, color: 'var(--text-muted)' }}>/{ACHIEVEMENTS.length}</span>
               </div>
-              <Trophy className="mt-2" style={{ width: 18, height: 18, color: 'rgba(255,255,255,.42)' }} />
+              <Trophy className="mt-2" style={{ width: 18, height: 18, color: 'var(--text-muted)' }} />
             </div>
             <div className="app-card-glow" />
           </div>
@@ -613,19 +613,19 @@ export default async function AchievementsPage() {
         <div className="panel-card mt-3 p-4" style={{ minHeight: 210 }}>
           <div className="mb-3 flex items-start justify-between">
             <div>
-              <h3 style={{ fontSize: 16, lineHeight: 1.15, fontWeight: 800, color: '#fff' }}>Activity Heatmap</h3>
-              <p style={{ marginTop: 3, fontSize: 12, color: 'rgba(255,255,255,.50)' }}>{activityMap.size} active day{activityMap.size === 1 ? '' : 's'} in the last 12 weeks</p>
+              <h3 style={{ fontSize: 16, lineHeight: 1.15, fontWeight: 800, color: 'var(--text-primary)' }}>Activity Heatmap</h3>
+              <p style={{ marginTop: 3, fontSize: 12, color: 'var(--text-muted)' }}>{activityMap.size} active day{activityMap.size === 1 ? '' : 's'} in the last 12 weeks</p>
             </div>
             <div className="flex items-center gap-1.5 pr-2">
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,.48)' }}>Less</span>
-              {['rgba(255,255,255,.055)', 'var(--accent-muted)', 'var(--accent-glow)', 'var(--accent)'].map((c, i) => <div key={i} style={{ width: 13, height: 13, borderRadius: 3, background: c }} />)}
-              <span style={{ fontSize: 10, color: 'rgba(255,255,255,.48)' }}>More</span>
+              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>Less</span>
+              {['var(--bg-hover)', 'var(--accent-muted)', 'var(--accent-glow)', 'var(--accent)'].map((c, i) => <div key={i} style={{ width: 13, height: 13, borderRadius: 3, background: c }} />)}
+              <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>More</span>
             </div>
           </div>
           <div className="overflow-hidden">
             <div className="flex gap-1" style={{ width: '100%' }}>
               <div className="mr-2 flex flex-col gap-1">
-                {dayLabels.map((d, i) => <div key={i} style={{ height: 13, display: 'flex', alignItems: 'center' }}><span style={{ fontSize: 10, color: 'rgba(255,255,255,.55)' }}>{d}</span></div>)}
+                {dayLabels.map((d, i) => <div key={i} style={{ height: 13, display: 'flex', alignItems: 'center' }}><span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{d}</span></div>)}
               </div>
               {heatWeeks.map((week, wi) => (
                 <div key={wi} className="flex flex-1 flex-col gap-1">
@@ -633,7 +633,7 @@ export default async function AchievementsPage() {
                 </div>
               ))}
             </div>
-            <div className="mt-2 grid" style={{ marginLeft: 190, gridTemplateColumns: '1fr 1fr 1fr', fontSize: 11, color: 'rgba(255,255,255,.44)', width: 'calc(100% - 190px)' }}>
+            <div className="mt-2 grid" style={{ marginLeft: 190, gridTemplateColumns: '1fr 1fr 1fr', fontSize: 11, color: 'var(--text-muted)', width: 'calc(100% - 190px)' }}>
               <span>{heatLabel1}</span><span>{heatLabel2}</span><span>{heatLabel3}</span>
             </div>
           </div>
@@ -643,7 +643,7 @@ export default async function AchievementsPage() {
           <div className="mb-3 flex items-start justify-between">
             <div>
               <h2 style={{ fontSize: 18, lineHeight: 1.1, fontWeight: 850, letterSpacing: '-.035em', color: '#fff' }}>Trophy Room</h2>
-              <p style={{ marginTop: 4, fontSize: 11, color: 'rgba(255,255,255,.50)' }}>We do not reward participation. We reward output.</p>
+              <p style={{ marginTop: 4, fontSize: 11, color: 'var(--text-muted)' }}>We do not reward participation. We reward output.</p>
             </div>
             <div className="text-right">
               <p className="kicker">Completion</p>

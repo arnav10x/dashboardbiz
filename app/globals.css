@@ -37,6 +37,19 @@
     --fo-soft-line-bg: rgba(255,255,255,.055);
     --scrollbar-thumb: rgba(255,255,255,0.08);
     --scrollbar-thumb-hover: rgba(255,255,255,0.14);
+    --glass-bg-a: rgba(255,255,255,.04);
+    --glass-bg-b: rgba(255,255,255,.013);
+    --glass-border: rgba(255,255,255,.075);
+    --glass-inset: rgba(255,255,255,.025);
+    --overlay-faint: rgba(255,255,255,.04);
+    --overlay-micro: rgba(255,255,255,.02);
+    --divider: rgba(255,255,255,.08);
+    --divider-subtle: rgba(255,255,255,.055);
+    --chart-grid: rgba(255,255,255,.07);
+    --tooltip-bg: #0d0f12;
+    --tooltip-border: rgba(255,255,255,.08);
+    --modal-bg: #0c0e11;
+    --ring-track: rgba(255,255,255,0.06);
   }
 
   html.theme-light {
@@ -61,6 +74,19 @@
     --fo-soft-line-bg: rgba(0,0,0,.07);
     --scrollbar-thumb: rgba(0,0,0,0.12);
     --scrollbar-thumb-hover: rgba(0,0,0,0.2);
+    --glass-bg-a: rgba(255,255,255,.85);
+    --glass-bg-b: rgba(248,250,252,.7);
+    --glass-border: rgba(0,0,0,.08);
+    --glass-inset: rgba(255,255,255,.7);
+    --overlay-faint: rgba(0,0,0,.04);
+    --overlay-micro: rgba(0,0,0,.02);
+    --divider: rgba(0,0,0,.08);
+    --divider-subtle: rgba(0,0,0,.06);
+    --chart-grid: rgba(0,0,0,.07);
+    --tooltip-bg: #ffffff;
+    --tooltip-border: rgba(0,0,0,.1);
+    --modal-bg: var(--bg-card);
+    --ring-track: rgba(0,0,0,0.08);
   }
 
   html.theme-light body { color-scheme: light; }
@@ -323,6 +349,20 @@ button:not(:disabled):active, [role="button"]:active {
   top: 20%;
   left: -18%;
   opacity: 0.42;
+}
+
+/* ── Light mode: Tailwind white-overlay utility overrides ── */
+html.theme-light .hover\:bg-white\/\[\.03\]:hover,
+html.theme-light .hover\:bg-white\/\[\.035\]:hover,
+html.theme-light .hover\:bg-white\/\[\.04\]:hover,
+html.theme-light .hover\:bg-white\/\[\.05\]:hover,
+html.theme-light .hover\:bg-white\/\[\.06\]:hover,
+html.theme-light .hover\:bg-white\/5:hover {
+  background-color: var(--bg-hover) !important;
+}
+html.theme-light .app-card-inner .text-white,
+html.theme-light .fo-card .text-white {
+  color: var(--text-primary) !important;
 }
 
 /* ── Light mode overrides for hardcoded dark surfaces ── */

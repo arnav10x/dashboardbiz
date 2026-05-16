@@ -53,10 +53,10 @@ function getPriority(task: Task | { priority?: string | null }): Priority {
 
 function cardStyle(extra: React.CSSProperties = {}): React.CSSProperties {
   return {
-    background: 'linear-gradient(145deg, rgba(13,16,19,0.99), rgba(5,6,8,0.99))',
+    background: 'linear-gradient(145deg, var(--bg-card), var(--bg-raised))',
     border: '1px solid var(--accent-muted)',
     borderRadius: 13,
-    boxShadow: 'inset 0 1px 0 rgba(255,255,255,.028), 0 18px 45px rgba(0,0,0,.24)',
+    boxShadow: 'inset 0 1px 0 var(--inset-highlight), 0 18px 45px rgba(0,0,0,.24)',
     ...extra,
   }
 }
@@ -77,7 +77,7 @@ function AddTaskModal({ onClose, onAdd }: { onClose: () => void; onAdd: (title: 
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,.78)' }} onClick={e => e.currentTarget === e.target && onClose()}>
-      <div className="w-full max-w-md p-5" style={cardStyle({ background: '#0c0e11' })}>
+      <div className="w-full max-w-md p-5" style={cardStyle({ background: 'var(--modal-bg)' })}>
         <div className="mb-5 flex items-center justify-between">
           <div>
             <h3 className="text-lg font-black">Add Task</h3>
@@ -90,12 +90,12 @@ function AddTaskModal({ onClose, onAdd }: { onClose: () => void; onAdd: (title: 
           <input className="input-base" value={notes} onChange={e => setNotes(e.target.value)} placeholder="Category or notes" />
           <div className="grid grid-cols-3 gap-2">
             {(['High', 'Medium', 'Low'] as Priority[]).map(p => (
-              <button key={p} onClick={() => setPriority(p)} className="py-2 text-xs font-bold" style={{ borderRadius: 9, border: '1px solid rgba(255,255,255,.08)', background: priority === p ? priorityStyle[p].bg : 'rgba(255,255,255,.03)', color: priorityStyle[p].color }}>{p}</button>
+              <button key={p} onClick={() => setPriority(p)} className="py-2 text-xs font-bold" style={{ borderRadius: 9, border: '1px solid var(--glass-border)', background: priority === p ? priorityStyle[p].bg : 'var(--overlay-micro)', color: priorityStyle[p].color }}>{p}</button>
             ))}
           </div>
         </div>
         <div className="mt-5 flex gap-2">
-          <button onClick={onClose} className="flex-1 rounded-xl py-2 text-xs font-bold" style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)' }}>Cancel</button>
+          <button onClick={onClose} className="flex-1 rounded-xl py-2 text-xs font-bold" style={{ background: 'var(--overlay-faint)', border: '1px solid var(--glass-border)' }}>Cancel</button>
           <button onClick={save} disabled={saving || !title.trim()} className="flex-1 rounded-xl py-2 text-xs font-black disabled:opacity-50" style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008' }}>{saving ? 'Saving…' : 'Add Task'}</button>
         </div>
       </div>
@@ -104,7 +104,7 @@ function AddTaskModal({ onClose, onAdd }: { onClose: () => void; onAdd: (title: 
 }
 
 function EmptyState({ title, body }: { title: string; body: string }) {
-  return <div className="rounded-xl px-4 py-8 text-center" style={{ background: 'rgba(255,255,255,.02)', border: '1px dashed rgba(255,255,255,.10)', color: 'var(--text-muted)' }}><p className="font-bold text-white">{title}</p><p className="mt-1 text-sm">{body}</p></div>
+  return <div className="rounded-xl px-4 py-8 text-center" style={{ background: 'var(--overlay-micro)', border: '1px dashed var(--divider)', color: 'var(--text-muted)' }}><p className="font-bold" style={{ color: 'var(--text-primary)' }}>{title}</p><p className="mt-1 text-sm">{body}</p></div>
 }
 
 export default function TasksPage() {
@@ -190,8 +190,8 @@ export default function TasksPage() {
         </div>
 
         <div className="mb-6 flex items-center gap-5">
-          <div className="h-2 flex-1 rounded-full" style={{ background: 'rgba(255,255,255,.06)' }}><div className="h-full rounded-full" style={{ width: `${pct}%`, background: 'var(--accent)', boxShadow: '0 0 18px var(--accent-muted)' }} /></div>
-          <div className="flex items-center gap-3"><div className="grid h-12 w-12 place-items-center rounded-full text-xs font-black" style={{ border: '3px solid var(--accent)', color: '#fff' }}>{pct}%</div><span className="font-bold">Complete</span></div>
+          <div className="h-2 flex-1 rounded-full" style={{ background: 'var(--fo-soft-line-bg)' }}><div className="h-full rounded-full" style={{ width: `${pct}%`, background: 'var(--accent)', boxShadow: '0 0 18px var(--accent-muted)' }} /></div>
+          <div className="flex items-center gap-3"><div className="grid h-12 w-12 place-items-center rounded-full text-xs font-black" style={{ border: '3px solid var(--accent)', color: 'var(--text-primary)' }}>{pct}%</div><span className="font-bold">Complete</span></div>
         </div>
 
         <div className="mb-4 p-5" style={cardStyle({ minHeight: 220 })}>

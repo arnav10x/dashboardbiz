@@ -82,7 +82,7 @@ function Ring({ pct, size, stroke, color }: { pct: number; size: number; stroke:
   const circ = 2 * Math.PI * r
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block' }}>
-      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={stroke} />
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" strokeWidth={stroke} style={{ stroke: 'var(--ring-track)' }} />
       <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={circ} strokeDashoffset={circ - (pct / 100) * circ}
         style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 1s ease' }} />
@@ -288,7 +288,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
     { label: 'Contacted', count: Math.round(leads * 0.6),         color: '#b56cff' },
     { label: 'Replied',   count: Math.round(leads * 0.3),         color: '#f59e0b' },
     { label: 'Booked',    count: customers > 0 ? customers : 0,   color: 'var(--accent)' },
-    { label: 'Closed',    count: customers,                        color: 'rgba(255,255,255,.55)' },
+    { label: 'Closed',    count: customers,                        color: 'var(--text-muted)' },
   ]
 
   const S = {
@@ -296,7 +296,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
     label: { fontSize: 10, fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.16em', color: 'rgba(196,201,197,0.62)' },
     value: { fontSize: 30, fontWeight: 950, fontVariantNumeric: 'tabular-nums' as const, lineHeight: 1.05, letterSpacing: '-0.045em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' },
     sub: { fontSize: 11, color: 'var(--text-muted)' },
-    bar: { height: 5, background: 'rgba(255,255,255,0.055)', borderRadius: 999, overflow: 'hidden' as const },
+    bar: { height: 5, background: 'var(--fo-soft-line-bg)', borderRadius: 999, overflow: 'hidden' as const },
   }
 
   const rankTitle = gamification.rank || 'Rookie I'
@@ -319,7 +319,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       {/* Period selector */}
       {hasData && (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'center', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, background: 'linear-gradient(145deg, rgba(15,17,20,0.98), rgba(5,6,7,0.98))', overflow: 'hidden', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.03)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--glass-border)', borderRadius: 10, background: 'linear-gradient(145deg, var(--bg-card), var(--bg-raised))', overflow: 'hidden', boxShadow: 'inset 0 1px 0 var(--inset-highlight)' }}>
             <button disabled={selectedPeriodIdx === 0} onClick={() => setSelectedPeriodIdx(i => i - 1)}
               style={{ width: 34, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-muted)', opacity: selectedPeriodIdx === 0 ? 0.3 : 1, background: 'none', border: 'none', cursor: 'pointer' }}>
               <ChevronLeft style={{ width: 12, height: 12 }} />
@@ -448,10 +448,10 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                       <stop offset="100%" stopColor="var(--accent)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="2 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                  <CartesianGrid strokeDasharray="2 3" stroke="var(--chart-grid)" vertical={false} />
                   <XAxis dataKey="label" tick={{ fill: 'var(--text-muted)', fontSize: 8 }} axisLine={false} tickLine={false} />
                   <YAxis hide />
-                  <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
+                  <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--chart-grid)', strokeWidth: 1 }} />
                   <Area type="monotone" dataKey="revenue" stroke="var(--accent)" strokeWidth={1.5} fill="url(#revGrad)" dot={false}
                     activeDot={{ r: 2.5, fill: 'var(--accent)', stroke: 'var(--bg-card)', strokeWidth: 1.5 }} />
                 </AreaChart>
@@ -487,7 +487,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                   <p style={{ fontSize: 10, fontWeight: 600, marginBottom: 7, color: 'var(--accent)' }}>
                     {goalPct >= 100 ? 'Goal achieved!' : `$${Math.max(0, revenueTarget - revenue).toLocaleString()} remaining`}
                   </p>
-                  <div style={{ height: 2, background: 'rgba(255,255,255,0.07)', borderRadius: 1, overflow: 'hidden' }}>
+                  <div style={{ height: 2, background: 'var(--fo-soft-line-bg)', borderRadius: 1, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${goalPct}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', borderRadius: 999, transition: 'width 1s ease' }} />
                   </div>
                 </div>
@@ -519,7 +519,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                   <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span style={{ fontSize: 18, fontWeight: 900, fontVariantNumeric: 'tabular-nums', width: 28, textAlign: 'right', flexShrink: 0, color: s.color }}>{s.count}</span>
                     <span style={{ fontSize: 11, width: 62, flexShrink: 0, color: 'var(--text-muted)' }}>{s.label}</span>
-                    <div style={{ flex: 1, height: 2, background: 'rgba(255,255,255,0.07)', borderRadius: 1, overflow: 'hidden' }}>
+                    <div style={{ flex: 1, height: 2, background: 'var(--fo-soft-line-bg)', borderRadius: 1, overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${Math.round((s.count / leads) * 100)}%`, background: s.color, borderRadius: 1 }} />
                     </div>
                   </div>
@@ -565,7 +565,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
               {tasks.slice(0, 4).map((task, i) => (
                 <div key={task.id} onClick={() => toggleTask(task)}
                   style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: i < Math.min(tasks.length, 4) - 1 ? '1px solid var(--border)' : 'none', cursor: 'pointer' }}>
-                  <div style={{ width: 17, height: 17, borderRadius: 4, border: `1.5px solid ${task.is_completed ? 'var(--accent)' : 'rgba(255,255,255,0.14)'}`, background: task.is_completed ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
+                  <div style={{ width: 17, height: 17, borderRadius: 4, border: `1.5px solid ${task.is_completed ? 'var(--accent)' : 'var(--border-strong)'}`, background: task.is_completed ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
                     {togglingId === task.id
                       ? <Loader2 style={{ width: 9, height: 9, color: 'white' }} className="animate-spin" />
                       : task.is_completed ? <Check style={{ width: 9, height: 9, color: 'white' }} strokeWidth={3} /> : null}

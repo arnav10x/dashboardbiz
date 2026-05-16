@@ -545,7 +545,7 @@ export default function PipelinePage() {
               <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
                 <div className="flex items-start justify-between mb-3">
                   <p className="fo-kicker">{s.label}</p>
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.08)' }}>
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--overlay-faint)', border: '1px solid var(--glass-border)' }}>
                     <s.icon className="w-4 h-4" style={{ color: s.color }} />
                   </div>
                 </div>

@@ -59,7 +59,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
       className="hidden md:flex flex-col h-screen sticky top-0 flex-shrink-0"
       style={{
         width: 172,
-        background: 'linear-gradient(180deg, #050607 0%, #08090b 100%)',
+        background: 'linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%)',
         borderRight: '1px solid var(--border)',
         zIndex: 30,
         padding: '0 0 16px',
@@ -121,7 +121,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
                     }}
                     onMouseEnter={e => {
                       if (!active) {
-                        (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.04)'
+                        (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover)'
                         ;(e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)'
                       }
                     }}

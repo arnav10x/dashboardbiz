@@ -127,7 +127,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
   return (
     <div
       className="flex-shrink-0 flex items-center gap-4 px-6"
-      style={{ height: 64, borderBottom: '1px solid rgba(255,255,255,0.055)', background: 'linear-gradient(180deg, rgba(3,4,5,0.98), rgba(3,4,5,0.94))' }}
+      style={{ height: 64, borderBottom: '1px solid var(--topbar-border-color)', background: 'var(--topbar-bg)' }}
     >
       {/* Left */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>

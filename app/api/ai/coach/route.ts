@@ -72,7 +72,7 @@ async function executeToolCall(
 
       const { data, error } = await supabase
         .from('tasks')
-        .insert({ user_id: userId, workspace_id: workspaceId || null, title, notes: args.notes || null, is_completed: false })
+        .insert({ user_id: userId, title, notes: args.notes || null, is_completed: false })
         .select('id, title')
         .single()
 
@@ -254,12 +254,16 @@ Upcoming/recent calendar events: ${(events || []).map((e: any) => `${e.event_dat
       try {
         const systemPrompt = `You are a sharp, direct business strategist embedded inside the founder's operating system. You have full context on their business and real metrics. Give specific, numbers-driven advice tailored to their niche, business model, and stage — never generic. Reference their actual numbers. Be concise — 3-5 sentences unless more detail is asked for. Use → bullets for action items.
 
-TOOLS AVAILABLE — use them immediately when the user asks you to take an action:
-- create_task: Use when the user asks to "add a task", "create a to-do", "remind me to [X]", or "add [X] to my tasks". Do not ask for confirmation — just call the tool.
-- complete_task: Use when the user asks to "mark [X] as done", "complete [X]", or "check off [X]".
-- add_pipeline_lead: Use when the user asks to "add a lead", "add [name] to my pipeline", or "create a prospect".
+TOOLS AVAILABLE:
+- create_task: Creates a task on the user's dashboard
+- complete_task: Marks an existing task as completed
+- add_pipeline_lead: Adds a lead to the sales pipeline
 
-After using a tool, briefly confirm what was done in 1 sentence, then add relevant advice if applicable.${(workspace as any)?.business_summary ? `\n\nBusiness context from the founder:\n"${(workspace as any).business_summary}"` : ''}
+CONFIRMATION RULE — always follow this two-step process:
+1. When the user asks you to add a task, complete a task, or add a lead: respond with a short confirmation question first. Example: "I'll add 'Follow up with John' to your tasks — go ahead?" or "I'll mark that task as done — confirm?"
+2. Only call the tool AFTER the user says yes, confirms, go ahead, sure, do it, yep, or any clear approval. Never call a tool without explicit user confirmation in the same conversation turn.
+
+After calling a tool, confirm in 1 sentence what was done.${(workspace as any)?.business_summary ? `\n\nBusiness context from the founder:\n"${(workspace as any).business_summary}"` : ''}
 
 Founder's live metrics:
 ${dataContext}

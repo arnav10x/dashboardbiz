@@ -324,7 +324,7 @@ export default function TasksPage() {
           </div>
           <button onClick={() => setModalOpen(true)}
             className="flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-black"
-            style={{ background: 'linear-gradient(180deg,#2fd976,#14b457)', color: '#031008' }}>
+            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg, #031008)' }}>
             <Plus className="h-4 w-4" /> New Task
           </button>
         </div>
@@ -332,7 +332,7 @@ export default function TasksPage() {
         {/* ── Progress bar ────────────────────────────────────────── */}
         <div className="mb-7 h-1.5 overflow-hidden rounded-full" style={{ background: 'var(--fo-soft-line-bg)' }}>
           <div className="h-full rounded-full transition-all duration-700"
-            style={{ width: `${pct}%`, background: 'linear-gradient(90deg,#14b457,#2fd976)', boxShadow: '0 0 14px rgba(45,217,118,.45)' }} />
+            style={{ width: `${pct}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', boxShadow: '0 0 14px color-mix(in srgb, var(--accent) 45%, transparent)' }} />
         </div>
 
         {/* ── Two-column layout ────────────────────────────────────── */}

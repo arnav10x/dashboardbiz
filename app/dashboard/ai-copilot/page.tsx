@@ -4,9 +4,17 @@ import { TopBar } from '@/components/strata/TopBar'
 import {
   Send, Plus, Zap, RefreshCw, Sparkles, TrendingUp, DollarSign,
   Users, BarChart2, Copy, Check, CheckSquare, GitMerge, FileText,
+  CheckCircle, XCircle,
   type LucideIcon,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+
+interface ActionResult {
+  type: string
+  success: boolean
+  message: string
+  data?: any
+}
 
 interface Message {
   role: 'assistant' | 'user'
@@ -14,6 +22,7 @@ interface Message {
   followUps?: string[]
   id: string
   isStreaming?: boolean
+  actions?: ActionResult[]
 }
 
 interface UserData {
@@ -72,7 +81,7 @@ function makeInitialMessage(d?: UserData): Message {
   return {
     id: 'init',
     role: 'assistant',
-    content: `I'm your FounderOS AI Copilot. I have your latest data loaded.\n\n**${d.workspaceName} — Latest period:**\n→ Revenue: $${d.revenue.toLocaleString()} · Expenses: $${d.expenses.toLocaleString()}\n→ Profit: $${d.profit.toLocaleString()} (${d.margin}% margin)\n${d.leads > 0 ? `→ Leads: ${d.leads} · Conversion: ${d.convRate}%` : '→ No lead data logged yet'}\n\nAsk me anything — what to prioritize, where you're leaking money, or how to grow faster.`,
+    content: `I'm your FounderOS AI Copilot. I have your latest data loaded.\n\n**${d.workspaceName} — Latest period:**\n→ Revenue: $${d.revenue.toLocaleString()} · Expenses: $${d.expenses.toLocaleString()}\n→ Profit: $${d.profit.toLocaleString()} (${d.margin}% margin)\n${d.leads > 0 ? `→ Leads: ${d.leads} · Conversion: ${d.convRate}%` : '→ No lead data logged yet'}\n\nAsk me anything — what to prioritize, where you're leaking money, or how to grow faster. I can also add tasks or leads directly: just ask.`,
     followUps: ['What should I focus on this week?', 'Where am I leaving money on the table?'],
   }
 }
@@ -164,6 +173,29 @@ function StreamingCursor() {
   )
 }
 
+function ActionBadge({ action }: { action: ActionResult }) {
+  const label: Record<string, string> = {
+    create_task: 'Task created',
+    complete_task: 'Task completed',
+    add_pipeline_lead: 'Lead added',
+  }
+  return (
+    <div className="flex items-center gap-2 text-xs px-3 py-2 mt-2"
+      style={{
+        borderRadius: 7,
+        background: action.success ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)',
+        border: `1px solid ${action.success ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
+        color: action.success ? '#10b981' : '#ef4444',
+      }}>
+      {action.success
+        ? <CheckCircle className="h-3.5 w-3.5 flex-shrink-0" />
+        : <XCircle className="h-3.5 w-3.5 flex-shrink-0" />}
+      <span className="font-semibold">{label[action.type] || 'Action'}: </span>
+      <span>{action.message.replace(/^(Task added:|Task completed:|Lead added to pipeline:)\s*/i, '')}</span>
+    </div>
+  )
+}
+
 function MessageBubble({ message, isLatest, onFollowUp }: {
   message: Message
   isLatest: boolean
@@ -195,11 +227,11 @@ function MessageBubble({ message, isLatest, onFollowUp }: {
             ? <>{renderContent(message.content)}{message.isStreaming && <StreamingCursor />}</>
             : <StreamingCursor />
           }
+          {message.actions && message.actions.map((a, i) => <ActionBadge key={i} action={a} />)}
           {!message.isStreaming && <CopyButton text={message.content} />}
         </div>
       </div>
 
-      {/* Actionable buttons — only on latest complete message */}
       {actionBtns.length > 0 && (
         <div className="flex flex-wrap gap-2 mt-2.5 ml-12">
           {actionBtns.map(btn => (
@@ -212,7 +244,6 @@ function MessageBubble({ message, isLatest, onFollowUp }: {
         </div>
       )}
 
-      {/* Follow-up chips — only on latest complete message */}
       {isLatest && !message.isStreaming && message.followUps && message.followUps.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mt-2 ml-12">
           {message.followUps.map(q => (
@@ -247,12 +278,25 @@ function TypingIndicator() {
   )
 }
 
+async function saveHistory(userId: string, msgs: Message[]) {
+  const supabase = createClient()
+  const toSave = msgs
+    .filter(m => !m.isStreaming && m.content)
+    .slice(-30)
+    .map(m => ({ role: m.role, content: m.content }))
+  await supabase.from('ai_memory').upsert(
+    { user_id: userId, memory_key: 'chat_history', memory_value: { messages: toSave, saved_at: new Date().toISOString() } },
+    { onConflict: 'user_id,memory_key' }
+  )
+}
+
 export default function AICopilotPage() {
   const [userData, setUserData] = useState<UserData | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [dataLoaded, setDataLoaded] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -261,11 +305,14 @@ export default function AICopilotPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { setMessages([makeInitialMessage()]); setDataLoaded(true); return }
 
+      setUserId(user.id)
+
       const { data: ws } = await supabase.from('workspaces').select('name').eq('owner_id', user.id).maybeSingle()
-      const [{ data: entries }, { data: tasks }, { data: gamification }] = await Promise.all([
+      const [{ data: entries }, { data: tasks }, { data: gamification }, { data: historyData }] = await Promise.all([
         supabase.from('period_entries').select('revenue, expenses, new_leads, leads, new_customers, customers').eq('user_id', user.id).order('period_date', { ascending: false }).limit(1),
         supabase.from('tasks').select('is_completed').eq('user_id', user.id).limit(100),
         supabase.from('user_gamification').select('level,total_xp,current_streak').eq('user_id', user.id).maybeSingle(),
+        supabase.from('ai_memory').select('memory_value').eq('user_id', user.id).eq('memory_key', 'chat_history').maybeSingle(),
       ])
 
       const latest = entries?.[0]
@@ -282,7 +329,14 @@ export default function AICopilotPage() {
         d = { workspaceName: ws?.name || 'My Workspace', hasData: false, revenue: 0, expenses: 0, profit: 0, margin: 0, leads: 0, convRate: 0, tasks: tasks?.length || 0, completedTasks: tasks?.filter((t:any)=>t.is_completed).length || 0, level: Number(gamification?.level)||1, xp: Number(gamification?.total_xp)||0, streak: Number(gamification?.current_streak)||0 }
       }
       setUserData(d)
-      setMessages([makeInitialMessage(d)])
+
+      const savedMsgs = (historyData as any)?.memory_value?.messages
+      if (savedMsgs && Array.isArray(savedMsgs) && savedMsgs.length > 0) {
+        setMessages(savedMsgs.map((m: any, i: number) => ({ id: `h-${i}`, role: m.role, content: m.content })))
+      } else {
+        setMessages([makeInitialMessage(d)])
+      }
+
       setDataLoaded(true)
     }
     load()
@@ -301,15 +355,18 @@ export default function AICopilotPage() {
     const streamId = `stream-${Date.now()}`
     const streamMsg: Message = { id: streamId, role: 'assistant', content: '', isStreaming: true }
 
+    const apiMessages = [...messages, userMsg]
     setMessages(prev => [...prev, userMsg, streamMsg])
     setLoading(true)
 
+    let fullContent = ''
+    let collectedActions: ActionResult[] = []
+
     try {
-      const allMsgs = [...messages, userMsg]
       const res = await fetch('/api/ai/coach', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: allMsgs.map(m => ({ role: m.role, content: m.content })) }),
+        body: JSON.stringify({ messages: apiMessages.map(m => ({ role: m.role, content: m.content })) }),
       })
 
       if (!res.body) throw new Error('No response body')
@@ -317,7 +374,6 @@ export default function AICopilotPage() {
       const reader = res.body.getReader()
       const decoder = new TextDecoder()
       let buffer = ''
-      let fullContent = ''
 
       while (true) {
         const { done, value } = await reader.read()
@@ -333,7 +389,12 @@ export default function AICopilotPage() {
           if (payload === '[DONE]') continue
           try {
             const parsed = JSON.parse(payload)
-            if (parsed.chunk) {
+            if (parsed.action) {
+              collectedActions = [...collectedActions, parsed.action]
+              setMessages(prev => prev.map(m =>
+                m.id === streamId ? { ...m, actions: collectedActions } : m
+              ))
+            } else if (parsed.chunk) {
               fullContent += parsed.chunk
               setMessages(prev => prev.map(m =>
                 m.id === streamId ? { ...m, content: fullContent } : m
@@ -343,11 +404,21 @@ export default function AICopilotPage() {
         }
       }
 
-      setMessages(prev => prev.map(m =>
-        m.id === streamId
-          ? { ...m, content: fullContent || "I couldn't process that. Try again.", isStreaming: false, followUps: getFollowUps(fullContent) }
-          : m
-      ))
+      const finalMsg: Message = {
+        id: streamId,
+        role: 'assistant',
+        content: fullContent || (collectedActions.length > 0 ? 'Done.' : "I couldn't process that. Try again."),
+        isStreaming: false,
+        followUps: fullContent ? getFollowUps(fullContent) : undefined,
+        actions: collectedActions.length > 0 ? collectedActions : undefined,
+      }
+
+      const finalMessages = [...apiMessages, finalMsg]
+      setMessages(finalMessages)
+
+      if (userId) {
+        saveHistory(userId, finalMessages).catch(() => null)
+      }
     } catch {
       setMessages(prev => prev.map(m =>
         m.id === streamId
@@ -357,9 +428,16 @@ export default function AICopilotPage() {
     } finally {
       setLoading(false)
     }
-  }, [input, loading, messages])
+  }, [input, loading, messages, userId])
 
-  const resetChat = () => setMessages([makeInitialMessage(userData ?? undefined)])
+  const resetChat = async () => {
+    const initialMsg = makeInitialMessage(userData ?? undefined)
+    setMessages([initialMsg])
+    if (userId) {
+      const supabase = createClient()
+      await supabase.from('ai_memory').delete().eq('user_id', userId).eq('memory_key', 'chat_history')
+    }
+  }
 
   const lastAiIdx = messages.reduce((acc, m, i) => m.role === 'assistant' ? i : acc, -1)
   const hasStreamingMsg = messages.some(m => m.isStreaming)
@@ -369,9 +447,7 @@ export default function AICopilotPage() {
       <TopBar title="AI Copilot" workspaceName={userData?.workspaceName || 'My Workspace'} hasData={userData?.hasData ?? false} showGreeting />
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Chat area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Sub-header */}
           <div className="flex items-center justify-between px-5 py-2.5 flex-shrink-0"
             style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)' }}>
             <div className="flex items-center gap-3">
@@ -399,7 +475,6 @@ export default function AICopilotPage() {
             </button>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto px-5 py-5">
             {messages.map((msg, i) => (
               <MessageBubble
@@ -413,7 +488,6 @@ export default function AICopilotPage() {
             <div ref={bottomRef} />
           </div>
 
-          {/* Input area */}
           <div className="px-5 py-4 flex-shrink-0"
             style={{ borderTop: '1px solid var(--border)', background: 'var(--bg-raised)' }}>
             <div className="flex gap-1.5 mb-3 overflow-x-auto pb-0.5" style={{ scrollbarWidth: 'none' }}>
@@ -428,7 +502,7 @@ export default function AICopilotPage() {
             <div className="flex gap-2">
               <input
                 className="flex-1 text-sm px-4 py-2.5 outline-none" style={{borderRadius: 7, background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-strong)'}}
-                placeholder="Ask your AI coach anything about your business…"
+                placeholder="Ask anything, or say 'add a task to follow up with John'…"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
@@ -443,7 +517,6 @@ export default function AICopilotPage() {
           </div>
         </div>
 
-        {/* Right sidebar */}
         <div className="hidden xl:flex w-64 flex-col flex-shrink-0"
           style={{ borderLeft: '1px solid var(--border)', background: 'var(--bg-raised)' }}>
           <div className="p-4" style={{ borderBottom: '1px solid var(--border)' }}>

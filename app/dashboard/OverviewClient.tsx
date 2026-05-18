@@ -294,7 +294,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
   const S = {
     card: {} as React.CSSProperties, // unused — all cards use .app-card class now
     label: { fontSize: 10, fontWeight: 800, textTransform: 'uppercase' as const, letterSpacing: '0.16em', color: 'var(--text-muted)' },
-    value: { fontSize: 30, fontWeight: 950, fontVariantNumeric: 'tabular-nums' as const, lineHeight: 1.05, letterSpacing: '-0.045em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' },
+    value: { fontSize: 30, fontWeight: 700, fontVariantNumeric: 'tabular-nums' as const, lineHeight: 1.05, letterSpacing: '-0.045em' },
     sub: { fontSize: 11, color: 'var(--text-muted)' },
     bar: { height: 5, background: 'var(--fo-soft-line-bg)', borderRadius: 999, overflow: 'hidden' as const },
   }

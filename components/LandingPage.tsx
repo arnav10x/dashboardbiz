@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Zap, TrendingUp, Users, Brain, BarChart3, Target, Star, Check, ArrowRight, Flame } from 'lucide-react'
 
@@ -88,127 +89,26 @@ function useScrollReveal() {
   }, [])
 }
 
-// ─── Dashboard UI Mockup ───────────────────────────────────────────────────────
+// ─── Dashboard Screenshot Mockup ──────────────────────────────────────────────
 
 function DashboardMockup() {
   return (
     <div style={{
-      width: 700, height: 450,
-      background: '#030405',
+      width: 700,
       borderRadius: 14,
       border: '1px solid rgba(16,185,129,0.22)',
       overflow: 'hidden',
       boxShadow: '0 0 0 1px rgba(255,255,255,0.06), 0 50px 100px rgba(0,0,0,0.85), 0 0 90px rgba(16,185,129,0.14)',
-      fontFamily: 'system-ui,-apple-system,sans-serif',
-      fontSize: 11,
-      color: '#f4f6f4',
-      display: 'flex',
-      flexDirection: 'column' as const,
+      background: '#030405',
     }}>
-      {/* Top bar */}
-      <div style={{ height: 40, background: 'rgba(3,4,5,0.98)', borderBottom: '1px solid rgba(255,255,255,0.055)', display: 'flex', alignItems: 'center', padding: '0 16px', gap: 10, flexShrink: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 22, height: 22, background: 'linear-gradient(135deg,#10b981,#34d399)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="#031008"><path d="m13 3-8.5 9H10l-2 9 9.5-12H12l1-6z"/></svg>
-          </div>
-          <span style={{ fontWeight: 800, fontSize: 13 }}>Strata</span>
-          <span style={{ fontSize: 8, padding: '1px 5px', background: 'rgba(255,255,255,0.08)', borderRadius: 4, color: '#a0a8a4' }}>beta</span>
-        </div>
-        <div style={{ flex: 1 }}/>
-        <div style={{ display: 'flex', gap: 18, color: '#6b7280', fontSize: 10, fontWeight: 500 }}>
-          {['Dashboard','Pipeline','P&L','Reports'].map(t => (
-            <span key={t} style={{ color: t === 'Dashboard' ? '#f4f6f4' : '#6b7280' }}>{t}</span>
-          ))}
-        </div>
-        <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'linear-gradient(135deg,#10b981,#34d399)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, color: '#031008' }}>L</div>
-      </div>
-
-      {/* Body */}
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        {/* Sidebar */}
-        <div style={{ width: 148, background: 'linear-gradient(180deg,#050607,#08090b)', borderRight: '1px solid rgba(255,255,255,0.055)', padding: '14px 0', flexShrink: 0 }}>
-          {[
-            { icon: '⊞', label: 'Dashboard', active: true },
-            { icon: '◎', label: "Today's Focus", active: false },
-            { icon: '▣', label: 'Pipeline', active: false },
-            { icon: '↗', label: 'P&L', active: false },
-            { icon: '✦', label: 'AI Coach', active: false },
-            { icon: '◈', label: 'Reports', active: false },
-            { icon: '⬡', label: 'Achievements', active: false },
-          ].map(item => (
-            <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '6.5px 14px', background: item.active ? 'rgba(16,185,129,0.09)' : 'transparent', borderLeft: `2px solid ${item.active ? '#10b981' : 'transparent'}`, color: item.active ? '#10b981' : '#4b5563', fontSize: 10, fontWeight: item.active ? 700 : 400 }}>
-              <span style={{ fontSize: 11 }}>{item.icon}</span>
-              <span>{item.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Main */}
-        <div style={{ flex: 1, padding: '14px 16px', overflowY: 'auto' as const, background: '#030405' }}>
-          {/* Header row */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>Good morning, Leo 👋</div>
-              <div style={{ color: '#4b5563', fontSize: 9 }}>Day 12 of 30 · 🔥 12-day streak</div>
-              <div style={{ marginTop: 5, width: 180, height: 3, background: 'rgba(255,255,255,0.07)', borderRadius: 999, overflow: 'hidden' }}>
-                <div style={{ width: '40%', height: '100%', background: 'linear-gradient(90deg,#10b981,#34d399)', borderRadius: 999 }}/>
-              </div>
-            </div>
-            <div style={{ padding: '5px 10px', background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.22)', borderRadius: 6, fontSize: 8, color: '#10b981', fontWeight: 700 }}>3 tasks today →</div>
-          </div>
-
-          {/* Metric cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 8, marginBottom: 10 }}>
-            {[
-              { label: 'DMs Sent', value: '24', change: '+6 today', color: '#10b981' },
-              { label: 'Replies', value: '7', change: '29% rate', color: '#3b82f6' },
-              { label: 'Revenue', value: '$1,200', change: '+$400', color: '#10b981' },
-            ].map(m => (
-              <div key={m.label} style={{ background: 'linear-gradient(145deg,rgba(13,16,19,0.99),rgba(5,6,8,0.99))', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '8px 10px' }}>
-                <div style={{ color: '#4b5563', fontSize: 7, marginBottom: 3, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' as const }}>{m.label}</div>
-                <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 2, letterSpacing: '-0.03em' }}>{m.value}</div>
-                <div style={{ fontSize: 8, color: m.color }}>{m.change}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Chart */}
-          <div style={{ background: 'linear-gradient(145deg,rgba(13,16,19,0.99),rgba(5,6,8,0.99))', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '10px 12px', marginBottom: 10 }}>
-            <div style={{ fontSize: 8, fontWeight: 700, color: '#4b5563', marginBottom: 8, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>Revenue Trend</div>
-            <svg width="100%" height="56" viewBox="0 0 380 56" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10b981" stopOpacity="0.28"/>
-                  <stop offset="100%" stopColor="#10b981" stopOpacity="0"/>
-                </linearGradient>
-              </defs>
-              <path d="M0,52 L32,46 L64,48 L96,36 L128,40 L160,26 L192,32 L224,18 L256,23 L288,10 L320,16 L380,6 L380,56 L0,56 Z" fill="url(#cg)"/>
-              <polyline points="0,52 32,46 64,48 96,36 128,40 160,26 192,32 224,18 256,23 288,10 320,16 380,6" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinejoin="round"/>
-              <circle cx="380" cy="6" r="3" fill="#10b981"/>
-            </svg>
-          </div>
-
-          {/* Pipeline */}
-          <div style={{ background: 'linear-gradient(145deg,rgba(13,16,19,0.99),rgba(5,6,8,0.99))', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 8, padding: '10px 12px' }}>
-            <div style={{ fontSize: 8, fontWeight: 700, color: '#4b5563', marginBottom: 8, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>Pipeline</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 6 }}>
-              {[
-                { col: 'Lead', count: 3, color: '#6b7280', names: ['DropzoneAI','Mark G.','TechFlow'] },
-                { col: 'Contacted', count: 5, color: '#f59e0b', names: ['Sarah K.','TechCorp'] },
-                { col: 'Meeting', count: 2, color: '#3b82f6', names: ['Alex R.','StartupX'] },
-                { col: 'Closed', count: 1, color: '#10b981', names: ['LocalBiz'] },
-              ].map(col => (
-                <div key={col.col}>
-                  <div style={{ fontSize: 7, fontWeight: 800, color: col.color, marginBottom: 5, textTransform: 'uppercase' as const, letterSpacing: '0.06em' }}>{col.col} · {col.count}</div>
-                  {col.names.slice(0, 2).map((n, i) => (
-                    <div key={i} style={{ background: `${col.color}14`, border: `1px solid ${col.color}28`, borderRadius: 4, padding: '3px 6px', marginBottom: 3, fontSize: 7, color: '#c4c9c5' }}>{n}</div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Image
+        src="/dashboard-preview.png"
+        alt="Strata dashboard"
+        width={1400}
+        height={684}
+        style={{ width: '100%', height: 'auto', display: 'block' }}
+        priority
+      />
     </div>
   )
 }
@@ -466,36 +366,30 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             <div className="lp-reveal">
               <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 18 }}>AI Coach</div>
               <h2 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.1, marginBottom: 18 }}>Your coach gives you<br/>brutal, honest feedback.</h2>
-              <p style={{ color: '#6b7280', fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>Paste a prospect's objection. Get a word-for-word rebuttal in seconds. Pre-call roleplay. Post-call debrief. The AI never sugarcoats.</p>
-              {['Handle any objection with a script', 'Rewrite your pitch in real-time', 'Pre-call prep & sales roleplay', 'Tough love when you skip days'].map(t => (
+              <p style={{ color: '#6b7280', fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>Paste a prospect's objection. Get a word-for-word rebuttal in seconds. Pre-call roleplay. Post-call debrief. The AI never sugarcoats — and it controls your entire workspace so you don't have to.</p>
+              {[
+                'Handle any objection with a word-for-word script',
+                'Full read/write access to your entire dashboard',
+                'Creates and manages your to-do list automatically',
+                'Reads your pipeline and suggests next actions',
+                'Analyzes your P&L and revenue trends in real-time',
+                'Truly hands-off — just ask and it executes',
+              ].map(t => (
                 <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 10 }}>
                   <Check size={14} color="#10b981"/>
                   <span style={{ fontSize: 14, color: '#c4c9c5' }}>{t}</span>
                 </div>
               ))}
             </div>
-            {/* AI chat mockup */}
-            <div className="lp-reveal lp-d2" style={{ background: 'rgba(3,4,5,.9)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 20, fontFamily: 'system-ui,sans-serif', fontSize: 12 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#4b5563', marginBottom: 14, textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI Coach — Strata</div>
-              {[
-                { from: 'user', msg: 'They said they\'re "not interested" after I sent my pitch. What do I do?' },
-                { from: 'ai', msg: '"Not interested" just means you haven\'t built enough pain yet. Reply: \'Totally understand — most founders I work with said the same before seeing [specific result]. Can I ask, what\'s your biggest challenge with [their niche] right now?\' Keep them talking.' },
-                { from: 'user', msg: 'What if they still don\'t reply?' },
-                { from: 'ai', msg: 'Follow up 3x. Most deals close on follow-up 4-6. Silence is not rejection. Ghosting is the norm. Send a breakup email on day 14 — it often triggers a response.' },
-              ].map((m, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: m.from === 'user' ? 'flex-end' : 'flex-start', marginBottom: 10 }}>
-                  <div style={{ maxWidth: '82%', padding: '9px 12px', borderRadius: m.from === 'user' ? '10px 10px 3px 10px' : '10px 10px 10px 3px', background: m.from === 'user' ? 'rgba(16,185,129,.14)' : 'rgba(255,255,255,.05)', border: `1px solid ${m.from === 'user' ? 'rgba(16,185,129,.22)' : 'rgba(255,255,255,.07)'}`, color: m.from === 'user' ? '#c4c9c5' : '#f4f6f4', fontSize: 11, lineHeight: 1.55 }}>
-                    {m.from === 'ai' && <div style={{ fontSize: 9, fontWeight: 800, color: '#10b981', marginBottom: 5, letterSpacing: '0.06em' }}>STRATA AI</div>}
-                    {m.msg}
-                  </div>
-                </div>
-              ))}
-              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                <div style={{ flex: 1, padding: '8px 12px', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, color: '#4b5563', fontSize: 11 }}>Ask your coach anything...</div>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                  <ArrowRight size={14} color="#031008"/>
-                </div>
-              </div>
+            {/* AI coach screenshot */}
+            <div className="lp-reveal lp-d2" style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(16,185,129,.2)', boxShadow: '0 0 0 1px rgba(255,255,255,.05), 0 32px 64px rgba(0,0,0,.8), 0 0 60px rgba(16,185,129,.1)' }}>
+              <Image
+                src="/ai-coach-preview.png"
+                alt="Strata AI Coach"
+                width={2222}
+                height={1030}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
             </div>
           </div>
         </div>

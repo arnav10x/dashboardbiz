@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Zap, TrendingUp, Users, Brain, BarChart3, Target, Star, Check, ArrowRight, Flame } from 'lucide-react'
 
@@ -250,6 +250,140 @@ function DashboardMockup() {
   )
 }
 
+// ─── Features Hub ──────────────────────────────────────────────────────────────
+
+const FEATURES = [
+  { Icon: Target,     title: 'Daily Action Dashboard', desc: '1-3 non-negotiable tasks every morning. The roadmap is fixed. Your job is to execute — nothing else.',       tag: 'Core'       },
+  { Icon: BarChart3,  title: 'P&L Tracking',           desc: 'Log revenue and expenses, see your financial trajectory at a glance. No spreadsheets, no confusion.',          tag: 'Finance'    },
+  { Icon: Users,      title: 'Pipeline Kanban',         desc: 'Lead → Contacted → Meeting → Closed. Never let a warm lead slip through the cracks again.',                    tag: 'Pipeline'   },
+  { Icon: Brain,      title: 'AI Coach',                desc: 'A strict performance coach in your pocket. Objection scripts, pitch rewrites, and brutal honesty.',             tag: 'AI'         },
+  { Icon: Flame,      title: 'Streak & Momentum',       desc: 'Daily streaks, penalties for missed days, and dopamine-hit celebrations when you close a client.',              tag: 'Motivation' },
+  { Icon: TrendingUp, title: 'Performance Reports',     desc: 'DM rates, reply rates, pipeline velocity — data-driven insights to sharpen your outreach daily.',               tag: 'Analytics'  },
+]
+
+function FeaturesHub() {
+  const [active, setActive] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setActive(true); obs.disconnect() } },
+      { threshold: 0.22 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  const W = 920, H = 640
+  const HX = 460, HY = 320
+  const CW = 182, CH = 155
+  const R  = 230
+
+  const positions = [-90, -30, 30, 90, 150, 210].map(deg => {
+    const rad = (deg * Math.PI) / 180
+    const ccx = HX + R * Math.cos(rad)
+    const ccy = HY + R * Math.sin(rad)
+    return { left: Math.round(ccx - CW / 2), top: Math.round(ccy - CH / 2), ccx, ccy }
+  })
+
+  return (
+    <div ref={ref} style={{ position: 'relative', maxWidth: W, height: H, margin: '0 auto' }}>
+
+      {/* SVG: connection lines + hub rings */}
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}>
+        {/* concentric rings around hub */}
+        {[88, 68, 52].map((r, i) => (
+          <circle key={r} cx={HX} cy={HY} r={r} fill="none"
+            stroke={`rgba(16,185,129,${[0.07, 0.12, 0.22][i]})`} strokeWidth="1"
+            opacity={active ? 1 : 0}
+            style={{ transition: `opacity 0.5s ease 0.05s` }}
+          />
+        ))}
+
+        {/* spoke lines */}
+        {positions.map((pos, i) => {
+          const dx = pos.ccx - HX, dy = pos.ccy - HY
+          const len = Math.sqrt(dx * dx + dy * dy)
+          const nx = dx / len, ny = dy / len
+          const x1 = HX + nx * 54,       y1 = HY + ny * 54
+          const x2 = pos.ccx - nx * 14,  y2 = pos.ccy - ny * 14
+          const lineLen = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+          const delay = 0.28 + i * 0.055
+          return (
+            <g key={i}>
+              <line x1={x1} y1={y1} x2={x2} y2={y2}
+                stroke="rgba(16,185,129,0.24)" strokeWidth="1.5"
+                strokeDasharray={lineLen} strokeDashoffset={active ? 0 : lineLen}
+                style={{ transition: `stroke-dashoffset 0.7s ease ${delay}s` }}
+              />
+              <circle cx={x2} cy={y2} r={3} fill="#10b981"
+                opacity={active ? 0.55 : 0}
+                style={{ transition: `opacity 0.35s ease ${delay + 0.65}s` }}
+              />
+            </g>
+          )
+        })}
+      </svg>
+
+      {/* Hub centre */}
+      <div style={{
+        position: 'absolute', left: HX, top: HY,
+        transform: active ? 'translate(-50%,-50%) scale(1)' : 'translate(-50%,-50%) scale(0)',
+        opacity: active ? 1 : 0,
+        transition: 'opacity 0.5s ease 0s, transform 0.65s cubic-bezier(0.34,1.56,0.64,1) 0s',
+        zIndex: 10,
+      }}>
+        <div style={{ position: 'absolute', inset: -24, borderRadius: '50%', border: '1px solid rgba(16,185,129,0.12)', animation: active ? 'lp-orb 5s ease-in-out infinite' : 'none' }}/>
+        <div style={{
+          width: 90, height: 90, borderRadius: '50%',
+          background: 'radial-gradient(circle,rgba(16,185,129,0.18) 0%,rgba(5,150,105,0.07) 70%)',
+          border: '1.5px solid rgba(16,185,129,0.45)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 0 50px rgba(16,185,129,0.22), 0 0 100px rgba(16,185,129,0.08)',
+        }}>
+          <Zap size={22} color="#10b981"/>
+          <span style={{ fontSize: 8, fontWeight: 900, color: '#10b981', marginTop: 5, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Strata OS</span>
+        </div>
+      </div>
+
+      {/* Feature cards */}
+      {FEATURES.map((f, i) => {
+        const pos = positions[i]
+        const dx = HX - pos.ccx, dy = HY - pos.ccy
+        const delay = 0.08 + i * 0.08
+        return (
+          <div key={f.title} style={{
+            position: 'absolute', left: pos.left, top: pos.top,
+            opacity: active ? 1 : 0,
+            transform: active ? 'translate(0,0) scale(1)' : `translate(${dx}px,${dy}px) scale(0)`,
+            transition: `opacity 0.55s ease ${delay}s, transform 0.65s cubic-bezier(0.34,1.56,0.64,1) ${delay}s`,
+          }}>
+            <div className="lp-hub-card" style={{
+              width: CW,
+              background: 'linear-gradient(145deg,rgba(14,17,20,.98),rgba(5,6,8,.98))',
+              border: '1px solid rgba(255,255,255,.07)',
+              borderRadius: 12, padding: '16px 15px',
+              position: 'relative', overflow: 'hidden',
+            }}>
+              <div style={{ position: 'absolute', top: -28, right: -28, width: 80, height: 80, background: 'radial-gradient(circle,rgba(16,185,129,.08),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 11 }}>
+                <div style={{ width: 36, height: 36, background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.2)', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <f.Icon size={17} color="#10b981"/>
+                </div>
+                <span style={{ fontSize: 9, fontWeight: 800, padding: '2px 7px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>{f.tag}</span>
+              </div>
+              <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.01em', color: '#f4f6f4', lineHeight: 1.3 }}>{f.title}</h3>
+              <p style={{ color: '#4b5563', fontSize: 11.5, lineHeight: 1.6 }}>{f.desc}</p>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 // ─── Main Landing Page ─────────────────────────────────────────────────────────
 
 export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
@@ -264,26 +398,6 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
   }, [])
-
-  const onCardMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const r = e.currentTarget.getBoundingClientRect()
-    const x = (e.clientX - r.left) / r.width - 0.5
-    const y = (e.clientY - r.top) / r.height - 0.5
-    e.currentTarget.style.transform = `perspective(900px) rotateY(${x * 16}deg) rotateX(${-y * 16}deg) translateZ(12px)`
-  }, [])
-
-  const onCardLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0px)'
-  }, [])
-
-  const FEATURES = [
-    { icon: <Target size={20} color="#10b981"/>, title: 'Daily Action Dashboard', desc: '1-3 non-negotiable tasks every morning. The roadmap is fixed. Your job is to execute — nothing else.', tag: 'Core' },
-    { icon: <BarChart3 size={20} color="#10b981"/>, title: 'P&L Tracking', desc: 'Log revenue and expenses, see your financial trajectory at a glance. No spreadsheets, no confusion.', tag: 'Finance' },
-    { icon: <Users size={20} color="#10b981"/>, title: 'Pipeline Kanban', desc: 'Lead → Contacted → Meeting → Closed. Never let a warm lead slip through the cracks again.', tag: 'Pipeline' },
-    { icon: <Brain size={20} color="#10b981"/>, title: 'AI Coach', desc: 'A strict performance coach in your pocket. Objection scripts, pitch rewrites, and brutal honesty.', tag: 'AI' },
-    { icon: <Flame size={20} color="#10b981"/>, title: 'Streak & Momentum', desc: 'Daily streaks, penalties for missed days, and dopamine-hit celebrations when you close a client.', tag: 'Motivation' },
-    { icon: <TrendingUp size={20} color="#10b981"/>, title: 'Performance Reports', desc: 'DM rates, reply rates, pipeline velocity — data-driven insights to sharpen your outreach daily.', tag: 'Analytics' },
-  ]
 
   const TESTIMONIALS = [
     { name: 'Marcus T.', role: 'SMMA Founder', avatar: 'MT', quote: 'Closed my first $1,500 client on Day 17. The daily tasks and AI coach removed every excuse I had. Nothing else comes close.' },
@@ -316,6 +430,8 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         .lp-tcard:hover{border-color:rgba(16,185,129,.28)!important;transform:translateY(-5px);box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 32px rgba(16,185,129,.07)!important}
         .lp-navlink{color:#6b7280;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
         .lp-navlink:hover{color:#f4f6f4}
+        .lp-hub-card{transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease,border-color .22s ease}
+        .lp-hub-card:hover{transform:translateY(-6px) scale(1.03);border-color:rgba(16,185,129,.28)!important;box-shadow:0 22px 44px rgba(0,0,0,.65),0 0 28px rgba(16,185,129,.11)!important}
       `}</style>
 
       {/* ── Canvas ── */}
@@ -441,31 +557,12 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       {/* ── FEATURES ── */}
       <section id="features" style={{ position: 'relative', zIndex: 1, padding: '110px 28px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 64 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>Everything you need</div>
-            <h2 style={{ fontSize: 46, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: 16 }}>Tools that close deals.<br/>Nothing that doesn't.</h2>
-            <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 480, margin: '0 auto', lineHeight: 1.65 }}>No fluff. No distractions. Every feature answers one question: does this help you get clients faster?</p>
+          <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 72 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>One dashboard</div>
+            <h2 style={{ fontSize: 46, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: 16 }}>Everything you need.<br/>Nothing you don't.</h2>
+            <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 520, margin: '0 auto', lineHeight: 1.65 }}>Stop juggling 12 different tabs. Strata connects your daily tasks, P&L, pipeline, and AI coaching into one ruthlessly focused dashboard — so you stop organizing and start earning.</p>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
-            {FEATURES.map((f, i) => (
-              <div
-                key={f.title}
-                className={`lp-reveal lp-fcard lp-d${(i % 3) + 1}`}
-                onMouseMove={onCardMove}
-                onMouseLeave={onCardLeave}
-                style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 28, cursor: 'default', position: 'relative', overflow: 'hidden' }}
-              >
-                <div style={{ position: 'absolute', top: -40, right: -40, width: 120, height: 120, background: 'radial-gradient(circle,rgba(16,185,129,.09),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18 }}>
-                  <div style={{ width: 44, height: 44, background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.2)', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{f.icon}</div>
-                  <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.06em' }}>{f.tag}</span>
-                </div>
-                <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 10, letterSpacing: '-0.01em' }}>{f.title}</h3>
-                <p style={{ color: '#4b5563', fontSize: 14, lineHeight: 1.7 }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
+          <FeaturesHub />
         </div>
       </section>
 

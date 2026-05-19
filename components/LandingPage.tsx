@@ -270,16 +270,16 @@ function FeaturesHub() {
     if (!el) return
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setActive(true); obs.disconnect() } },
-      { threshold: 0.22 }
+      { threshold: 0.15 }
     )
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
 
-  const W = 920, H = 640
-  const HX = 460, HY = 320
-  const CW = 182, CH = 155
-  const R  = 230
+  const W = 1100, H = 800
+  const HX = 550, HY = 400
+  const CW = 230, CH = 190
+  const R  = 300
 
   const positions = [-90, -30, 30, 90, 150, 210].map(deg => {
     const rad = (deg * Math.PI) / 180
@@ -294,7 +294,7 @@ function FeaturesHub() {
       {/* SVG: connection lines + hub rings */}
       <svg viewBox={`0 0 ${W} ${H}`} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'visible' }}>
         {/* concentric rings around hub */}
-        {[88, 68, 52].map((r, i) => (
+        {[118, 92, 70].map((r, i) => (
           <circle key={r} cx={HX} cy={HY} r={r} fill="none"
             stroke={`rgba(16,185,129,${[0.07, 0.12, 0.22][i]})`} strokeWidth="1"
             opacity={active ? 1 : 0}
@@ -307,19 +307,19 @@ function FeaturesHub() {
           const dx = pos.ccx - HX, dy = pos.ccy - HY
           const len = Math.sqrt(dx * dx + dy * dy)
           const nx = dx / len, ny = dy / len
-          const x1 = HX + nx * 54,       y1 = HY + ny * 54
-          const x2 = pos.ccx - nx * 14,  y2 = pos.ccy - ny * 14
+          const x1 = HX + nx * 72,       y1 = HY + ny * 72
+          const x2 = pos.ccx - nx * 18,  y2 = pos.ccy - ny * 18
           const lineLen = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
           const delay = 0.28 + i * 0.055
           return (
             <g key={i}>
               <line x1={x1} y1={y1} x2={x2} y2={y2}
-                stroke="rgba(16,185,129,0.24)" strokeWidth="1.5"
+                stroke="rgba(16,185,129,0.28)" strokeWidth="1.5"
                 strokeDasharray={lineLen} strokeDashoffset={active ? 0 : lineLen}
                 style={{ transition: `stroke-dashoffset 0.7s ease ${delay}s` }}
               />
-              <circle cx={x2} cy={y2} r={3} fill="#10b981"
-                opacity={active ? 0.55 : 0}
+              <circle cx={x2} cy={y2} r={3.5} fill="#10b981"
+                opacity={active ? 0.6 : 0}
                 style={{ transition: `opacity 0.35s ease ${delay + 0.65}s` }}
               />
             </g>
@@ -335,16 +335,16 @@ function FeaturesHub() {
         transition: 'opacity 0.5s ease 0s, transform 0.65s cubic-bezier(0.34,1.56,0.64,1) 0s',
         zIndex: 10,
       }}>
-        <div style={{ position: 'absolute', inset: -24, borderRadius: '50%', border: '1px solid rgba(16,185,129,0.12)', animation: active ? 'lp-orb 5s ease-in-out infinite' : 'none' }}/>
+        <div style={{ position: 'absolute', inset: -30, borderRadius: '50%', border: '1px solid rgba(16,185,129,0.12)', animation: active ? 'lp-orb 5s ease-in-out infinite' : 'none' }}/>
         <div style={{
-          width: 90, height: 90, borderRadius: '50%',
+          width: 112, height: 112, borderRadius: '50%',
           background: 'radial-gradient(circle,rgba(16,185,129,0.18) 0%,rgba(5,150,105,0.07) 70%)',
           border: '1.5px solid rgba(16,185,129,0.45)',
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 50px rgba(16,185,129,0.22), 0 0 100px rgba(16,185,129,0.08)',
+          boxShadow: '0 0 60px rgba(16,185,129,0.24), 0 0 120px rgba(16,185,129,0.09)',
         }}>
-          <Zap size={22} color="#10b981"/>
-          <span style={{ fontSize: 8, fontWeight: 900, color: '#10b981', marginTop: 5, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Strata OS</span>
+          <Zap size={28} color="#10b981"/>
+          <span style={{ fontSize: 10, fontWeight: 900, color: '#10b981', marginTop: 6, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Strata OS</span>
         </div>
       </div>
 
@@ -364,18 +364,18 @@ function FeaturesHub() {
               width: CW,
               background: 'linear-gradient(145deg,rgba(14,17,20,.98),rgba(5,6,8,.98))',
               border: '1px solid rgba(255,255,255,.07)',
-              borderRadius: 12, padding: '16px 15px',
+              borderRadius: 14, padding: '22px 20px',
               position: 'relative', overflow: 'hidden',
             }}>
-              <div style={{ position: 'absolute', top: -28, right: -28, width: 80, height: 80, background: 'radial-gradient(circle,rgba(16,185,129,.08),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 11 }}>
-                <div style={{ width: 36, height: 36, background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.2)', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <f.Icon size={17} color="#10b981"/>
+              <div style={{ position: 'absolute', top: -32, right: -32, width: 100, height: 100, background: 'radial-gradient(circle,rgba(16,185,129,.08),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                <div style={{ width: 44, height: 44, background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.2)', borderRadius: 11, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <f.Icon size={20} color="#10b981"/>
                 </div>
-                <span style={{ fontSize: 9, fontWeight: 800, padding: '2px 7px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>{f.tag}</span>
+                <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>{f.tag}</span>
               </div>
-              <h3 style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, letterSpacing: '-0.01em', color: '#f4f6f4', lineHeight: 1.3 }}>{f.title}</h3>
-              <p style={{ color: '#4b5563', fontSize: 11.5, lineHeight: 1.6 }}>{f.desc}</p>
+              <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em', color: '#f4f6f4', lineHeight: 1.3 }}>{f.title}</h3>
+              <p style={{ color: '#4b5563', fontSize: 13, lineHeight: 1.65 }}>{f.desc}</p>
             </div>
           </div>
         )
@@ -556,7 +556,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
       {/* ── FEATURES ── */}
       <section id="features" style={{ position: 'relative', zIndex: 1, padding: '110px 28px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 72 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>One dashboard</div>
             <h2 style={{ fontSize: 46, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: 16 }}>Everything you need.<br/>Nothing you don't.</h2>

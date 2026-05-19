@@ -257,29 +257,28 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
   return (
     <div style={{ background: '#030405', color: '#f4f6f4', minHeight: '100vh', overflowX: 'hidden' }}>
 
-      {/* ── Global styles ── */}
+      {/* ── Landing-page-scoped styles (no global resets) ── */}
       <style>{`
-        *{box-sizing:border-box;margin:0;padding:0}
-        @keyframes orb{0%,100%{transform:scale(1) translate(0,0);opacity:1}50%{transform:scale(1.2) translate(18px,-22px);opacity:.65}}
-        @keyframes float3d{0%,100%{transform:perspective(1300px) rotateX(5deg) rotateY(-13deg) rotateZ(0.8deg) translateY(0)}50%{transform:perspective(1300px) rotateX(5deg) rotateY(-13deg) rotateZ(0.8deg) translateY(-20px)}}
-        @keyframes rise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes pulse-ring{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.5}}
+        @keyframes lp-orb{0%,100%{transform:scale(1) translate(0,0);opacity:1}50%{transform:scale(1.2) translate(18px,-22px);opacity:.65}}
+        @keyframes lp-float3d{0%,100%{transform:perspective(1300px) rotateX(5deg) rotateY(-13deg) rotateZ(0.8deg) translateY(0)}50%{transform:perspective(1300px) rotateX(5deg) rotateY(-13deg) rotateZ(0.8deg) translateY(-20px)}}
+        @keyframes lp-rise{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes lp-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.5}}
         .lp-reveal{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
         .lp-reveal.lp-in{opacity:1;transform:translateY(0)}
-        .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
-        .hero-a{animation:rise .7s cubic-bezier(.16,1,.3,1) .1s both}
-        .hero-b{animation:rise .7s cubic-bezier(.16,1,.3,1) .22s both}
-        .hero-c{animation:rise .7s cubic-bezier(.16,1,.3,1) .36s both}
-        .hero-d{animation:rise .7s cubic-bezier(.16,1,.3,1) .48s both}
-        .hero-e{animation:rise .9s cubic-bezier(.16,1,.3,1) .55s both}
-        .fcard{transition:transform .15s ease,box-shadow .15s ease}
-        .glow-btn{position:relative;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease!important}
-        .glow-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.16) 0%,transparent 55%);pointer-events:none}
-        .glow-btn:hover{box-shadow:0 0 36px rgba(16,185,129,.55),0 10px 28px rgba(16,185,129,.3)!important;transform:translateY(-2px)!important}
-        .tcard{transition:all .3s cubic-bezier(.16,1,.3,1)}
-        .tcard:hover{border-color:rgba(16,185,129,.28)!important;transform:translateY(-5px);box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 32px rgba(16,185,129,.07)!important}
-        .nav-link{color:#6b7280;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
-        .nav-link:hover{color:#f4f6f4}
+        .lp-d1{transition-delay:.1s}.lp-d2{transition-delay:.2s}.lp-d3{transition-delay:.3s}.lp-d4{transition-delay:.4s}
+        .lp-hero-a{animation:lp-rise .7s cubic-bezier(.16,1,.3,1) .1s both}
+        .lp-hero-b{animation:lp-rise .7s cubic-bezier(.16,1,.3,1) .22s both}
+        .lp-hero-c{animation:lp-rise .7s cubic-bezier(.16,1,.3,1) .36s both}
+        .lp-hero-d{animation:lp-rise .7s cubic-bezier(.16,1,.3,1) .48s both}
+        .lp-hero-e{animation:lp-rise .9s cubic-bezier(.16,1,.3,1) .55s both}
+        .lp-fcard{transition:transform .15s ease,box-shadow .15s ease}
+        .lp-glow-btn{position:relative;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease!important}
+        .lp-glow-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.16) 0%,transparent 55%);pointer-events:none}
+        .lp-glow-btn:hover{box-shadow:0 0 36px rgba(16,185,129,.55),0 10px 28px rgba(16,185,129,.3)!important;transform:translateY(-2px)!important}
+        .lp-tcard{transition:all .3s cubic-bezier(.16,1,.3,1)}
+        .lp-tcard:hover{border-color:rgba(16,185,129,.28)!important;transform:translateY(-5px);box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 32px rgba(16,185,129,.07)!important}
+        .lp-navlink{color:#6b7280;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
+        .lp-navlink:hover{color:#f4f6f4}
       `}</style>
 
       {/* ── Canvas ── */}
@@ -287,9 +286,9 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
       {/* ── Background orbs + grid ── */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.11) 0%,transparent 68%)', top: -250, right: -120, animation: 'orb 9s ease-in-out infinite' }}/>
-        <div style={{ position: 'absolute', width: 550, height: 550, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.07) 0%,transparent 68%)', bottom: '5%', left: -120, animation: 'orb 12s ease-in-out infinite 3s' }}/>
-        <div style={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle,rgba(52,211,153,.06) 0%,transparent 68%)', top: '42%', left: '32%', animation: 'orb 15s ease-in-out infinite 6s' }}/>
+        <div style={{ position: 'absolute', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.11) 0%,transparent 68%)', top: -250, right: -120, animation: 'lp-orb 9s ease-in-out infinite' }}/>
+        <div style={{ position: 'absolute', width: 550, height: 550, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.07) 0%,transparent 68%)', bottom: '5%', left: -120, animation: 'lp-orb 12s ease-in-out infinite 3s' }}/>
+        <div style={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle,rgba(52,211,153,.06) 0%,transparent 68%)', top: '42%', left: '32%', animation: 'lp-orb 15s ease-in-out infinite 6s' }}/>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)', backgroundSize: '64px 64px' }}/>
       </div>
 
@@ -303,13 +302,13 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           <span style={{ fontSize: 9, padding: '2px 7px', background: 'rgba(255,255,255,.07)', borderRadius: 5, color: '#6b7280', fontWeight: 700, letterSpacing: '0.04em' }}>BETA</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
-          <a href="#features" className="nav-link">Features</a>
-          <a href="#how" className="nav-link">How it works</a>
-          <a href="#reviews" className="nav-link">Reviews</a>
+          <a href="#features" className="lp-navlink">Features</a>
+          <a href="#how" className="lp-navlink">How it works</a>
+          <a href="#reviews" className="lp-navlink">Reviews</a>
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
           {isLoggedIn ? (
-            <Link href="/dashboard" className="glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
+            <Link href="/dashboard" className="lp-glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
               Go to Dashboard →
             </Link>
           ) : (
@@ -317,7 +316,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               <Link href="/login" style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(255,255,255,.055)', color: '#c4c9c5', fontSize: 14, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,.1)', transition: 'all .2s' }}>
                 Sign in
               </Link>
-              <Link href="/signup" className="glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
+              <Link href="/signup" className="lp-glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
                 Get started →
               </Link>
             </>
@@ -332,30 +331,30 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           {/* Left — copy */}
           <div>
             {/* Badge */}
-            <div className="hero-a" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '6px 14px', background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.26)', borderRadius: 9999, marginBottom: 28 }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'block', animation: 'pulse-ring 2.2s ease-in-out infinite' }}/>
+            <div className="lp-hero-a" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '6px 14px', background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.26)', borderRadius: 9999, marginBottom: 28 }}>
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'block', animation: 'lp-pulse 2.2s ease-in-out infinite' }}/>
               <span style={{ fontSize: 12, fontWeight: 700, color: '#10b981' }}>Now in Beta · 2,400+ founders building</span>
             </div>
 
-            <h1 className="hero-b" style={{ fontSize: 62, fontWeight: 900, lineHeight: 1.04, marginBottom: 22, letterSpacing: '-0.04em' }}>
+            <h1 className="lp-hero-b" style={{ fontSize: 62, fontWeight: 900, lineHeight: 1.04, marginBottom: 22, letterSpacing: '-0.04em' }}>
               The performance OS<br/>
               <span style={{ background: 'linear-gradient(130deg,#10b981 0%,#34d399 45%,#6ee7b7 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 built for founders.
               </span>
             </h1>
 
-            <p className="hero-c" style={{ fontSize: 17, lineHeight: 1.72, color: '#a0a8a4', marginBottom: 36, maxWidth: 430 }}>
+            <p className="lp-hero-c" style={{ fontSize: 17, lineHeight: 1.72, color: '#a0a8a4', marginBottom: 36, maxWidth: 430 }}>
               Track your P&L, manage your pipeline, and get AI-coached from $0 to your first clients — all in one ruthlessly focused dashboard.
             </p>
 
-            <div className="hero-d" style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 22 }}>
+            <div className="lp-hero-d" style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 22 }}>
               {isLoggedIn ? (
-                <Link href="/dashboard" className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
+                <Link href="/dashboard" className="lp-glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
                   Go to Dashboard <ArrowRight size={16}/>
                 </Link>
               ) : (
                 <>
-                  <Link href="/signup" className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
+                  <Link href="/signup" className="lp-glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
                     Start for free <ArrowRight size={16}/>
                   </Link>
                   <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '15px 26px', borderRadius: 11, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', color: '#c4c9c5', fontSize: 16, fontWeight: 600, textDecoration: 'none', transition: 'all .2s' }}>
@@ -365,7 +364,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               )}
             </div>
 
-            <div className="hero-d" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, color: '#4b5563', fontSize: 13 }}>
+            <div className="lp-hero-d" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, color: '#4b5563', fontSize: 13 }}>
               {['No credit card needed', 'Free forever plan', '30-day roadmap included'].map(t => (
                 <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                   <Check size={12} color="#10b981"/> {t}
@@ -375,10 +374,10 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           </div>
 
           {/* Right — 3D dashboard */}
-          <div className="hero-e" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="lp-hero-e" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             {/* Glow beneath */}
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 60%,rgba(16,185,129,.14),transparent 70%)', pointerEvents: 'none' }}/>
-            <div style={{ animation: 'float3d 7s ease-in-out infinite', transformOrigin: 'center center', filter: 'drop-shadow(0 50px 70px rgba(0,0,0,.88)) drop-shadow(0 0 70px rgba(16,185,129,.16))' }}>
+            <div style={{ animation: 'lp-float3d 7s ease-in-out infinite', transformOrigin: 'center center', filter: 'drop-shadow(0 50px 70px rgba(0,0,0,.88)) drop-shadow(0 0 70px rgba(16,185,129,.16))' }}>
               <DashboardMockup/>
             </div>
           </div>
@@ -394,7 +393,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             { n: '$3.2M', label: 'Revenue Tracked' },
             { n: '4.9 / 5', label: 'Average Rating' },
           ].map((s, i) => (
-            <div key={s.label} className={`lp-reveal d${i+1}`}>
+            <div key={s.label} className={`lp-reveal lp-d${i+1}`}>
               <div style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1, background: 'linear-gradient(135deg,#10b981,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.n}</div>
               <div style={{ color: '#4b5563', fontSize: 13, marginTop: 6 }}>{s.label}</div>
             </div>
@@ -415,7 +414,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             {FEATURES.map((f, i) => (
               <div
                 key={f.title}
-                className={`lp-reveal fcard d${(i % 3) + 1}`}
+                className={`lp-reveal lp-fcard lp-d${(i % 3) + 1}`}
                 onMouseMove={onCardMove}
                 onMouseLeave={onCardLeave}
                 style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 28, cursor: 'default', position: 'relative', overflow: 'hidden' }}
@@ -446,7 +445,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               { n: '02', title: 'Execute every single day', desc: 'Log in each morning. Your 1-3 tasks are waiting. Focus Mode locks you in. Strata penalizes inaction and rewards consistency.' },
               { n: '03', title: 'Close your first deal', desc: 'As leads warm up, move them through your pipeline. The AI coach sharpens your pitch and handles objections in real-time.' },
             ].map((s, i) => (
-              <div key={s.n} className={`lp-reveal d${i+1}`} style={{ display: 'flex', gap: 22, alignItems: 'flex-start' }}>
+              <div key={s.n} className={`lp-reveal lp-d${i+1}`} style={{ display: 'flex', gap: 22, alignItems: 'flex-start' }}>
                 <div style={{ flexShrink: 0, width: 50, height: 50, borderRadius: 13, background: 'rgba(16,185,129,.08)', border: '1px solid rgba(16,185,129,.22)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: '#10b981', fontVariantNumeric: 'tabular-nums' }}>{s.n}</div>
                 <div>
                   <div style={{ fontSize: 19, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em' }}>{s.title}</div>
@@ -476,7 +475,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               ))}
             </div>
             {/* AI chat mockup */}
-            <div className="lp-reveal d2" style={{ background: 'rgba(3,4,5,.9)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 20, fontFamily: 'system-ui,sans-serif', fontSize: 12 }}>
+            <div className="lp-reveal lp-d2" style={{ background: 'rgba(3,4,5,.9)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 20, fontFamily: 'system-ui,sans-serif', fontSize: 12 }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: '#4b5563', marginBottom: 14, textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI Coach — Strata</div>
               {[
                 { from: 'user', msg: 'They said they\'re "not interested" after I sent my pitch. What do I do?' },
@@ -511,7 +510,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
             {TESTIMONIALS.map((t, i) => (
-              <div key={t.name} className={`lp-reveal tcard d${i+1}`} style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 16, padding: 28 }}>
+              <div key={t.name} className={`lp-reveal lp-tcard lp-d${i+1}`} style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 16, padding: 28 }}>
                 <div style={{ display: 'flex', marginBottom: 14 }}>
                   {Array.from({ length: 5 }).map((_, j) => <Star key={j} size={14} fill="#10b981" color="#10b981"/>)}
                 </div>
@@ -541,7 +540,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             </span>
           </h2>
           <p style={{ color: '#6b7280', fontSize: 18, marginBottom: 44, lineHeight: 1.65 }}>Stop consuming. Start executing. Strata gives you the structure, tools, and AI coaching to land your first client — faster than you think.</p>
-          <Link href={isLoggedIn ? '/dashboard' : '/signup'} className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 40px', borderRadius: 13, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 18, fontWeight: 800, textDecoration: 'none', boxShadow: '0 10px 36px rgba(16,185,129,.42),inset 0 1px 0 rgba(255,255,255,.22)' }}>
+          <Link href={isLoggedIn ? '/dashboard' : '/signup'} className="lp-glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 40px', borderRadius: 13, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 18, fontWeight: 800, textDecoration: 'none', boxShadow: '0 10px 36px rgba(16,185,129,.42),inset 0 1px 0 rgba(255,255,255,.22)' }}>
             {isLoggedIn ? 'Go to Dashboard' : 'Start free — no card needed'} <ArrowRight size={18}/>
           </Link>
           <div style={{ marginTop: 20, color: '#4b5563', fontSize: 13 }}>Join 2,400+ founders already building with Strata</div>

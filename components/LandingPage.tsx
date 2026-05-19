@@ -215,7 +215,7 @@ function DashboardMockup() {
 
 // ─── Main Landing Page ─────────────────────────────────────────────────────────
 
-export default function LandingPage() {
+export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [scrolled, setScrolled] = useState(false)
 
@@ -308,12 +308,20 @@ export default function LandingPage() {
           <a href="#reviews" className="nav-link">Reviews</a>
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <Link href="/login" style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(255,255,255,.055)', color: '#c4c9c5', fontSize: 14, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,.1)', transition: 'all .2s' }}>
-            Sign in
-          </Link>
-          <Link href="/signup" className="glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
-            Get started →
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard" className="glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
+              Go to Dashboard →
+            </Link>
+          ) : (
+            <>
+              <Link href="/login" style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(255,255,255,.055)', color: '#c4c9c5', fontSize: 14, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,.1)', transition: 'all .2s' }}>
+                Sign in
+              </Link>
+              <Link href="/signup" className="glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
+                Get started →
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -341,12 +349,20 @@ export default function LandingPage() {
             </p>
 
             <div className="hero-d" style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 22 }}>
-              <Link href="/signup" className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
-                Start for free <ArrowRight size={16}/>
-              </Link>
-              <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '15px 26px', borderRadius: 11, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', color: '#c4c9c5', fontSize: 16, fontWeight: 600, textDecoration: 'none', transition: 'all .2s' }}>
-                Sign in
-              </Link>
+              {isLoggedIn ? (
+                <Link href="/dashboard" className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
+                  Go to Dashboard <ArrowRight size={16}/>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/signup" className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
+                    Start for free <ArrowRight size={16}/>
+                  </Link>
+                  <Link href="/login" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '15px 26px', borderRadius: 11, background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.1)', color: '#c4c9c5', fontSize: 16, fontWeight: 600, textDecoration: 'none', transition: 'all .2s' }}>
+                    Sign in
+                  </Link>
+                </>
+              )}
             </div>
 
             <div className="hero-d" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, color: '#4b5563', fontSize: 13 }}>
@@ -525,8 +541,8 @@ export default function LandingPage() {
             </span>
           </h2>
           <p style={{ color: '#6b7280', fontSize: 18, marginBottom: 44, lineHeight: 1.65 }}>Stop consuming. Start executing. Strata gives you the structure, tools, and AI coaching to land your first client — faster than you think.</p>
-          <Link href="/signup" className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 40px', borderRadius: 13, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 18, fontWeight: 800, textDecoration: 'none', boxShadow: '0 10px 36px rgba(16,185,129,.42),inset 0 1px 0 rgba(255,255,255,.22)' }}>
-            Start free — no card needed <ArrowRight size={18}/>
+          <Link href={isLoggedIn ? '/dashboard' : '/signup'} className="glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 40px', borderRadius: 13, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 18, fontWeight: 800, textDecoration: 'none', boxShadow: '0 10px 36px rgba(16,185,129,.42),inset 0 1px 0 rgba(255,255,255,.22)' }}>
+            {isLoggedIn ? 'Go to Dashboard' : 'Start free — no card needed'} <ArrowRight size={18}/>
           </Link>
           <div style={{ marginTop: 20, color: '#4b5563', fontSize: 13 }}>Join 2,400+ founders already building with Strata</div>
         </div>

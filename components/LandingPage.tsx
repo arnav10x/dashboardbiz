@@ -366,36 +366,30 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             <div className="lp-reveal">
               <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 18 }}>AI Coach</div>
               <h2 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.1, marginBottom: 18 }}>Your coach gives you<br/>brutal, honest feedback.</h2>
-              <p style={{ color: '#6b7280', fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>Paste a prospect's objection. Get a word-for-word rebuttal in seconds. Pre-call roleplay. Post-call debrief. The AI never sugarcoats.</p>
-              {['Handle any objection with a script', 'Rewrite your pitch in real-time', 'Pre-call prep & sales roleplay', 'Tough love when you skip days'].map(t => (
+              <p style={{ color: '#6b7280', fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>Paste a prospect's objection. Get a word-for-word rebuttal in seconds. Pre-call roleplay. Post-call debrief. The AI never sugarcoats — and it controls your entire workspace so you don't have to.</p>
+              {[
+                'Handle any objection with a word-for-word script',
+                'Full read/write access to your entire dashboard',
+                'Creates and manages your to-do list automatically',
+                'Reads your pipeline and suggests next actions',
+                'Analyzes your P&L and revenue trends in real-time',
+                'Truly hands-off — just ask and it executes',
+              ].map(t => (
                 <div key={t} style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 10 }}>
                   <Check size={14} color="#10b981"/>
                   <span style={{ fontSize: 14, color: '#c4c9c5' }}>{t}</span>
                 </div>
               ))}
             </div>
-            {/* AI chat mockup */}
-            <div className="lp-reveal lp-d2" style={{ background: 'rgba(3,4,5,.9)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: 20, fontFamily: 'system-ui,sans-serif', fontSize: 12 }}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#4b5563', marginBottom: 14, textTransform: 'uppercase', letterSpacing: '0.08em' }}>AI Coach — Strata</div>
-              {[
-                { from: 'user', msg: 'They said they\'re "not interested" after I sent my pitch. What do I do?' },
-                { from: 'ai', msg: '"Not interested" just means you haven\'t built enough pain yet. Reply: \'Totally understand — most founders I work with said the same before seeing [specific result]. Can I ask, what\'s your biggest challenge with [their niche] right now?\' Keep them talking.' },
-                { from: 'user', msg: 'What if they still don\'t reply?' },
-                { from: 'ai', msg: 'Follow up 3x. Most deals close on follow-up 4-6. Silence is not rejection. Ghosting is the norm. Send a breakup email on day 14 — it often triggers a response.' },
-              ].map((m, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: m.from === 'user' ? 'flex-end' : 'flex-start', marginBottom: 10 }}>
-                  <div style={{ maxWidth: '82%', padding: '9px 12px', borderRadius: m.from === 'user' ? '10px 10px 3px 10px' : '10px 10px 10px 3px', background: m.from === 'user' ? 'rgba(16,185,129,.14)' : 'rgba(255,255,255,.05)', border: `1px solid ${m.from === 'user' ? 'rgba(16,185,129,.22)' : 'rgba(255,255,255,.07)'}`, color: m.from === 'user' ? '#c4c9c5' : '#f4f6f4', fontSize: 11, lineHeight: 1.55 }}>
-                    {m.from === 'ai' && <div style={{ fontSize: 9, fontWeight: 800, color: '#10b981', marginBottom: 5, letterSpacing: '0.06em' }}>STRATA AI</div>}
-                    {m.msg}
-                  </div>
-                </div>
-              ))}
-              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-                <div style={{ flex: 1, padding: '8px 12px', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.08)', borderRadius: 8, color: '#4b5563', fontSize: 11 }}>Ask your coach anything...</div>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                  <ArrowRight size={14} color="#031008"/>
-                </div>
-              </div>
+            {/* AI coach screenshot */}
+            <div className="lp-reveal lp-d2" style={{ borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(16,185,129,.2)', boxShadow: '0 0 0 1px rgba(255,255,255,.05), 0 32px 64px rgba(0,0,0,.8), 0 0 60px rgba(16,185,129,.1)' }}>
+              <Image
+                src="/ai-coach-preview.png"
+                alt="Strata AI Coach"
+                width={2222}
+                height={1030}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
             </div>
           </div>
         </div>

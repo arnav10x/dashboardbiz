@@ -434,6 +434,43 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         .lp-navlink:hover{color:#f4f6f4}
         .lp-hub-card{transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease,border-color .22s ease}
         .lp-hub-card:hover{transform:translateY(-6px) scale(1.03);border-color:rgba(16,185,129,.28)!important;box-shadow:0 22px 44px rgba(0,0,0,.65),0 0 28px rgba(16,185,129,.11)!important}
+        /* ── Responsive ── */
+        .lp-hero-dash{display:flex}
+        .lp-feat-hub-wrap{display:block}
+        .lp-feat-grid-wrap{display:none}
+        @media(max-width:1023px){
+          .lp-nav-links{display:none!important}
+          .lp-hero-grid{grid-template-columns:1fr!important;gap:40px!important;text-align:center}
+          .lp-hero-dash{display:none!important}
+          .lp-hero-btns{justify-content:center!important;flex-wrap:wrap!important}
+          .lp-hero-badges{justify-content:center!important}
+          .lp-hero-h1{font-size:48px!important}
+          .lp-stats-grid{grid-template-columns:repeat(2,1fr)!important}
+          .lp-feat-hub-wrap{display:none!important}
+          .lp-feat-grid-wrap{display:grid!important;grid-template-columns:repeat(2,1fr);gap:18px}
+          .lp-ai-inner{grid-template-columns:1fr!important;padding:40px 32px!important;gap:36px!important}
+          .lp-test-grid{grid-template-columns:repeat(2,1fr)!important}
+          .lp-footer-inner{flex-direction:column!important;gap:16px!important;text-align:center!important}
+        }
+        @media(max-width:639px){
+          .lp-sign-in-btn{display:none!important}
+          .lp-hero-h1{font-size:34px!important;letter-spacing:-0.025em!important}
+          .lp-hero-p{font-size:15px!important;max-width:100%!important}
+          .lp-hero-btns a,.lp-hero-btns div{font-size:15px!important;padding:13px 22px!important}
+          .lp-stats-grid{grid-template-columns:repeat(2,1fr)!important}
+          .lp-feat-section{padding:70px 20px!important}
+          .lp-feat-grid-wrap{grid-template-columns:1fr!important}
+          .lp-how-section{padding:64px 20px!important}
+          .lp-how-h2{font-size:30px!important}
+          .lp-ai-section{padding:64px 20px!important}
+          .lp-ai-inner{padding:28px 20px!important}
+          .lp-ai-h2{font-size:26px!important;line-height:1.2!important}
+          .lp-test-section{padding:64px 20px!important}
+          .lp-test-grid{grid-template-columns:1fr!important}
+          .lp-cta-section{padding:80px 20px!important}
+          .lp-cta-h2{font-size:32px!important}
+          .lp-footer{padding:24px 20px!important}
+        }
       `}</style>
 
       {/* ── Canvas ── */}
@@ -456,7 +493,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           <span style={{ fontWeight: 900, fontSize: 19, letterSpacing: '-0.02em' }}>Strata</span>
           <span style={{ fontSize: 9, padding: '2px 7px', background: 'rgba(255,255,255,.07)', borderRadius: 5, color: '#6b7280', fontWeight: 700, letterSpacing: '0.04em' }}>BETA</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
+        <div className="lp-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
           <a href="#features" className="lp-navlink">Features</a>
           <a href="#how" className="lp-navlink">How it works</a>
           <a href="#reviews" className="lp-navlink">Reviews</a>
@@ -468,7 +505,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             </Link>
           ) : (
             <>
-              <Link href="/login" style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(255,255,255,.055)', color: '#c4c9c5', fontSize: 14, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,.1)', transition: 'all .2s' }}>
+              <Link href="/login" className="lp-sign-in-btn" style={{ padding: '8px 18px', borderRadius: 8, background: 'rgba(255,255,255,.055)', color: '#c4c9c5', fontSize: 14, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(255,255,255,.1)', transition: 'all .2s' }}>
                 Sign in
               </Link>
               <Link href="/signup" className="lp-glow-btn" style={{ padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: '0 4px 16px rgba(16,185,129,.32)' }}>
@@ -481,7 +518,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
       {/* ── HERO ── */}
       <section style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '130px 28px 80px' }}>
-        <div style={{ maxWidth: 1200, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
+        <div className="lp-hero-grid" style={{ maxWidth: 1200, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
 
           {/* Left — copy */}
           <div>
@@ -491,18 +528,18 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               <span style={{ fontSize: 12, fontWeight: 700, color: '#10b981' }}>Now in Beta · 2,400+ founders building</span>
             </div>
 
-            <h1 className="lp-hero-b" style={{ fontSize: 62, fontWeight: 900, lineHeight: 1.04, marginBottom: 22, letterSpacing: '-0.04em' }}>
+            <h1 className="lp-hero-b lp-hero-h1" style={{ fontSize: 62, fontWeight: 900, lineHeight: 1.04, marginBottom: 22, letterSpacing: '-0.04em' }}>
               The performance OS<br/>
               <span style={{ background: 'linear-gradient(130deg,#10b981 0%,#34d399 45%,#6ee7b7 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                 built for founders.
               </span>
             </h1>
 
-            <p className="lp-hero-c" style={{ fontSize: 17, lineHeight: 1.72, color: '#a0a8a4', marginBottom: 36, maxWidth: 430 }}>
+            <p className="lp-hero-c lp-hero-p" style={{ fontSize: 17, lineHeight: 1.72, color: '#a0a8a4', marginBottom: 36, maxWidth: 430 }}>
               Track your P&L, manage your pipeline, and get AI-coached from $0 to your first clients — all in one ruthlessly focused dashboard.
             </p>
 
-            <div className="lp-hero-d" style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 22 }}>
+            <div className="lp-hero-d lp-hero-btns" style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 22 }}>
               {isLoggedIn ? (
                 <Link href="/dashboard" className="lp-glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '15px 30px', borderRadius: 11, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 16, fontWeight: 800, textDecoration: 'none', boxShadow: '0 8px 26px rgba(16,185,129,.38),inset 0 1px 0 rgba(255,255,255,.22)' }}>
                   Go to Dashboard <ArrowRight size={16}/>
@@ -519,7 +556,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               )}
             </div>
 
-            <div className="lp-hero-d" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, color: '#4b5563', fontSize: 13 }}>
+            <div className="lp-hero-d lp-hero-badges" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, color: '#4b5563', fontSize: 13 }}>
               {['No credit card needed', 'Free forever plan', '30-day roadmap included'].map(t => (
                 <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                   <Check size={12} color="#10b981"/> {t}
@@ -529,7 +566,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           </div>
 
           {/* Right — 3D dashboard */}
-          <div className="lp-hero-e" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+          <div className="lp-hero-e lp-hero-dash" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             {/* Glow beneath */}
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 60%,rgba(16,185,129,.14),transparent 70%)', pointerEvents: 'none' }}/>
             <div style={{ animation: 'lp-float3d 7s ease-in-out infinite', transformOrigin: 'center center', filter: 'drop-shadow(0 50px 70px rgba(0,0,0,.88)) drop-shadow(0 0 70px rgba(16,185,129,.16))' }}>
@@ -541,7 +578,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
       {/* ── SOCIAL PROOF BAR ── */}
       <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)', background: 'rgba(255,255,255,.012)', padding: '38px 28px' }}>
-        <div style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24, textAlign: 'center' }}>
+        <div className="lp-stats-grid" style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24, textAlign: 'center' }}>
           {[
             { n: '2,400+', label: 'Active Founders' },
             { n: '87%', label: 'Close First Client ≤ 30 Days' },
@@ -557,23 +594,40 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       </div>
 
       {/* ── FEATURES ── */}
-      <section id="features" style={{ position: 'relative', zIndex: 1, padding: '110px 28px' }}>
+      <section id="features" className="lp-feat-section" style={{ position: 'relative', zIndex: 1, padding: '110px 28px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 72 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>One dashboard</div>
             <h2 style={{ fontSize: 46, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: 16 }}>Everything you need.<br/>Nothing you don't.</h2>
             <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 520, margin: '0 auto', lineHeight: 1.65 }}>Stop juggling 12 different tabs. Strata connects your daily tasks, P&L, pipeline, and AI coaching into one ruthlessly focused dashboard — so you stop organizing and start earning.</p>
           </div>
-          <FeaturesHub />
+          {/* Desktop hub */}
+          <div className="lp-feat-hub-wrap"><FeaturesHub /></div>
+          {/* Mobile / tablet card grid */}
+          <div className="lp-feat-grid-wrap">
+            {FEATURES.map((f, i) => (
+              <div key={f.title} className={`lp-reveal lp-d${(i % 2) + 1}`} style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.98),rgba(5,6,8,.98))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 14, padding: '24px 20px', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: -28, right: -28, width: 90, height: 90, background: 'radial-gradient(circle,rgba(16,185,129,.08),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
+                  <div style={{ width: 42, height: 42, background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.2)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <f.Icon size={19} color="#10b981"/>
+                  </div>
+                  <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>{f.tag}</span>
+                </div>
+                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 8, letterSpacing: '-0.01em', color: '#f4f6f4', lineHeight: 1.3 }}>{f.title}</h3>
+                <p style={{ color: '#4b5563', fontSize: 13, lineHeight: 1.65 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section id="how" style={{ position: 'relative', zIndex: 1, padding: '80px 28px', background: 'rgba(255,255,255,.01)', borderTop: '1px solid rgba(255,255,255,.04)' }}>
+      <section id="how" className="lp-how-section" style={{ position: 'relative', zIndex: 1, padding: '80px 28px', background: 'rgba(255,255,255,.01)', borderTop: '1px solid rgba(255,255,255,.04)' }}>
         <div style={{ maxWidth: 740, margin: '0 auto' }}>
           <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>How it works</div>
-            <h2 style={{ fontSize: 42, fontWeight: 900, letterSpacing: '-0.035em' }}>Three steps to your first client.</h2>
+            <h2 className="lp-how-h2" style={{ fontSize: 42, fontWeight: 900, letterSpacing: '-0.035em' }}>Three steps to your first client.</h2>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {[
@@ -594,14 +648,14 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       </section>
 
       {/* ── BIG FEATURE CALLOUT ── */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '100px 28px' }}>
+      <section className="lp-ai-section" style={{ position: 'relative', zIndex: 1, padding: '100px 28px' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(16,185,129,.15)', borderRadius: 20, padding: '60px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div className="lp-ai-inner" style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(16,185,129,.15)', borderRadius: 20, padding: '60px 64px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
             {/* bg glow */}
             <div style={{ position: 'absolute', bottom: -100, right: -100, width: 400, height: 400, background: 'radial-gradient(circle,rgba(16,185,129,.1),transparent 70%)', borderRadius: '50%', pointerEvents: 'none' }}/>
             <div className="lp-reveal">
               <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 18 }}>AI Coach</div>
-              <h2 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.1, marginBottom: 18 }}>Your coach gives you<br/>brutal, honest feedback.</h2>
+              <h2 className="lp-ai-h2" style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.1, marginBottom: 18 }}>Your coach gives you<br/>brutal, honest feedback.</h2>
               <p style={{ color: '#6b7280', fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>Paste a prospect's objection. Get a word-for-word rebuttal in seconds. Pre-call roleplay. Post-call debrief. The AI never sugarcoats — and it controls your entire workspace so you don't have to.</p>
               {[
                 'Handle any objection with a word-for-word script',
@@ -662,13 +716,13 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section id="reviews" style={{ position: 'relative', zIndex: 1, padding: '80px 28px', borderTop: '1px solid rgba(255,255,255,.04)' }}>
+      <section id="reviews" className="lp-test-section" style={{ position: 'relative', zIndex: 1, padding: '80px 28px', borderTop: '1px solid rgba(255,255,255,.04)' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>Testimonials</div>
             <h2 style={{ fontSize: 42, fontWeight: 900, letterSpacing: '-0.035em' }}>Real founders. Real results.</h2>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
+          <div className="lp-test-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 18 }}>
             {TESTIMONIALS.map((t, i) => (
               <div key={t.name} className={`lp-reveal lp-tcard lp-d${i+1}`} style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 16, padding: 28 }}>
                 <div style={{ display: 'flex', marginBottom: 14 }}>
@@ -689,11 +743,11 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       </section>
 
       {/* ── FINAL CTA ── */}
-      <section style={{ position: 'relative', zIndex: 1, padding: '120px 28px', overflow: 'hidden' }}>
+      <section className="lp-cta-section" style={{ position: 'relative', zIndex: 1, padding: '120px 28px', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, background: 'radial-gradient(circle,rgba(16,185,129,.13),transparent 68%)', borderRadius: '50%', pointerEvents: 'none' }}/>
         <div className="lp-reveal" style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 20 }}>Get started today</div>
-          <h2 style={{ fontSize: 56, fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.04, marginBottom: 20 }}>
+          <h2 className="lp-cta-h2" style={{ fontSize: 56, fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.04, marginBottom: 20 }}>
             Your first client<br/>
             <span style={{ background: 'linear-gradient(130deg,#10b981,#34d399,#6ee7b7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               is 30 days away.
@@ -708,8 +762,8 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,.055)', padding: '36px 28px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <footer className="lp-footer" style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,.055)', padding: '36px 28px' }}>
+        <div className="lp-footer-inner" style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 26, height: 26, background: 'linear-gradient(135deg,#10b981,#34d399)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Zap size={13} color="#031008"/>

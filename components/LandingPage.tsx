@@ -270,23 +270,25 @@ function FeaturesHub() {
     if (!el) return
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setActive(true); obs.disconnect() } },
-      { threshold: 0.15 }
+      { threshold: 0.12 }
     )
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
 
-  const W = 1100, H = 800
-  const HX = 550, HY = 400
-  const CW = 230, CH = 190
-  const R  = 300
+  const W = 1100, H = 660
+  const HX = 550, HY = 330
+  const CW = 230, CH = 195
 
-  const positions = [-90, -30, 30, 90, 150, 210].map(deg => {
-    const rad = (deg * Math.PI) / 180
-    const ccx = HX + R * Math.cos(rad)
-    const ccy = HY + R * Math.sin(rad)
-    return { left: Math.round(ccx - CW / 2), top: Math.round(ccy - CH / 2), ccx, ccy }
-  })
+  // 3 cards top row, 3 cards bottom row — full horizontal spread
+  const positions = [
+    { left: 20,  top: 10,  ccx: 135, ccy: 107 },  // top-left
+    { left: 435, top: 10,  ccx: 550, ccy: 107 },   // top-center
+    { left: 850, top: 10,  ccx: 965, ccy: 107 },   // top-right
+    { left: 20,  top: 455, ccx: 135, ccy: 552 },   // bottom-left
+    { left: 435, top: 455, ccx: 550, ccy: 552 },   // bottom-center
+    { left: 850, top: 455, ccx: 965, ccy: 552 },   // bottom-right
+  ]
 
   return (
     <div ref={ref} style={{ position: 'relative', maxWidth: W, height: H, margin: '0 auto' }}>

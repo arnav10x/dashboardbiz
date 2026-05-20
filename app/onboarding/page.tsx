@@ -38,18 +38,16 @@ export default function OnboardingPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) { router.push('/login'); return }
 
-      const { data: settings } = await supabase
-        .from('user_settings')
-        .select('onboarding_completed')
-        .eq('user_id', user.id)
-        .maybeSingle()
+      const [{ data: settings }, { data: ws }] = await Promise.all([
+        supabase.from('user_settings').select('onboarding_completed').eq('user_id', user.id).maybeSingle(),
+        supabase.from('workspaces').select('name, business_type, stage').eq('owner_id', user.id).maybeSingle(),
+      ])
 
       if (settings?.onboarding_completed) {
         router.push('/dashboard')
         return
       }
 
-      const { data: ws } = await supabase.from('workspaces').select('name, business_type, stage').eq('owner_id', user.id).maybeSingle()
       if (ws) {
         setBusinessName(ws.name || '')
         setBusinessType(ws.business_type || 'Agency')
@@ -66,7 +64,11 @@ export default function OnboardingPage() {
     setSaveError('')
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { setSaving(false); return }
+    if (!user) {
+      setSaveError('Session expired. Please refresh and try again.')
+      setSaving(false)
+      return
+    }
 
     // Upsert workspace — insert for new users, update for returning users
     const { data: existingWs } = await supabase
@@ -76,14 +78,19 @@ export default function OnboardingPage() {
       .maybeSingle()
 
     if (existingWs) {
-      await supabase.from('workspaces').update({
+      const { error: wsErr } = await supabase.from('workspaces').update({
         name: businessName || 'My Workspace',
         business_type: businessType,
         stage,
         business_summary: summary.trim(),
       }).eq('id', existingWs.id)
+      if (wsErr) {
+        setSaveError('Failed to save workspace info. Please try again.')
+        setSaving(false)
+        return
+      }
     } else {
-      await supabase.from('workspaces').insert({
+      const { error: wsErr } = await supabase.from('workspaces').insert({
         owner_id: user.id,
         name: businessName || 'My Workspace',
         business_type: businessType,
@@ -91,6 +98,11 @@ export default function OnboardingPage() {
         business_summary: summary.trim(),
         invite_code: Math.random().toString(36).substring(2, 8).toUpperCase(),
       })
+      if (wsErr) {
+        setSaveError('Failed to create workspace. Please try again.')
+        setSaving(false)
+        return
+      }
     }
 
     const { error: settingsError } = await supabase.from('user_settings').upsert({
@@ -106,7 +118,8 @@ export default function OnboardingPage() {
       return
     }
 
-    router.push('/dashboard')
+    // Hard navigation ensures the dashboard server component re-runs with fresh data
+    window.location.href = '/dashboard'
   }
 
   if (checking) {

@@ -6,8 +6,8 @@ import { Zap } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Sign in | Strata',
-  description: 'Sign in to your Strata dashboard.',
+  title: 'Sign in | prspectve',
+  description: 'Sign in to your prspectve dashboard.',
 }
 
 export default function LoginPage() {
@@ -22,7 +22,7 @@ export default function LoginPage() {
           >
             <Zap className="h-4 w-4 text-white" />
           </div>
-          <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>Strata</span>
+          <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>prspectve</span>
         </div>
 
         <div

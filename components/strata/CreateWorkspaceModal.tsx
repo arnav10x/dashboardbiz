@@ -75,7 +75,7 @@ export function CreateWorkspaceModal() {
           >
             <Zap className="h-4.5 w-4.5 text-white" />
           </div>
-          <span className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>Strata</span>
+          <span className="text-base font-bold" style={{ color: 'var(--text-primary)' }}>prspectve</span>
         </div>
 
         <h2 className="text-xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>

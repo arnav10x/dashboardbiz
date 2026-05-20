@@ -1,8 +1,8 @@
-# FounderOS Phase 7 Implemented
+# prspectve Phase 7 Implemented
 
 ## Business Intelligence + Accuracy Pass
 
-This phase focused on making FounderOS more trustworthy and less like a mock dashboard.
+This phase focused on making prspectve more trustworthy and less like a mock dashboard.
 
 ### Completed
 - Reports revenue chart now uses real logged data instead of hard-coded/random SVG points.

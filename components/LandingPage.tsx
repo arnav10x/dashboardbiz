@@ -100,7 +100,7 @@ function DashboardMockup() {
           <div style={{ width: 22, height: 22, background: 'linear-gradient(135deg,#10b981,#059669)', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Zap size={11} color="#031008"/>
           </div>
-          <span style={{ fontWeight: 800, fontSize: 13, color: '#f4f6f4' }}>Strata</span>
+          <span style={{ fontWeight: 800, fontSize: 13, color: '#f4f6f4' }}>prspectve</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <span style={{ color: '#6b7280', fontSize: 10 }}>Working late, navbuilds</span>
@@ -346,7 +346,7 @@ function FeaturesHub() {
           boxShadow: '0 0 60px rgba(16,185,129,0.24), 0 0 120px rgba(16,185,129,0.09)',
         }}>
           <Zap size={28} color="#10b981"/>
-          <span style={{ fontSize: 10, fontWeight: 900, color: '#10b981', marginTop: 6, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Strata OS</span>
+          <span style={{ fontSize: 10, fontWeight: 900, color: '#10b981', marginTop: 6, letterSpacing: '0.07em', textTransform: 'uppercase' }}>prspectve</span>
         </div>
       </div>
 
@@ -403,7 +403,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
   const TESTIMONIALS = [
     { name: 'Marcus T.', role: 'SMMA Founder', avatar: 'MT', quote: 'Closed my first $1,500 client on Day 17. The daily tasks and AI coach removed every excuse I had. Nothing else comes close.' },
-    { name: 'Priya S.', role: 'Freelance Dev', avatar: 'PS', quote: 'I used to open 12 different tabs every morning. Now I open Strata, see my tasks, and get to work. Absolutely game-changing.' },
+    { name: 'Priya S.', role: 'Freelance Dev', avatar: 'PS', quote: 'I used to open 12 different tabs every morning. Now I open prspectve, see my tasks, and get to work. Absolutely game-changing.' },
     { name: 'Jake L.', role: 'AI Agency Owner', avatar: 'JL', quote: 'The pipeline board alone is worth it. I can see exactly where every prospect is. Closed 3 clients in my first 30 days.' },
   ]
 
@@ -490,7 +490,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           <div style={{ width: 34, height: 34, background: 'linear-gradient(135deg,#10b981,#34d399)', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 18px rgba(16,185,129,.42)' }}>
             <Zap size={16} color="#031008"/>
           </div>
-          <span style={{ fontWeight: 900, fontSize: 19, letterSpacing: '-0.02em' }}>Strata</span>
+          <span style={{ fontWeight: 900, fontSize: 19, letterSpacing: '-0.02em' }}>prspectve</span>
           <span style={{ fontSize: 9, padding: '2px 7px', background: 'rgba(255,255,255,.07)', borderRadius: 5, color: '#6b7280', fontWeight: 700, letterSpacing: '0.04em' }}>BETA</span>
         </div>
         <div className="lp-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
@@ -599,7 +599,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 72 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 16 }}>One dashboard</div>
             <h2 style={{ fontSize: 46, fontWeight: 900, letterSpacing: '-0.035em', lineHeight: 1.08, marginBottom: 16 }}>Everything you need.<br/>Nothing you don't.</h2>
-            <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 520, margin: '0 auto', lineHeight: 1.65 }}>Stop juggling 12 different tabs. Strata connects your daily tasks, P&L, pipeline, and AI coaching into one ruthlessly focused dashboard — so you stop organizing and start earning.</p>
+            <p style={{ color: '#6b7280', fontSize: 17, maxWidth: 520, margin: '0 auto', lineHeight: 1.65 }}>Stop juggling 12 different tabs. prspectve connects your daily tasks, P&L, pipeline, and AI coaching into one ruthlessly focused dashboard — so you stop organizing and start earning.</p>
           </div>
           {/* Desktop hub */}
           <div className="lp-feat-hub-wrap"><FeaturesHub /></div>
@@ -631,8 +631,8 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
             {[
-              { n: '01', title: 'Set up your profile', desc: 'Tell Strata your niche, service, and daily outreach goal. The AI tailors your 30-day execution roadmap in seconds.' },
-              { n: '02', title: 'Execute every single day', desc: 'Log in each morning. Your 1-3 tasks are waiting. Focus Mode locks you in. Strata penalizes inaction and rewards consistency.' },
+              { n: '01', title: 'Set up your profile', desc: 'Tell prspectve your niche, service, and daily outreach goal. The AI tailors your 30-day execution roadmap in seconds.' },
+              { n: '02', title: 'Execute every single day', desc: 'Log in each morning. Your 1-3 tasks are waiting. Focus Mode locks you in. prspectve penalizes inaction and rewards consistency.' },
               { n: '03', title: 'Close your first deal', desc: 'As leads warm up, move them through your pipeline. The AI coach sharpens your pitch and handles objections in real-time.' },
             ].map((s, i) => (
               <div key={s.n} className={`lp-reveal lp-d${i+1}`} style={{ display: 'flex', gap: 22, alignItems: 'flex-start' }}>
@@ -679,7 +679,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
                   <Brain size={16} color="#031008"/>
                 </div>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#f4f6f4' }}>Strata AI Coach</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#f4f6f4' }}>prspectve AI Coach</div>
                   <div style={{ fontSize: 10, color: '#10b981', display: 'flex', alignItems: 'center', gap: 4 }}>
                     <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block' }}/>
                     Online · Has access to your full dashboard
@@ -753,11 +753,11 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
               is 30 days away.
             </span>
           </h2>
-          <p style={{ color: '#6b7280', fontSize: 18, marginBottom: 44, lineHeight: 1.65 }}>Stop consuming. Start executing. Strata gives you the structure, tools, and AI coaching to land your first client — faster than you think.</p>
+          <p style={{ color: '#6b7280', fontSize: 18, marginBottom: 44, lineHeight: 1.65 }}>Stop consuming. Start executing. prspectve gives you the structure, tools, and AI coaching to land your first client — faster than you think.</p>
           <Link href={isLoggedIn ? '/dashboard' : '/signup'} className="lp-glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 40px', borderRadius: 13, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 18, fontWeight: 800, textDecoration: 'none', boxShadow: '0 10px 36px rgba(16,185,129,.42),inset 0 1px 0 rgba(255,255,255,.22)' }}>
             {isLoggedIn ? 'Go to Dashboard' : 'Start free — no card needed'} <ArrowRight size={18}/>
           </Link>
-          <div style={{ marginTop: 20, color: '#4b5563', fontSize: 13 }}>Join 2,400+ founders already building with Strata</div>
+          <div style={{ marginTop: 20, color: '#4b5563', fontSize: 13 }}>Join 2,400+ founders already building with prspectve</div>
         </div>
       </section>
 
@@ -768,9 +768,9 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             <div style={{ width: 26, height: 26, background: 'linear-gradient(135deg,#10b981,#34d399)', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Zap size={13} color="#031008"/>
             </div>
-            <span style={{ fontWeight: 900, fontSize: 17, letterSpacing: '-0.02em' }}>Strata</span>
+            <span style={{ fontWeight: 900, fontSize: 17, letterSpacing: '-0.02em' }}>prspectve</span>
           </div>
-          <div style={{ color: '#2d3748', fontSize: 13 }}>© 2025 Strata. Built for founders who mean business.</div>
+          <div style={{ color: '#2d3748', fontSize: 13 }}>© 2025 prspectve. Built for founders who mean business.</div>
           <div style={{ display: 'flex', gap: 20 }}>
             <Link href="/login" style={{ color: '#4b5563', textDecoration: 'none', fontSize: 13, transition: 'color .2s' }}>Sign in</Link>
             <Link href="/signup" style={{ color: '#10b981', textDecoration: 'none', fontSize: 13, fontWeight: 700 }}>Get started →</Link>

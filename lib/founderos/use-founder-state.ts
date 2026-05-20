@@ -12,10 +12,10 @@ export function useFounderState() {
     setError('')
     try {
       const res = await fetch('/api/founderos/state', { cache: 'no-store' })
-      if (!res.ok) throw new Error('Could not load FounderOS state')
+      if (!res.ok) throw new Error('Could not load prspectve state')
       setState(await res.json())
     } catch (e: any) {
-      setError(e?.message || 'Could not load FounderOS state')
+      setError(e?.message || 'Could not load prspectve state')
     } finally {
       setLoading(false)
     }

@@ -53,7 +53,7 @@ export default function BillingPage() {
             className="text-xs font-bold px-3 py-1.5 rounded-lg"
             style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }}
           >
-            ✓ Strata Free
+            ✓ prspectve Free
           </span>
         </div>
 

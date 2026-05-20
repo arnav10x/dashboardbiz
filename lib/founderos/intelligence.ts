@@ -74,7 +74,7 @@ export function buildHealthSignals(snapshot: FounderSnapshot): HealthSignal[] {
       score: Math.round(consistencyScore),
       status: status(consistencyScore),
       insight: `${g.streak}-day login streak, ${g.taskStreak}-day task streak, ${m.activeDays} active data days.`,
-      action: 'Open FounderOS daily and complete at least one meaningful action.',
+      action: 'Open prspectve daily and complete at least one meaningful action.',
       href: '/dashboard/achievements',
     },
     {
@@ -134,7 +134,7 @@ export function buildCeoReport(snapshot: FounderSnapshot) {
   const g = snapshot.gamification
   return {
     generatedAt: new Date().toISOString(),
-    headline: weakest?.score < 40 ? `Main bottleneck: ${weakest.label}` : `FounderOS momentum is building around ${strongest?.label || 'execution'}`,
+    headline: weakest?.score < 40 ? `Main bottleneck: ${weakest.label}` : `prspectve momentum is building around ${strongest?.label || 'execution'}`,
     founderSummary: `Current operating snapshot: ${money(m.revenue)} revenue, ${money(m.profit)} profit, ${m.completedTasks}/${m.taskCount} tasks completed, ${m.leadCount} pipeline leads, level ${g.level} ${g.rank}.`,
     strongestArea: strongest,
     weakestArea: weakest,

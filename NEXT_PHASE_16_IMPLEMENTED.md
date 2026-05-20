@@ -1,6 +1,6 @@
 # Next Phase Implemented — Dopamine Polish, Team Invites, and Patch Announcements
 
-This update focuses on making FounderOS feel more alive while fixing the team invite flow.
+This update focuses on making prspectve feel more alive while fixing the team invite flow.
 
 ## Team invite acceptance
 

@@ -66,12 +66,12 @@ const ACHIEVEMENTS: Achievement[] = [
   { id: 'pipeline_1m', title: '$1M Pipeline', desc: 'Build a $1M pipeline.', icon: '', category: 'Pipeline', condition: '$1M pipeline value' },
 
   // Consistency — 15 badges
-  { id: 'login_streak_3', title: '3-Day Login', desc: 'Open FounderOS 3 days in a row.', icon: '', category: 'Consistency', condition: '3-day login streak' },
-  { id: 'login_streak_7', title: '7-Day Login', desc: 'Open FounderOS 7 days in a row.', icon: '', category: 'Consistency', condition: '7-day login streak' },
-  { id: 'login_streak_14', title: '14-Day Login', desc: 'Open FounderOS 14 days in a row.', icon: '', category: 'Consistency', condition: '14-day login streak' },
-  { id: 'login_streak_30', title: '30-Day Login', desc: 'Open FounderOS 30 days in a row.', icon: '', category: 'Consistency', condition: '30-day login streak' },
-  { id: 'login_streak_60', title: '60-Day Login', desc: 'Open FounderOS 60 days in a row.', icon: '', category: 'Consistency', condition: '60-day login streak' },
-  { id: 'login_streak_100', title: '100-Day Login', desc: 'Open FounderOS 100 days in a row.', icon: '', category: 'Consistency', condition: '100-day login streak' },
+  { id: 'login_streak_3', title: '3-Day Login', desc: 'Open prspectve 3 days in a row.', icon: '', category: 'Consistency', condition: '3-day login streak' },
+  { id: 'login_streak_7', title: '7-Day Login', desc: 'Open prspectve 7 days in a row.', icon: '', category: 'Consistency', condition: '7-day login streak' },
+  { id: 'login_streak_14', title: '14-Day Login', desc: 'Open prspectve 14 days in a row.', icon: '', category: 'Consistency', condition: '14-day login streak' },
+  { id: 'login_streak_30', title: '30-Day Login', desc: 'Open prspectve 30 days in a row.', icon: '', category: 'Consistency', condition: '30-day login streak' },
+  { id: 'login_streak_60', title: '60-Day Login', desc: 'Open prspectve 60 days in a row.', icon: '', category: 'Consistency', condition: '60-day login streak' },
+  { id: 'login_streak_100', title: '100-Day Login', desc: 'Open prspectve 100 days in a row.', icon: '', category: 'Consistency', condition: '100-day login streak' },
   { id: 'task_streak_3', title: '3-Day Task Streak', desc: 'Complete tasks 3 days in a row.', icon: '', category: 'Consistency', condition: '3-day task streak' },
   { id: 'task_streak_7', title: '7-Day Task Streak', desc: 'Complete tasks 7 days in a row.', icon: '', category: 'Consistency', condition: '7-day task streak' },
   { id: 'task_streak_14', title: 'Two Week Operator', desc: 'Complete tasks 14 days in a row.', icon: '', category: 'Consistency', condition: '14-day task streak' },
@@ -93,11 +93,11 @@ const ACHIEVEMENTS: Achievement[] = [
   { id: 'team_5', title: 'Squad Builder', desc: 'Build a 5-person team.', icon: '', category: 'Milestones', condition: '5 team members' },
   { id: 'integration_first', title: 'First Integration', desc: 'Connect your first integration.', icon: '', category: 'Milestones', condition: '1 integration' },
   { id: 'integration_3', title: 'Connected Stack', desc: 'Connect 3 integrations.', icon: '', category: 'Milestones', condition: '3 integrations' },
-  { id: 'username_set', title: 'Identity Claimed', desc: 'Set your FounderOS username.', icon: '', category: 'Milestones', condition: 'Set username' },
+  { id: 'username_set', title: 'Identity Claimed', desc: 'Set your prspectve username.', icon: '', category: 'Milestones', condition: 'Set username' },
   { id: 'profile_photo', title: 'Profile Ready', desc: 'Add a profile picture.', icon: '', category: 'Milestones', condition: 'Upload avatar' },
   { id: 'first_report', title: 'CEO Report Opened', desc: 'Open your first CEO report.', icon: '', category: 'Milestones', condition: 'Open reports' },
   { id: 'notification_action', title: 'Inbox Operator', desc: 'Act on a notification.', icon: '', category: 'Milestones', condition: 'Use notifications' },
-  { id: 'founder_os_ready', title: 'OS Activated', desc: 'Complete the core FounderOS setup loop.', icon: '', category: 'Milestones', condition: 'Workspace + task + lead + revenue' },
+  { id: 'founder_os_ready', title: 'OS Activated', desc: 'Complete the core prspectve setup loop.', icon: '', category: 'Milestones', condition: 'Workspace + task + lead + revenue' },
 ]
 
 const CATEGORIES = ['Revenue', 'Outreach', 'Pipeline', 'Consistency', 'Milestones'] as const

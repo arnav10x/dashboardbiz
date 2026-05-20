@@ -1,7 +1,7 @@
 # Phase 9 Implemented — Profile, Workspace, Integration, and Badge Polish
 
 ## Completed
-- Replaced the rank ladder with original FounderOS names:
+- Replaced the rank ladder with original prspectve names:
   - Rookie (green)
   - Silver (silver)
   - Gold (gold)

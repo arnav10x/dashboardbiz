@@ -410,7 +410,7 @@ export default function SettingsPage() {
           <div className="w-full max-w-md overflow-hidden animate-in" style={{borderRadius: 10, background: 'var(--bg-card)', border: '1px solid rgba(244,63,94,0.35)', boxShadow: '0 24px 80px rgba(0,0,0,0.7)'}}>
             <div className="px-6 py-5" style={{ borderBottom: '1px solid var(--border)' }}>
               <p className="text-base font-black" style={{ color: '#f43f5e' }}>Delete account</p>
-              <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>This deletes your FounderOS app data and signs you out. Supabase auth deletion requires the server-side service role key.</p>
+              <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>This deletes your prspectve app data and signs you out. Supabase auth deletion requires the server-side service role key.</p>
             </div>
             <div className="px-6 py-5 space-y-4">
               <label className="text-[11px] font-bold uppercase tracking-widest block" style={{ color: 'var(--text-muted)' }}>Type DELETE ACCOUNT</label>
@@ -563,7 +563,7 @@ export default function SettingsPage() {
             {tab === 'preferences' && (
               <div className="p-5" style={{ borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                 <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>Notifications</p>
-                <p className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>Control how Strata keeps you informed.</p>
+                <p className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>Control how prspectve keeps you informed.</p>
                 <div className="space-y-4">
                   {[
                     { key: 'weeklySummary' as const, label: 'Weekly AI summary', desc: 'AI-generated digest every Monday' },
@@ -739,7 +739,7 @@ export default function SettingsPage() {
                   <p className="text-xs mb-4" style={{ color: 'var(--text-muted)' }}>Your plan and account details.</p>
                   <div className="space-y-3">
                     {[
-                      { label: 'Plan', value: 'Strata Beta — Free', valueStyle: { background: 'rgba(16,185,129,0.12)', color: '#10b981', padding: '0.25rem 0.75rem', borderRadius: 6 } },
+                      { label: 'Plan', value: 'prspectve Beta — Free', valueStyle: { background: 'rgba(16,185,129,0.12)', color: '#10b981', padding: '0.25rem 0.75rem', borderRadius: 6 } },
                       { label: 'Data entries', value: `${entryCount} entries`, valueStyle: {} },
                       { label: 'Last saved', value: new Date().toLocaleString(), valueStyle: {} },
                     ].map(item => (
@@ -757,7 +757,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Sign out</p>
-                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Sign out of your Strata account on this device.</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Sign out of your prspectve account on this device.</p>
                     </div>
                     <button
                       onClick={handleSignOut}
@@ -795,7 +795,7 @@ export default function SettingsPage() {
                     <div className="flex items-center justify-between py-2">
                       <div>
                         <p className="text-sm" style={{ color: '#f43f5e' }}>Delete account</p>
-                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Remove your FounderOS profile and sign out</p>
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Remove your prspectve profile and sign out</p>
                       </div>
                       <button onClick={() => setDeleteAccountOpen(true)} className="text-xs font-semibold px-3 py-1.5 rounded-lg" style={{ background: 'rgba(244,63,94,0.10)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.25)' }}><Trash2 className="inline h-3.5 w-3.5 mr-1" />Delete Account</button>
                     </div>

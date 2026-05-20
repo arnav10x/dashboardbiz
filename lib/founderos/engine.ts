@@ -3,7 +3,7 @@ import { generateBriefing, recordActivity } from './next-phase'
 
 export const XP_LEVELS = [0, 1200, 3000, 6000, 11000, 18000, 28000, 42000, 60000, 85000, 120000, 170000, 240000, 340000, 480000, 675000, 950000, 1300000, 1750000, 2350000, 3150000, 4200000]
 
-// XP is intentionally harder now. FounderOS should reward meaningful execution, not page reloads.
+// XP is intentionally harder now. prspectve should reward meaningful execution, not page reloads.
 export const XP_AWARDS: Record<string, number> = {
   daily_checkin: 10,
   complete_task: 15,
@@ -246,7 +246,7 @@ export function buildNotifications(snapshot: Awaited<ReturnType<typeof getFounde
   const m = snapshot.metrics
   if (m.openTasks > 0) notes.push({ id: 'open-tasks', type: 'info', title: `${m.openTasks} tasks still open`, body: 'Finish your highest-value execution tasks to earn XP and keep momentum.', href: '/dashboard/tasks' })
   if (m.revenueTarget > 0 && m.revenueProgress < 70) notes.push({ id: 'revenue-gap', type: 'warning', title: 'Revenue goal needs attention', body: `You are ${m.revenueProgress}% to goal. Check Reports for the gap and next actions.`, href: '/dashboard/reports' })
-  if (m.leadCount === 0) notes.push({ id: 'no-pipeline', type: 'urgent', title: 'No pipeline leads yet', body: 'Add leads so FounderOS can track close rate, pipeline value, and sales momentum.', href: '/dashboard/pipeline' })
+  if (m.leadCount === 0) notes.push({ id: 'no-pipeline', type: 'urgent', title: 'No pipeline leads yet', body: 'Add leads so prspectve can track close rate, pipeline value, and sales momentum.', href: '/dashboard/pipeline' })
   if (snapshot.gamification.streak >= 7) notes.push({ id: 'streak-win', type: 'success', title: `${snapshot.gamification.streak}-day login streak`, body: 'Your consistency streak is building trophy progress.', href: '/dashboard/achievements' })
   if (m.taskCompletionRate >= 80 && m.taskCount > 0) notes.push({ id: 'execution-strong', type: 'success', title: 'Execution score is strong', body: `${m.taskCompletionRate}% task completion. Keep the daily loop alive.`, href: '/dashboard/tasks' })
   return notes
@@ -261,7 +261,7 @@ export function buildAiContext(snapshot: Awaited<ReturnType<typeof getFounderSna
   const connectedIntegrations = (snapshot.integrations || []).filter((i: any) => i.status === 'connected').map((i: any) => i.provider).join(', ') || 'none'
   const recentActivity = (snapshot.activity || []).slice(0, 8).map((a: any) => a.title || a.type).join('; ') || 'none'
   const recentEvents = snapshot.events.slice(0, 8).map((e: any) => `${e.event_date || ''} ${e.start_time || ''} ${e.title || ''}`.trim()).join('; ') || 'none'
-  return `FounderOS live context\nBusiness: ${w?.name || 'Unknown'}\nType: ${w?.business_type || 'unknown'}\nStage: ${w?.stage || 'unknown'}\nSummary: ${w?.business_summary || 'not provided'}\nRevenue: $${m.revenue.toLocaleString()}\nExpenses: $${m.expenses.toLocaleString()}\nProfit: $${m.profit.toLocaleString()}\nMargin: ${m.margin}%\nRevenue target progress: ${m.revenueProgress}%\nTasks: ${m.completedTasks}/${m.taskCount} completed (${m.taskCompletionRate}%)\nOpen tasks: ${topOpenTasks}\nPipeline leads: ${m.leadCount}\nWon deals: ${m.wonDeals}\nClose rate: ${m.closeRate}%\nPipeline value: $${m.pipelineValue.toLocaleString()}\nLevel: ${g.level}\nRank: ${g.rank}\nXP: ${g.totalXp}\nLogin streak: ${g.streak}\nTask streak: ${g.taskStreak}\nRecent/upcoming calendar: ${recentEvents}
+  return `prspectve live context\nBusiness: ${w?.name || 'Unknown'}\nType: ${w?.business_type || 'unknown'}\nStage: ${w?.stage || 'unknown'}\nSummary: ${w?.business_summary || 'not provided'}\nRevenue: $${m.revenue.toLocaleString()}\nExpenses: $${m.expenses.toLocaleString()}\nProfit: $${m.profit.toLocaleString()}\nMargin: ${m.margin}%\nRevenue target progress: ${m.revenueProgress}%\nTasks: ${m.completedTasks}/${m.taskCount} completed (${m.taskCompletionRate}%)\nOpen tasks: ${topOpenTasks}\nPipeline leads: ${m.leadCount}\nWon deals: ${m.wonDeals}\nClose rate: ${m.closeRate}%\nPipeline value: $${m.pipelineValue.toLocaleString()}\nLevel: ${g.level}\nRank: ${g.rank}\nXP: ${g.totalXp}\nLogin streak: ${g.streak}\nTask streak: ${g.taskStreak}\nRecent/upcoming calendar: ${recentEvents}
 Team members: ${teamCount}
 Connected integrations: ${connectedIntegrations}
 Recent activity: ${recentActivity}`

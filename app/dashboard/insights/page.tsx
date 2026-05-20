@@ -108,7 +108,7 @@ export default async function InsightsPage() {
               </div>
               <h3 className="text-base font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Insights unlock with data</h3>
               <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
-                Log a period entry and Strata generates risk alerts, growth signals, and conversion analysis automatically.
+                Log a period entry and prspectve generates risk alerts, growth signals, and conversion analysis automatically.
               </p>
               <Link href="/dashboard/period-entry" className="inline-flex items-center gap-1.5 text-sm font-bold px-5 py-2.5 rounded-xl"
                 style={{ background: 'var(--accent)', color: 'white' }}>

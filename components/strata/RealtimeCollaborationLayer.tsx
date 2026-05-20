@@ -22,13 +22,13 @@ export function RealtimeCollaborationLayer() {
 
       channel = supabase.channel(`founderos-workspace-${workspaceId}`)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks', filter: `workspace_id=eq.${workspaceId}` }, payload => {
-          window.dispatchEvent(new CustomEvent('founderos:team-live-update', { detail: { type: 'task', payload } }))
+          window.dispatchEvent(new CustomEvent('prspectve:team-live-update', { detail: { type: 'task', payload } }))
         })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'pipeline_leads', filter: `workspace_id=eq.${workspaceId}` }, payload => {
-          window.dispatchEvent(new CustomEvent('founderos:team-live-update', { detail: { type: 'pipeline', payload } }))
+          window.dispatchEvent(new CustomEvent('prspectve:team-live-update', { detail: { type: 'pipeline', payload } }))
         })
         .on('postgres_changes', { event: '*', schema: 'public', table: 'activity_events', filter: `workspace_id=eq.${workspaceId}` }, payload => {
-          window.dispatchEvent(new CustomEvent('founderos:activity-refresh', { detail: payload }))
+          window.dispatchEvent(new CustomEvent('prspectve:activity-refresh', { detail: payload }))
         })
         .on('broadcast', { event: 'typing' }, ({ payload }) => {
           if (payload?.user_id === user.id) return
@@ -42,8 +42,8 @@ export function RealtimeCollaborationLayer() {
         const detail = (event as CustomEvent).detail || {}
         channel?.send({ type: 'broadcast', event: 'typing', payload: { user_id: user.id, name: detail.name || 'A teammate' } })
       }
-      window.addEventListener('founderos:typing', onTyping)
-      return () => window.removeEventListener('founderos:typing', onTyping)
+      window.addEventListener('prspectve:typing', onTyping)
+      return () => window.removeEventListener('prspectve:typing', onTyping)
     }
 
     let cleanupListener: undefined | (() => void)

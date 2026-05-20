@@ -151,7 +151,7 @@ export default function OnboardingPage() {
           <div className="h-8 w-8 rounded-xl flex items-center justify-center" style={{ background: 'var(--accent)' }}>
             <Zap className="h-4 w-4 text-white" />
           </div>
-          <span className="text-lg font-black" style={{ color: 'var(--text-primary)' }}>FounderOS</span>
+          <span className="text-lg font-black" style={{ color: 'var(--text-primary)' }}>prspectve</span>
         </div>
 
         {/* Step indicator */}

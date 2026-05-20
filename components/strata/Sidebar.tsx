@@ -114,7 +114,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
           <Zap style={{ width: 15, height: 15, color: 'var(--accent)' }} strokeWidth={2.5} />
         </div>
         <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-          Strata
+          prspectve
         </span>
       </div>
 

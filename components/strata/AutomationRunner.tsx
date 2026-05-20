@@ -18,8 +18,8 @@ export function AutomationRunner() {
         localStorage.setItem(RUN_KEY, String(Date.now()))
         const data = await res.json().catch(() => null)
         if (data?.created?.length || data?.notifications?.length) {
-          window.dispatchEvent(new CustomEvent('founderos:automations-ran', { detail: data }))
-          window.dispatchEvent(new CustomEvent('founderos:notifications-refresh'))
+          window.dispatchEvent(new CustomEvent('prspectve:automations-ran', { detail: data }))
+          window.dispatchEvent(new CustomEvent('prspectve:notifications-refresh'))
         }
       } catch {}
     }

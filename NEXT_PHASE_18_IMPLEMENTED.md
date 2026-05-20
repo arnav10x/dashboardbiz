@@ -32,4 +32,4 @@ This phase adds the next major operating-system layer focused on mobile usage, s
 - Added `collaboration_notes` table with workspace collaborator RLS policies.
 
 ## Goal
-FounderOS now moves closer to a daily operating system: it works better on phones, creates useful follow-up work automatically, alerts users when work is slipping, and gives teams live shared workspace behavior.
+prspectve now moves closer to a daily operating system: it works better on phones, creates useful follow-up work automatically, alerts users when work is slipping, and gives teams live shared workspace behavior.

@@ -1,4 +1,4 @@
-# FounderOS Next Phase Implemented
+# prspectve Next Phase Implemented
 
 This patch starts the deeper product architecture layer beyond the UI redesign.
 

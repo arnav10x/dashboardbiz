@@ -1,6 +1,6 @@
-# FounderOS Functionality Audit
+# prspectve Functionality Audit
 
-Goal alignment: FounderOS is now set up as a daily operating system for ambitious business owners with execution, dopamine, growth tracking, AI guidance, team collaboration, sales/pipeline management, calendars, reporting, achievements, and business intelligence connected through real app state.
+Goal alignment: prspectve is now set up as a daily operating system for ambitious business owners with execution, dopamine, growth tracking, AI guidance, team collaboration, sales/pipeline management, calendars, reporting, achievements, and business intelligence connected through real app state.
 
 Final cleanup performed:
 - Removed dependency on remote Google Fonts so local builds are not blocked by network font loading.

@@ -32,7 +32,7 @@ function useParticles(canvasRef: React.RefObject<HTMLCanvasElement>) {
           vx: (Math.random() - 0.5) * 0.25,
           vy: -Math.random() * 0.4 - 0.05,
           r: Math.random() * 1.2 + 0.4,
-          a: Math.random() * 0.45 + 0.08,
+          a: Math.random() * 0.28 + 0.05,
         })
       }
     }
@@ -129,7 +129,7 @@ function DashboardMockup() {
             </div>
           ))}
           <div style={{ padding: '8px 14px 4px', fontSize: 9, color: '#374151', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: 6 }}>Tools</div>
-          {['AI Copilot', 'Team', 'Integrations'].map(label => (
+          {['AI Coach', 'Team', 'Integrations'].map(label => (
             <div key={label} style={{ padding: '6px 14px', display: 'flex', alignItems: 'center', gap: 7 }}>
               <div style={{ width: 13, height: 13, borderRadius: 3, background: 'rgba(255,255,255,.08)' }}/>
               <span style={{ fontSize: 11, color: '#374151' }}>{label}</span>
@@ -426,14 +426,14 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         .lp-hero-e{animation:lp-rise .9s cubic-bezier(.16,1,.3,1) .55s both}
         .lp-fcard{transition:transform .15s ease,box-shadow .15s ease}
         .lp-glow-btn{position:relative;overflow:hidden;transition:box-shadow .2s ease,transform .2s ease!important}
-        .lp-glow-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.16) 0%,transparent 55%);pointer-events:none}
-        .lp-glow-btn:hover{box-shadow:0 0 36px rgba(16,185,129,.55),0 10px 28px rgba(16,185,129,.3)!important;transform:translateY(-2px)!important}
+        .lp-glow-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.12) 0%,transparent 55%);pointer-events:none}
+        .lp-glow-btn:hover{box-shadow:0 0 18px rgba(16,185,129,.22),0 8px 18px rgba(16,185,129,.1)!important;transform:translateY(-2px)!important}
         .lp-tcard{transition:all .3s cubic-bezier(.16,1,.3,1)}
-        .lp-tcard:hover{border-color:rgba(16,185,129,.28)!important;transform:translateY(-5px);box-shadow:0 24px 48px rgba(0,0,0,.55),0 0 32px rgba(16,185,129,.07)!important}
+        .lp-tcard:hover{border-color:rgba(16,185,129,.2)!important;transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.5),0 0 16px rgba(16,185,129,.05)!important}
         .lp-navlink{color:#6b7280;text-decoration:none;font-size:14px;font-weight:500;transition:color .2s}
         .lp-navlink:hover{color:#f4f6f4}
         .lp-hub-card{transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease,border-color .22s ease}
-        .lp-hub-card:hover{transform:translateY(-6px) scale(1.03);border-color:rgba(16,185,129,.28)!important;box-shadow:0 22px 44px rgba(0,0,0,.65),0 0 28px rgba(16,185,129,.11)!important}
+        .lp-hub-card:hover{transform:translateY(-5px) scale(1.02);border-color:rgba(16,185,129,.2)!important;box-shadow:0 18px 36px rgba(0,0,0,.55),0 0 14px rgba(16,185,129,.07)!important}
         /* ── Responsive ── */
         .lp-hero-dash{display:flex}
         .lp-feat-hub-wrap{display:block}
@@ -446,6 +446,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           .lp-hero-badges{justify-content:center!important}
           .lp-hero-h1{font-size:48px!important}
           .lp-stats-grid{grid-template-columns:repeat(2,1fr)!important}
+          .lp-preview-grid{grid-template-columns:1fr!important}
           .lp-feat-hub-wrap{display:none!important}
           .lp-feat-grid-wrap{display:grid!important;grid-template-columns:repeat(2,1fr);gap:18px}
           .lp-ai-inner{grid-template-columns:1fr!important;padding:40px 32px!important;gap:36px!important}
@@ -458,6 +459,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           .lp-hero-p{font-size:15px!important;max-width:100%!important}
           .lp-hero-btns a,.lp-hero-btns div{font-size:15px!important;padding:13px 22px!important}
           .lp-stats-grid{grid-template-columns:repeat(2,1fr)!important}
+          .lp-preview-grid{grid-template-columns:1fr!important}
           .lp-feat-section{padding:70px 20px!important}
           .lp-feat-grid-wrap{grid-template-columns:1fr!important}
           .lp-how-section{padding:64px 20px!important}
@@ -478,16 +480,16 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
       {/* ── Background orbs + grid ── */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.11) 0%,transparent 68%)', top: -250, right: -120, animation: 'lp-orb 9s ease-in-out infinite' }}/>
-        <div style={{ position: 'absolute', width: 550, height: 550, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.07) 0%,transparent 68%)', bottom: '5%', left: -120, animation: 'lp-orb 12s ease-in-out infinite 3s' }}/>
-        <div style={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle,rgba(52,211,153,.06) 0%,transparent 68%)', top: '42%', left: '32%', animation: 'lp-orb 15s ease-in-out infinite 6s' }}/>
+        <div style={{ position: 'absolute', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.06) 0%,transparent 68%)', top: -250, right: -120, animation: 'lp-orb 9s ease-in-out infinite' }}/>
+        <div style={{ position: 'absolute', width: 550, height: 550, borderRadius: '50%', background: 'radial-gradient(circle,rgba(16,185,129,.04) 0%,transparent 68%)', bottom: '5%', left: -120, animation: 'lp-orb 12s ease-in-out infinite 3s' }}/>
+        <div style={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle,rgba(52,211,153,.025) 0%,transparent 68%)', top: '42%', left: '32%', animation: 'lp-orb 15s ease-in-out infinite 6s' }}/>
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px)', backgroundSize: '64px 64px' }}/>
       </div>
 
       {/* ── NAVBAR ── */}
       <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200, height: 64, padding: '0 28px', display: 'flex', alignItems: 'center', background: scrolled ? 'rgba(3,4,5,0.93)' : 'transparent', backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: scrolled ? '1px solid rgba(255,255,255,0.055)' : '1px solid transparent', transition: 'all .35s ease' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1 }}>
-          <div style={{ width: 34, height: 34, background: 'linear-gradient(135deg,#10b981,#34d399)', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 18px rgba(16,185,129,.42)' }}>
+          <div style={{ width: 34, height: 34, background: 'linear-gradient(135deg,#10b981,#34d399)', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 12px rgba(16,185,129,.25)' }}>
             <Zap size={16} color="#031008"/>
           </div>
           <span style={{ fontWeight: 900, fontSize: 19, letterSpacing: '-0.02em' }}>prspectve</span>
@@ -525,7 +527,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             {/* Badge */}
             <div className="lp-hero-a" style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '6px 14px', background: 'rgba(16,185,129,.09)', border: '1px solid rgba(16,185,129,.26)', borderRadius: 9999, marginBottom: 28 }}>
               <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10b981', display: 'block', animation: 'lp-pulse 2.2s ease-in-out infinite' }}/>
-              <span style={{ fontSize: 12, fontWeight: 700, color: '#10b981' }}>Now in Beta · 2,400+ founders building</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: '#10b981' }}>Now FREE in beta</span>
             </div>
 
             <h1 className="lp-hero-b lp-hero-h1" style={{ fontSize: 62, fontWeight: 900, lineHeight: 1.04, marginBottom: 22, letterSpacing: '-0.04em' }}>
@@ -536,7 +538,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             </h1>
 
             <p className="lp-hero-c lp-hero-p" style={{ fontSize: 17, lineHeight: 1.72, color: '#a0a8a4', marginBottom: 36, maxWidth: 430 }}>
-              Track your P&L, manage your pipeline, and get AI-coached from $0 to your first clients — all in one ruthlessly focused dashboard.
+              Track P&L, revenue, clients, and tasks. Manage your pipeline. Get AI-coached to scale — all in one ruthlessly focused dashboard.
             </p>
 
             <div className="lp-hero-d lp-hero-btns" style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 22 }}>
@@ -557,7 +559,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             </div>
 
             <div className="lp-hero-d lp-hero-badges" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 16, color: '#4b5563', fontSize: 13 }}>
-              {['No credit card needed', 'Free forever plan', '30-day roadmap included'].map(t => (
+              {['Free forever plan', '30-day roadmap included'].map(t => (
                 <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                   <Check size={12} color="#10b981"/> {t}
                 </span>
@@ -576,20 +578,86 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF BAR ── */}
-      <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)', background: 'rgba(255,255,255,.012)', padding: '38px 28px' }}>
-        <div className="lp-stats-grid" style={{ maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 24, textAlign: 'center' }}>
-          {[
-            { n: '2,400+', label: 'Active Founders' },
-            { n: '87%', label: 'Close First Client ≤ 30 Days' },
-            { n: '$3.2M', label: 'Revenue Tracked' },
-            { n: '4.9 / 5', label: 'Average Rating' },
-          ].map((s, i) => (
-            <div key={s.label} className={`lp-reveal lp-d${i+1}`}>
-              <div style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1, background: 'linear-gradient(135deg,#10b981,#34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{s.n}</div>
-              <div style={{ color: '#4b5563', fontSize: 13, marginTop: 6 }}>{s.label}</div>
+      {/* ── FEATURE PREVIEW ── */}
+      <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(255,255,255,0.055)', borderBottom: '1px solid rgba(255,255,255,0.055)', background: 'rgba(255,255,255,.006)', padding: '72px 28px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 52 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 14 }}>What you get</div>
+            <h2 style={{ fontSize: 36, fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: 14, color: '#f4f6f4' }}>One system. Replace them all.</h2>
+            <p style={{ fontSize: 15, color: '#6b7280', maxWidth: 500, margin: '0 auto', lineHeight: 1.7 }}>Most founders track P&L in spreadsheets, leads in notes, and get advice from YouTube. prspectve replaces all of it.</p>
+          </div>
+          <div className="lp-preview-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
+
+            {/* Card 1: P&L Tracking */}
+            <div className="lp-reveal lp-d1" style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 16, padding: '22px 20px', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: -30, right: -30, width: 90, height: 90, background: 'radial-gradient(circle,rgba(16,185,129,.06),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
+              <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>P&L TRACKING</span>
+              <div style={{ marginTop: 16, padding: '10px 12px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)', borderRadius: 10, marginBottom: 18 }}>
+                <div style={{ fontSize: 7, color: '#4b5563', fontWeight: 700, letterSpacing: '0.08em', marginBottom: 8 }}>THIS PERIOD</div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  {[{label:'REVENUE',val:'$8,400',g:false},{label:'EXPENSES',val:'$2,100',g:false},{label:'PROFIT',val:'$6,300',g:true},{label:'MARGIN',val:'75%',g:true}].map(m=>(
+                    <div key={m.label}>
+                      <div style={{ fontSize: 7, color: '#4b5563', fontWeight: 700, letterSpacing: '0.08em', marginBottom: 2 }}>{m.label}</div>
+                      <div style={{ fontSize: 15, fontWeight: 800, color: m.g ? '#10b981' : '#f4f6f4', lineHeight: 1 }}>{m.val}</div>
+                    </div>
+                  ))}
+                </div>
+                <svg width="100%" height="22" viewBox="0 0 160 22" preserveAspectRatio="none" style={{ marginTop: 10, display: 'block' }}>
+                  <defs><linearGradient id="fp1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#10b981" stopOpacity="0.22"/><stop offset="100%" stopColor="#10b981" stopOpacity="0"/></linearGradient></defs>
+                  <path d="M0,20 C20,18 40,16 60,12 C80,8 100,6 120,4 C140,2 152,1 160,0.5" fill="none" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round"/>
+                  <path d="M0,20 C20,18 40,16 60,12 C80,8 100,6 120,4 C140,2 152,1 160,0.5 L160,22 L0,22 Z" fill="url(#fp1)"/>
+                </svg>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 7, color: '#f4f6f4', letterSpacing: '-0.01em', margin: '0 0 7px' }}>Know your numbers.</h3>
+              <p style={{ color: '#6b7280', fontSize: 13, lineHeight: 1.65, margin: 0 }}>Log revenue and expenses. See your P&L, margin, and growth trend — no spreadsheets, no formulas, no confusion.</p>
             </div>
-          ))}
+
+            {/* Card 2: Pipeline */}
+            <div className="lp-reveal lp-d2" style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 16, padding: '22px 20px', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: -30, right: -30, width: 90, height: 90, background: 'radial-gradient(circle,rgba(16,185,129,.06),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
+              <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>PIPELINE</span>
+              <div style={{ marginTop: 16, padding: '10px 12px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)', borderRadius: 10, marginBottom: 18 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 6 }}>
+                  {[
+                    {stage:'CONTACTED',color:'#6b7280',leads:['Alex R.','Maria C.']},
+                    {stage:'MEETING',color:'#f59e0b',leads:['James T.']},
+                    {stage:'CLOSED',color:'#10b981',leads:['Sarah K.']},
+                  ].map(col=>(
+                    <div key={col.stage}>
+                      <div style={{ fontSize: 7, fontWeight: 700, color: col.color, letterSpacing: '0.06em', marginBottom: 5 }}>{col.stage}</div>
+                      {col.leads.map(l=>(
+                        <div key={l} style={{ padding: '4px 7px', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.07)', borderRadius: 4, fontSize: 8, color: '#9ca3af', marginBottom: 3 }}>{l}</div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 7, color: '#f4f6f4', letterSpacing: '-0.01em', margin: '0 0 7px' }}>Never lose a warm lead.</h3>
+              <p style={{ color: '#6b7280', fontSize: 13, lineHeight: 1.65, margin: 0 }}>Drag leads from cold to closed. See exactly where every deal stands and which ones need attention today.</p>
+            </div>
+
+            {/* Card 3: AI Coach */}
+            <div className="lp-reveal lp-d3" style={{ background: 'linear-gradient(145deg,rgba(14,17,20,.99),rgba(5,6,8,.99))', border: '1px solid rgba(255,255,255,.07)', borderRadius: 16, padding: '22px 20px', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', top: -30, right: -30, width: 90, height: 90, background: 'radial-gradient(circle,rgba(16,185,129,.06),transparent)', borderRadius: '50%', pointerEvents: 'none' }}/>
+              <span style={{ fontSize: 10, fontWeight: 800, padding: '3px 9px', background: 'rgba(16,185,129,.07)', color: '#10b981', borderRadius: 9999, letterSpacing: '0.05em' }}>AI COACH</span>
+              <div style={{ marginTop: 16, padding: '10px 12px', background: 'rgba(255,255,255,.03)', border: '1px solid rgba(255,255,255,.06)', borderRadius: 10, marginBottom: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ padding: '6px 9px', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.07)', borderRadius: '7px 7px 7px 2px' }}>
+                  <div style={{ fontSize: 7, fontWeight: 800, color: '#10b981', marginBottom: 2, letterSpacing: '0.06em' }}>AI COACH</div>
+                  <div style={{ fontSize: 8, color: '#9ca3af', lineHeight: 1.5 }}>3 leads stuck in Contacted for 8+ days. Added follow-up tasks for each.</div>
+                </div>
+                <div style={{ padding: '6px 9px', background: 'rgba(16,185,129,.08)', border: '1px solid rgba(16,185,129,.18)', borderRadius: '7px 7px 2px 7px', alignSelf: 'flex-end', maxWidth: '82%' }}>
+                  <div style={{ fontSize: 8, color: '#d1fae5', lineHeight: 1.5 }}>Best move this week?</div>
+                </div>
+                <div style={{ padding: '6px 9px', background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.07)', borderRadius: '7px 7px 7px 2px' }}>
+                  <div style={{ fontSize: 7, fontWeight: 800, color: '#10b981', marginBottom: 2, letterSpacing: '0.06em' }}>AI COACH</div>
+                  <div style={{ fontSize: 8, color: '#9ca3af', lineHeight: 1.5 }}>Close Alex R. — warm for 10 days. Script drafted and added to your tasks.</div>
+                </div>
+              </div>
+              <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 7, color: '#f4f6f4', letterSpacing: '-0.01em', margin: '0 0 7px' }}>AI that acts, not advises.</h3>
+              <p style={{ color: '#6b7280', fontSize: 13, lineHeight: 1.65, margin: 0 }}>Your AI Coach reads your revenue, pipeline, and tasks — then executes. Writes scripts, adds tasks, and tells you exactly what to do next.</p>
+            </div>
+
+          </div>
         </div>
       </div>
 
@@ -697,7 +765,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
                 ].map((m, i) => (
                   <div key={i} style={{ display: 'flex', justifyContent: m.from === 'user' ? 'flex-end' : 'flex-start' }}>
                     <div style={{ maxWidth: '85%', padding: '10px 14px', borderRadius: m.from === 'user' ? '12px 12px 3px 12px' : '12px 12px 12px 3px', background: m.from === 'user' ? 'rgba(16,185,129,.15)' : 'rgba(255,255,255,.05)', border: `1px solid ${m.from === 'user' ? 'rgba(16,185,129,.25)' : 'rgba(255,255,255,.07)'}`, color: m.from === 'user' ? '#d1fae5' : '#e5e7eb', fontSize: 12, lineHeight: 1.6 }}>
-                      {m.from === 'ai' && <div style={{ fontSize: 9, fontWeight: 800, color: '#10b981', marginBottom: 5, letterSpacing: '0.08em' }}>STRATA AI</div>}
+                      {m.from === 'ai' && <div style={{ fontSize: 9, fontWeight: 800, color: '#10b981', marginBottom: 5, letterSpacing: '0.08em' }}>AI COACH</div>}
                       {m.msg}
                     </div>
                   </div>
@@ -744,7 +812,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
 
       {/* ── FINAL CTA ── */}
       <section className="lp-cta-section" style={{ position: 'relative', zIndex: 1, padding: '120px 28px', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, background: 'radial-gradient(circle,rgba(16,185,129,.13),transparent 68%)', borderRadius: '50%', pointerEvents: 'none' }}/>
+        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 500, height: 500, background: 'radial-gradient(circle,rgba(16,185,129,.07),transparent 68%)', borderRadius: '50%', pointerEvents: 'none' }}/>
         <div className="lp-reveal" style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center', position: 'relative' }}>
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#10b981', marginBottom: 20 }}>Get started today</div>
           <h2 className="lp-cta-h2" style={{ fontSize: 56, fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.04, marginBottom: 20 }}>
@@ -755,9 +823,9 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           </h2>
           <p style={{ color: '#6b7280', fontSize: 18, marginBottom: 44, lineHeight: 1.65 }}>Stop consuming. Start executing. prspectve gives you the structure, tools, and AI coaching to land your first client — faster than you think.</p>
           <Link href={isLoggedIn ? '/dashboard' : '/signup'} className="lp-glow-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '18px 40px', borderRadius: 13, background: 'linear-gradient(135deg,#10b981,#059669)', color: '#fff', fontSize: 18, fontWeight: 800, textDecoration: 'none', boxShadow: '0 10px 36px rgba(16,185,129,.42),inset 0 1px 0 rgba(255,255,255,.22)' }}>
-            {isLoggedIn ? 'Go to Dashboard' : 'Start free — no card needed'} <ArrowRight size={18}/>
+            {isLoggedIn ? 'Go to Dashboard' : 'Start for free'} <ArrowRight size={18}/>
           </Link>
-          <div style={{ marginTop: 20, color: '#4b5563', fontSize: 13 }}>Join 2,400+ founders already building with prspectve</div>
+          <div style={{ marginTop: 20, color: '#4b5563', fontSize: 13 }}>Free to start · No credit card · Cancel anytime</div>
         </div>
       </section>
 

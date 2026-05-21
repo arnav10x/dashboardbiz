@@ -75,13 +75,13 @@ function makeInitialMessage(d?: UserData): Message {
     return {
       id: 'init',
       role: 'assistant',
-      content: `I'm your prspectve AI Copilot — a business analyst built into your dashboard.\n\nRight now I don't have any of your data to work with. To give you specific analysis instead of generic advice, I need your actual numbers.\n\n**Start by logging:**\n→ Revenue & expenses (profit and margin)\n→ Leads & customers (conversion rate)\n→ Hours worked (revenue per hour)\n\nOnce you save your first entry, come back and ask me anything.`,
+      content: `I'm your AI Coach — a business analyst built into your dashboard.\n\nRight now I don't have any of your data to work with. To give you specific analysis instead of generic advice, I need your actual numbers.\n\n**Start by logging:**\n→ Revenue & expenses (profit and margin)\n→ Leads & customers (conversion rate)\n→ Hours worked (revenue per hour)\n\nOnce you save your first entry, come back and ask me anything.`,
     }
   }
   return {
     id: 'init',
     role: 'assistant',
-    content: `I'm your prspectve AI Copilot. I have your latest data loaded.\n\n**${d.workspaceName} — Latest period:**\n→ Revenue: $${d.revenue.toLocaleString()} · Expenses: $${d.expenses.toLocaleString()}\n→ Profit: $${d.profit.toLocaleString()} (${d.margin}% margin)\n${d.leads > 0 ? `→ Leads: ${d.leads} · Conversion: ${d.convRate}%` : '→ No lead data logged yet'}\n\nAsk me anything — what to prioritize, where you're leaking money, or how to grow faster. I can also add tasks or leads directly: just ask.`,
+    content: `I'm your AI Coach. I have your latest data loaded.\n\n**${d.workspaceName} — Latest period:**\n→ Revenue: $${d.revenue.toLocaleString()} · Expenses: $${d.expenses.toLocaleString()}\n→ Profit: $${d.profit.toLocaleString()} (${d.margin}% margin)\n${d.leads > 0 ? `→ Leads: ${d.leads} · Conversion: ${d.convRate}%` : '→ No lead data logged yet'}\n\nAsk me anything — what to prioritize, where you're leaking money, or how to grow faster. I can also add tasks or leads directly: just ask.`,
     followUps: ['What should I focus on this week?', 'Where am I leaving money on the table?'],
   }
 }
@@ -444,7 +444,7 @@ export default function AICopilotPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <TopBar title="AI Copilot" workspaceName={userData?.workspaceName || 'My Workspace'} hasData={userData?.hasData ?? false} showGreeting />
+      <TopBar title="AI Coach" workspaceName={userData?.workspaceName || 'My Workspace'} hasData={userData?.hasData ?? false} showGreeting />
 
       <div className="flex flex-1 overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
@@ -456,7 +456,7 @@ export default function AICopilotPage() {
                 <Zap className="h-4.5 w-4.5 text-white" strokeWidth={2.5} />
               </div>
               <div>
-                <p className="text-sm font-black" style={{ color: 'var(--text-primary)' }}>prspectve Copilot</p>
+                <p className="text-sm font-black" style={{ color: 'var(--text-primary)' }}>AI Coach</p>
                 <div className="flex items-center gap-1.5">
                   <div className="h-1.5 w-1.5 rounded-full"
                     style={{

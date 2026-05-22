@@ -17,6 +17,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('strata-theme');if(t!=='dark'){document.documentElement.classList.add('theme-light');}}catch(e){}})();` }} />
+      </head>
       <body className="antialiased font-sans">
         {children}
       </body>

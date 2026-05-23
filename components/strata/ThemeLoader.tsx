@@ -5,13 +5,16 @@ import { createClient } from '@/lib/supabase/client'
 export function ThemeLoader() {
   useEffect(() => {
     const apply = async () => {
-      // First apply from localStorage for instant load (no flash)
+      // Apply from localStorage instantly; default to light if no preference set
       const cached = localStorage.getItem('strata-theme')
-      if (cached === 'light') {
+      if (cached === 'dark') {
+        document.documentElement.classList.remove('theme-light')
+      } else {
+        // First visit or explicit light → apply light
         document.documentElement.classList.add('theme-light')
       }
 
-      // Then confirm from Supabase and sync
+      // Confirm from Supabase and sync
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -22,12 +25,12 @@ export function ThemeLoader() {
         .eq('user_id', user.id)
         .maybeSingle()
 
-      if (data?.theme === 'light') {
-        document.documentElement.classList.add('theme-light')
-        localStorage.setItem('strata-theme', 'light')
-      } else {
+      if (data?.theme === 'dark') {
         document.documentElement.classList.remove('theme-light')
         localStorage.setItem('strata-theme', 'dark')
+      } else {
+        document.documentElement.classList.add('theme-light')
+        localStorage.setItem('strata-theme', 'light')
       }
 
       // Restore saved accent color + derived opacity variants
@@ -35,11 +38,11 @@ export function ThemeLoader() {
         const c = data.accent_color
         document.documentElement.style.setProperty('--accent', c)
         document.documentElement.style.setProperty('--accent-hover', c)
-        document.documentElement.style.setProperty('--accent-muted', c + '20')   // ~13%
-        document.documentElement.style.setProperty('--accent-ring', c + '38')    // ~22%
-        document.documentElement.style.setProperty('--accent-faint', c + '14')   // ~8%
-        document.documentElement.style.setProperty('--accent-glow', c + '6B')    // ~42%
-        document.documentElement.style.setProperty('--accent-subtle', c + '09')  // ~3.5%
+        document.documentElement.style.setProperty('--accent-muted', c + '20')
+        document.documentElement.style.setProperty('--accent-ring', c + '38')
+        document.documentElement.style.setProperty('--accent-faint', c + '14')
+        document.documentElement.style.setProperty('--accent-glow', c + '6B')
+        document.documentElement.style.setProperty('--accent-subtle', c + '09')
       }
     }
     apply()

@@ -219,7 +219,7 @@ export default function ProgressPage() {
     { label: 'Prospects', count: funnel.prospects, color: 'var(--accent)' },
     { label: 'Replied', count: funnel.replied, color: '#60a5fa' },
     { label: 'Calls Booked', count: funnel.booked, color: '#f59e0b' },
-    { label: 'Clients Closed', count: funnel.closed, color: '#10b981' },
+    { label: 'Clients Closed', count: funnel.closed, color: 'var(--accent)' },
   ]
   const maxFunnel = Math.max(...funnelStages.map(s => s.count), 1)
 

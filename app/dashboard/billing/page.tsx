@@ -51,7 +51,7 @@ export default function BillingPage() {
           </div>
           <span
             className="text-xs font-bold px-3 py-1.5 rounded-lg"
-            style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }}
+            style={{ background: 'rgba(139,92,246,0.12)', color: 'var(--accent)', border: '1px solid rgba(139,92,246,0.2)' }}
           >
             ✓ prspectve Free
           </span>
@@ -70,7 +70,7 @@ export default function BillingPage() {
               {FREE_FEATURES.map(f => (
                 <div key={f.label} className="flex items-center gap-2.5">
                   {f.included ? (
-                    <Check className="h-4 w-4 flex-shrink-0" style={{ color: '#10b981' }} />
+                    <Check className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--accent)' }} />
                   ) : (
                     <X className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
                   )}

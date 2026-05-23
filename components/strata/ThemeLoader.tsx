@@ -5,10 +5,12 @@ import { createClient } from '@/lib/supabase/client'
 export function ThemeLoader() {
   useEffect(() => {
     const apply = async () => {
-      // First apply from localStorage for instant load (no flash)
+      // First apply from localStorage for instant load (no flash). Default: light.
       const cached = localStorage.getItem('strata-theme')
-      if (cached === 'light') {
+      if (cached !== 'dark') {
         document.documentElement.classList.add('theme-light')
+      } else {
+        document.documentElement.classList.remove('theme-light')
       }
 
       // Then confirm from Supabase and sync
@@ -22,12 +24,12 @@ export function ThemeLoader() {
         .eq('user_id', user.id)
         .maybeSingle()
 
-      if (data?.theme === 'light') {
-        document.documentElement.classList.add('theme-light')
-        localStorage.setItem('strata-theme', 'light')
-      } else {
+      if (data?.theme === 'dark') {
         document.documentElement.classList.remove('theme-light')
         localStorage.setItem('strata-theme', 'dark')
+      } else {
+        document.documentElement.classList.add('theme-light')
+        localStorage.setItem('strata-theme', 'light')
       }
 
       // Restore saved accent color + derived opacity variants

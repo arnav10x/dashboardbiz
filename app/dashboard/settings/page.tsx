@@ -61,7 +61,7 @@ export default function SettingsPage() {
     primaryGoal: 'Hit $10k/month', revenueTarget: '', profitMargin: '60',
     monthlyClients: '5', maxHours: '80',
   })
-  const [appearance, setAppearance] = useState({ theme: 'dark', accentColor: '#f43f5e', secondaryColor: '#10b981' })
+  const [appearance, setAppearance] = useState({ theme: 'light', accentColor: '#A855F7', secondaryColor: '#7C3AED' })
   const [entryCount, setEntryCount] = useState(0)
   const [clearConfirmOpen, setClearConfirmOpen] = useState(false)
   const [clearing, setClearing] = useState(false)
@@ -114,9 +114,9 @@ export default function SettingsPage() {
           maxHours: settings.max_hours_month?.toString() || '80',
         }))
         setAppearance({
-          theme: settings.theme || 'dark',
-          accentColor: settings.accent_color || '#f43f5e',
-          secondaryColor: settings.secondary_color || '#10b981',
+          theme: settings.theme || 'light',
+          accentColor: settings.accent_color || '#A855F7',
+          secondaryColor: settings.secondary_color || '#7C3AED',
         })
       }
 

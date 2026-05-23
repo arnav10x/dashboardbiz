@@ -181,13 +181,13 @@ export function TodaysFocus({ userName, businessType, hasData, revenue, expenses
                 <svg width={36} height={36} viewBox="0 0 36 36" style={{ display: 'block' }}>
                   <circle cx={18} cy={18} r={16} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={3.5} />
                   <circle cx={18} cy={18} r={16} fill="none"
-                    stroke={completionPct === 100 ? '#10b981' : 'var(--accent)'}
+                    stroke="var(--accent)"
                     strokeWidth={3.5} strokeLinecap="round"
                     strokeDasharray={circ} strokeDashoffset={circ * (1 - completionPct / 100)}
                     style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 0.8s ease' }} />
                 </svg>
                 <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: 7, fontWeight: 900, color: completionPct === 100 ? '#10b981' : 'var(--accent)' }}>{completionPct}%</span>
+                  <span style={{ fontSize: 7, fontWeight: 900, color: 'var(--accent)' }}>{completionPct}%</span>
                 </div>
               </div>
               <div>
@@ -204,7 +204,7 @@ export function TodaysFocus({ userName, businessType, hasData, revenue, expenses
                 <Star style={{ width: 10, height: 10, color: '#c084fc' }} />
                 <span style={S.label}>Lv {gam?.level ?? 1}</span>
               </div>
-              {xpFlash && <span style={{ fontSize: 9, fontWeight: 800, color: '#10b981' }}>+{xpFlash} XP</span>}
+              {xpFlash && <span style={{ fontSize: 9, fontWeight: 800, color: 'var(--accent)' }}>+{xpFlash} XP</span>}
             </div>
             <p style={{ fontSize: 13, fontWeight: 900, fontVariantNumeric: 'tabular-nums', color: '#c084fc', marginBottom: 5 }}>
               {(gam?.totalXp ?? 0).toLocaleString()} XP

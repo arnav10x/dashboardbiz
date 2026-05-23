@@ -183,9 +183,9 @@ function ActionBadge({ action }: { action: ActionResult }) {
     <div className="flex items-center gap-2 text-xs px-3 py-2 mt-2"
       style={{
         borderRadius: 7,
-        background: action.success ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)',
-        border: `1px solid ${action.success ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`,
-        color: action.success ? '#10b981' : '#ef4444',
+        background: action.success ? 'rgba(139,92,246,0.08)' : 'rgba(239,68,68,0.08)',
+        border: `1px solid ${action.success ? 'rgba(139,92,246,0.3)' : 'rgba(239,68,68,0.3)'}`,
+        color: action.success ? 'var(--accent)' : '#ef4444',
       }}>
       {action.success
         ? <CheckCircle className="h-3.5 w-3.5 flex-shrink-0" />

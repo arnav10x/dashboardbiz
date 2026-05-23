@@ -55,7 +55,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
         gap: 10,
         padding: '9px 10px',
         borderRadius: 7,
-        background: active ? 'rgba(39,211,110,0.10)' : 'transparent',
+        background: active ? 'var(--accent-muted)' : 'transparent',
         color: active ? 'var(--accent)' : 'var(--text-muted)',
         textDecoration: 'none',
         transition: 'background 0.1s, color 0.1s',

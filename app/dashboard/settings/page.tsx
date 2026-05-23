@@ -61,7 +61,7 @@ export default function SettingsPage() {
     primaryGoal: 'Hit $10k/month', revenueTarget: '', profitMargin: '60',
     monthlyClients: '5', maxHours: '80',
   })
-  const [appearance, setAppearance] = useState({ theme: 'dark', accentColor: '#f43f5e', secondaryColor: '#10b981' })
+  const [appearance, setAppearance] = useState({ theme: 'light', accentColor: '#8B5CF6', secondaryColor: '#8B5CF6' })
   const [entryCount, setEntryCount] = useState(0)
   const [clearConfirmOpen, setClearConfirmOpen] = useState(false)
   const [clearing, setClearing] = useState(false)
@@ -114,9 +114,9 @@ export default function SettingsPage() {
           maxHours: settings.max_hours_month?.toString() || '80',
         }))
         setAppearance({
-          theme: settings.theme || 'dark',
-          accentColor: settings.accent_color || '#f43f5e',
-          secondaryColor: settings.secondary_color || '#10b981',
+          theme: settings.theme || 'light',
+          accentColor: settings.accent_color || '#8B5CF6',
+          secondaryColor: settings.secondary_color || '#8B5CF6',
         })
       }
 
@@ -652,7 +652,7 @@ export default function SettingsPage() {
                       style={{ borderRadius: 7, border: `2px solid ${appearance.theme === 'dark' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-raised)' }}
                     >
                       <div className="h-10 rounded-lg mb-2" style={{ background: '#0b0d12', border: '1px solid var(--border)' }} />
-                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Dark (default)</p>
+                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Dark</p>
                       <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>Calm, focused, premium.</p>
                     </button>
                     <button
@@ -661,7 +661,7 @@ export default function SettingsPage() {
                       style={{ borderRadius: 7, border: `2px solid ${appearance.theme === 'light' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-raised)' }}
                     >
                       <div className="h-10 rounded-lg mb-2" style={{ background: '#f0f2f5', border: '1px solid rgba(0,0,0,0.08)' }} />
-                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Light</p>
+                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Light (default)</p>
                       <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>Clean, airy, and bright.</p>
                     </button>
                   </div>
@@ -692,7 +692,7 @@ export default function SettingsPage() {
                       <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>{appearance.accentColor}</span>
                     </div>
                     <button
-                      onClick={() => setAppearance(a => ({ ...a, accentColor: '#f43f5e' }))}
+                      onClick={() => setAppearance(a => ({ ...a, accentColor: '#8B5CF6' }))}
                       className="text-xs font-medium"
                       style={{ color: 'var(--text-muted)' }}
                     >
@@ -739,7 +739,7 @@ export default function SettingsPage() {
                   <p className="text-xs mb-4" style={{ color: 'var(--text-muted)' }}>Your plan and account details.</p>
                   <div className="space-y-3">
                     {[
-                      { label: 'Plan', value: 'prspectve Beta — Free', valueStyle: { background: 'rgba(16,185,129,0.12)', color: '#10b981', padding: '0.25rem 0.75rem', borderRadius: 6 } },
+                      { label: 'Plan', value: 'prspectve Beta — Free', valueStyle: { background: 'rgba(139,92,246,0.12)', color: '#8B5CF6', padding: '0.25rem 0.75rem', borderRadius: 6 } },
                       { label: 'Data entries', value: `${entryCount} entries`, valueStyle: {} },
                       { label: 'Last saved', value: new Date().toLocaleString(), valueStyle: {} },
                     ].map(item => (

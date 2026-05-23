@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Zap } from 'lucide-react'
 
 export function LogoPreloader() {
   const [phase, setPhase] = useState<'in' | 'hold' | 'out' | 'gone'>('in')
@@ -27,20 +26,18 @@ export function LogoPreloader() {
     >
       <div className="flex flex-col items-center gap-5">
         {/* Logo */}
-        <div
-          style={{
-            animation: 'logoReveal 0.6s cubic-bezier(0.16,1,0.3,1) both',
-          }}
-        >
-          <div
-            className="h-20 w-20 rounded-3xl flex items-center justify-center"
+        <div style={{ animation: 'logoReveal 0.6s cubic-bezier(0.16,1,0.3,1) both' }}>
+          <img
+            src="/logo.png"
+            alt="prspectve"
+            width={80}
+            height={80}
             style={{
-              background: 'var(--accent)',
+              borderRadius: 20,
               boxShadow: '0 0 60px var(--accent-glow), 0 0 120px var(--accent-muted)',
+              display: 'block',
             }}
-          >
-            <Zap className="h-10 w-10 text-white" strokeWidth={2.5} />
-          </div>
+          />
         </div>
 
         {/* Word mark */}
@@ -51,7 +48,7 @@ export function LogoPreloader() {
             animation: 'logoReveal 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both',
           }}
         >
-          <span style={{ color: 'var(--text-primary)' }}>Strat</span><span style={{ color: 'var(--accent)' }}>a</span>
+          <span style={{ color: 'var(--text-primary)' }}>prspect</span><span style={{ color: 'var(--accent)' }}>ve</span>
         </div>
 
         {/* Pulse dots */}

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
-  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Zap,
+  BarChart2, Trophy, Sparkles, Users, Plug, Settings,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: any; label: string; exact?: boolean }
@@ -110,9 +110,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
     >
       {/* Logo */}
       <div style={{ height: 56, display: 'flex', alignItems: 'center', gap: 10, padding: '0 16px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
-        <div style={{ width: 28, height: 28, borderRadius: 8, background: 'var(--accent-faint)', border: '1px solid var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Zap style={{ width: 15, height: 15, color: 'var(--accent)' }} strokeWidth={2.5} />
-        </div>
+        <img src="/logo.png" alt="prspectve" width={28} height={28} style={{ borderRadius: 6, flexShrink: 0, display: 'block' }} />
         <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
           prspectve
         </span>

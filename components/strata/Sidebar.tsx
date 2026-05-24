@@ -1,6 +1,19 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+function SidebarLogo() {
+  const [err, setErr] = useState(false)
+  if (err) {
+    return (
+      <div style={{ width: 28, height: 28, borderRadius: 6, background: 'linear-gradient(135deg,#8B5CF6,#6D28D9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <span style={{ color: '#fff', fontWeight: 900, fontSize: 15, fontFamily: 'system-ui', lineHeight: 1 }}>P</span>
+      </div>
+    )
+  }
+  return <img src="/logo.png" alt="prspectve" width={28} height={28} style={{ borderRadius: 6, flexShrink: 0, display: 'block' }} onError={() => setErr(true)} />
+}
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
   BarChart2, Trophy, Sparkles, Users, Plug, Settings,
@@ -110,7 +123,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
     >
       {/* Logo */}
       <div style={{ height: 56, display: 'flex', alignItems: 'center', gap: 10, padding: '0 16px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
-        <img src="/logo.png" alt="prspectve" width={28} height={28} style={{ borderRadius: 6, flexShrink: 0, display: 'block' }} />
+        <SidebarLogo />
         <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
           prspectve
         </span>

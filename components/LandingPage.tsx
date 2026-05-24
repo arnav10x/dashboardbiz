@@ -92,13 +92,19 @@ function useScrollReveal() {
 // ─── Logo Mark ────────────────────────────────────────────────────────────────
 
 function LogoMark({ size = 34 }: { size?: number }) {
+  const [err, setErr] = useState(false)
+  const r = Math.round(size * 0.22)
+  if (err) {
+    return (
+      <div style={{ width: size, height: size, borderRadius: r, background: 'linear-gradient(135deg,#8B5CF6,#6D28D9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <span style={{ color: '#fff', fontWeight: 900, fontSize: Math.round(size * 0.55), fontFamily: 'system-ui', lineHeight: 1, letterSpacing: '-0.04em' }}>P</span>
+      </div>
+    )
+  }
   return (
-    <img
-      src="/logo.png"
-      alt="prspectve logo"
-      width={size}
-      height={size}
-      style={{ display: 'block', flexShrink: 0 }}
+    <img src="/logo.png" alt="prspectve logo" width={size} height={size}
+      style={{ display: 'block', flexShrink: 0, borderRadius: r }}
+      onError={() => setErr(true)}
     />
   )
 }
@@ -112,7 +118,7 @@ function DashboardMockup() {
       {/* Top bar */}
       <div style={{ background: '#0d1014', borderBottom: '1px solid rgba(255,255,255,.07)', padding: '9px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src="/logo.png" alt="logo" width={22} height={22} style={{ borderRadius: 4 }} />
+          <LogoMark size={22} />
           <span style={{ fontWeight: 800, fontSize: 13, color: '#f4f6f4' }}>prspectve</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -352,7 +358,7 @@ function FeaturesHub() {
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           boxShadow: '0 0 60px rgba(139,92,246,0.2), 0 0 120px rgba(139,92,246,0.08)',
         }}>
-          <img src="/logo.png" alt="logo" width={40} height={40} />
+          <LogoMark size={40} />
           <span style={{ fontSize: 10, fontWeight: 900, color: '#8b5cf6', marginTop: 6, letterSpacing: '0.07em', textTransform: 'uppercase' }}>prspectve</span>
         </div>
       </div>

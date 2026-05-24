@@ -94,7 +94,7 @@ function useScrollReveal() {
 function LogoMark({ size = 34 }: { size?: number }) {
   return (
     <img
-      src="/logo.svg"
+      src="/logo.png"
       alt="prspectve logo"
       width={size}
       height={size}
@@ -112,7 +112,7 @@ function DashboardMockup() {
       {/* Top bar */}
       <div style={{ background: '#0d1014', borderBottom: '1px solid rgba(255,255,255,.07)', padding: '9px 14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img src="/logo.svg" alt="logo" width={22} height={22} style={{ borderRadius: 4 }} />
+          <img src="/logo.png" alt="logo" width={22} height={22} style={{ borderRadius: 4 }} />
           <span style={{ fontWeight: 800, fontSize: 13, color: '#f4f6f4' }}>prspectve</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -352,7 +352,7 @@ function FeaturesHub() {
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           boxShadow: '0 0 60px rgba(139,92,246,0.2), 0 0 120px rgba(139,92,246,0.08)',
         }}>
-          <img src="/logo.svg" alt="logo" width={40} height={40} />
+          <img src="/logo.png" alt="logo" width={40} height={40} />
           <span style={{ fontSize: 10, fontWeight: 900, color: '#8b5cf6', marginTop: 6, letterSpacing: '0.07em', textTransform: 'uppercase' }}>prspectve</span>
         </div>
       </div>
@@ -421,6 +421,11 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       {/* ── Landing-page-scoped styles ── */}
       <style>{`
         @keyframes lp-orb{0%,100%{transform:scale(1) translate(0,0);opacity:1}50%{transform:scale(1.2) translate(18px,-22px);opacity:.65}}
+        @keyframes lp-blob1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(50px,-60px) scale(1.18)}66%{transform:translate(-25px,35px) scale(0.94)}}
+        @keyframes lp-blob2{0%,100%{transform:translate(0,0) scale(1.08)}33%{transform:translate(-55px,40px) scale(0.96)}66%{transform:translate(35px,-45px) scale(1.2)}}
+        @keyframes lp-blob3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(25px,40px) scale(1.12)}}
+        @keyframes lp-blob4{0%,100%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(-20px,-30px) scale(1.06) rotate(180deg)}}
+        @keyframes lp-shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
         @keyframes lp-float3d{0%,100%{transform:perspective(1300px) rotateX(4deg) rotateY(-12deg) rotateZ(0.6deg) translateY(0)}50%{transform:perspective(1300px) rotateX(4deg) rotateY(-12deg) rotateZ(0.6deg) translateY(-18px)}}
         @keyframes lp-rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
         @keyframes lp-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:.5}}
@@ -528,7 +533,51 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
       </nav>
 
       {/* ── HERO ── */}
-      <section style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '130px 28px 80px' }}>
+      <section style={{ position: 'relative', zIndex: 1, minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '130px 28px 80px', overflow: 'hidden' }}>
+
+        {/* ── Animated aurora blobs (hero only) ── */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          {/* Primary blob — top right */}
+          <div style={{
+            position: 'absolute', width: 900, height: 900, borderRadius: '50%',
+            background: 'radial-gradient(circle at 40% 40%, rgba(196,167,255,0.28) 0%, rgba(167,139,250,0.12) 40%, transparent 68%)',
+            top: -300, right: -250,
+            animation: 'lp-blob1 14s ease-in-out infinite',
+            filter: 'blur(1px)',
+          }}/>
+          {/* Secondary blob — bottom left */}
+          <div style={{
+            position: 'absolute', width: 750, height: 750, borderRadius: '50%',
+            background: 'radial-gradient(circle at 55% 55%, rgba(139,92,246,0.18) 0%, rgba(109,40,217,0.08) 45%, transparent 68%)',
+            bottom: -220, left: -200,
+            animation: 'lp-blob2 16s ease-in-out infinite 1.5s',
+            filter: 'blur(1px)',
+          }}/>
+          {/* Centre accent blob */}
+          <div style={{
+            position: 'absolute', width: 600, height: 600, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(221,214,254,0.22) 0%, rgba(196,167,255,0.08) 50%, transparent 68%)',
+            top: '20%', left: '20%',
+            animation: 'lp-blob3 12s ease-in-out infinite 3s',
+            filter: 'blur(2px)',
+          }}/>
+          {/* Small vivid accent — upper left */}
+          <div style={{
+            position: 'absolute', width: 350, height: 350, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%)',
+            top: '5%', left: '5%',
+            animation: 'lp-blob4 18s ease-in-out infinite 5s',
+          }}/>
+          {/* Mesh / dot grid overlay */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'radial-gradient(circle, rgba(139,92,246,0.12) 1px, transparent 1px)',
+            backgroundSize: '32px 32px',
+            maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)',
+            WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)',
+          }}/>
+        </div>
+
         <div className="lp-hero-grid" style={{ maxWidth: 1200, width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center' }}>
 
           {/* Left — copy */}

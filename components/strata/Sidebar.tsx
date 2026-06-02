@@ -12,7 +12,7 @@ function SidebarLogo() {
       </div>
     )
   }
-  return <img src="/logo.svg" alt="prspectve" width={28} height={28} style={{ borderRadius: 6, flexShrink: 0, display: 'block' }} onError={() => setErr(true)} />
+  return <img src="/logo.png" alt="prspectve" width={28} height={28} style={{ borderRadius: 6, flexShrink: 0, display: 'block' }} onError={() => setErr(true)} />
 }
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,

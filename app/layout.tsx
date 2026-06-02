@@ -13,9 +13,9 @@ export const metadata: Metadata = {
   title: 'prspectve',
   description: 'A daily operating system for ambitious founders.',
   icons: {
-    icon: '/logo.svg',
-    shortcut: '/logo.svg',
-    apple: '/logo.svg',
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
 }
 

@@ -15,7 +15,7 @@ function PreloaderLogo() {
   }
   return (
     <img
-      src="/logo.svg"
+      src="/logo.png"
       alt="prspectve"
       width={80}
       height={80}

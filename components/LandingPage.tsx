@@ -102,7 +102,7 @@ function LogoMark({ size = 34 }: { size?: number }) {
     )
   }
   return (
-    <img src="/logo.png" alt="prspectve logo" width={size} height={size}
+    <img src="/logo.svg" alt="prspectve logo" width={size} height={size}
       style={{ display: 'block', flexShrink: 0, borderRadius: r }}
       onError={() => setErr(true)}
     />

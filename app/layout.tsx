@@ -10,7 +10,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'FounderOS',
+  title: 'prspectve',
   description: 'A daily operating system for ambitious founders.',
 }
 

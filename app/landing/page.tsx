@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: 'Track your P&L, manage your pipeline, and get AI-coached from $0 to your first clients — all in one ruthlessly focused dashboard.',
 }
 
-export default async function RootPage() {
+export default async function LandingRoute() {
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 

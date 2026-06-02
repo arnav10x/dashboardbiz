@@ -1,6 +1,29 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Zap } from 'lucide-react'
+
+function PreloaderLogo() {
+  const [err, setErr] = useState(false)
+  if (err) {
+    return (
+      <div
+        className="h-20 w-20 rounded-3xl flex items-center justify-center"
+        style={{ background: 'linear-gradient(135deg,#8B5CF6,#6D28D9)', boxShadow: '0 0 60px var(--accent-glow), 0 0 120px var(--accent-muted)' }}
+      >
+        <span style={{ color: '#fff', fontWeight: 900, fontSize: 36, fontFamily: 'system-ui', lineHeight: 1, letterSpacing: '-0.04em' }}>P</span>
+      </div>
+    )
+  }
+  return (
+    <img
+      src="/logo.png"
+      alt="prspectve"
+      width={80}
+      height={80}
+      style={{ borderRadius: 20, boxShadow: '0 0 60px var(--accent-glow), 0 0 120px var(--accent-muted)', display: 'block' }}
+      onError={() => setErr(true)}
+    />
+  )
+}
 
 export function LogoPreloader() {
   const [phase, setPhase] = useState<'in' | 'hold' | 'out' | 'gone'>('in')
@@ -26,47 +49,21 @@ export function LogoPreloader() {
       }}
     >
       <div className="flex flex-col items-center gap-5">
-        {/* Logo */}
-        <div
-          style={{
-            animation: 'logoReveal 0.6s cubic-bezier(0.16,1,0.3,1) both',
-          }}
-        >
-          <div
-            className="h-20 w-20 rounded-3xl flex items-center justify-center"
-            style={{
-              background: 'var(--accent)',
-              boxShadow: '0 0 60px var(--accent-glow), 0 0 120px var(--accent-muted)',
-            }}
-          >
-            <Zap className="h-10 w-10 text-white" strokeWidth={2.5} />
-          </div>
+        <div style={{ animation: 'logoReveal 0.6s cubic-bezier(0.16,1,0.3,1) both' }}>
+          <PreloaderLogo />
         </div>
 
-        {/* Word mark */}
         <div
           className="text-xl font-black tracking-tight"
-          style={{
-            color: 'var(--text-primary)',
-            animation: 'logoReveal 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both',
-          }}
+          style={{ color: 'var(--text-primary)', animation: 'logoReveal 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both' }}
         >
-          <span style={{ color: 'var(--text-primary)' }}>Strat</span><span style={{ color: 'var(--accent)' }}>a</span>
+          <span style={{ color: 'var(--text-primary)' }}>prspect</span><span style={{ color: 'var(--accent)' }}>ve</span>
         </div>
 
-        {/* Pulse dots */}
-        <div
-          className="flex items-center gap-1.5"
-          style={{ animation: 'logoReveal 0.4s 0.3s ease both' }}
-        >
+        <div className="flex items-center gap-1.5" style={{ animation: 'logoReveal 0.4s 0.3s ease both' }}>
           {[0, 1, 2].map(i => (
-            <div
-              key={i}
-              className="h-1.5 w-1.5 rounded-full"
-              style={{
-                background: 'var(--accent)',
-                animation: `dotPulse 0.9s ${i * 0.18}s ease-in-out infinite`,
-              }}
+            <div key={i} className="h-1.5 w-1.5 rounded-full"
+              style={{ background: 'var(--accent)', animation: `dotPulse 0.9s ${i * 0.18}s ease-in-out infinite` }}
             />
           ))}
         </div>

@@ -6,7 +6,7 @@ import Link from 'next/link'
 
 function InsightCard({ type, title, body }: { type: 'good' | 'warn' | 'info'; title: string; body: string }) {
   const colors = {
-    good: { bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.2)', icon: '#10b981', Icon: TrendingUp },
+    good: { bg: 'rgba(139,92,246,0.08)', border: 'rgba(139,92,246,0.2)', icon: 'var(--accent)', Icon: TrendingUp },
     warn: { bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.2)', icon: '#fbbf24', Icon: AlertTriangle },
     info: { bg: 'rgba(244,63,94,0.08)', border: 'rgba(244,63,94,0.15)', icon: 'var(--accent)', Icon: Zap },
   }
@@ -83,7 +83,7 @@ export default async function InsightsPage() {
   const funnelStages = [
     { label: 'Leads', value: leads, color: 'var(--accent)' },
     { label: 'Proposals', value: Number(latest?.proposals_sent) || Number(latest?.proposals) || 0, color: '#f97316' },
-    { label: 'Customers', value: customers, color: '#10b981' },
+    { label: 'Customers', value: customers, color: 'var(--accent)' },
   ]
   const funnelMax = Math.max(...funnelStages.map(s => s.value), 1)
 
@@ -108,7 +108,7 @@ export default async function InsightsPage() {
               </div>
               <h3 className="text-base font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Insights unlock with data</h3>
               <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>
-                Log a period entry and Strata generates risk alerts, growth signals, and conversion analysis automatically.
+                Log a period entry and prspectve generates risk alerts, growth signals, and conversion analysis automatically.
               </p>
               <Link href="/dashboard/period-entry" className="inline-flex items-center gap-1.5 text-sm font-bold px-5 py-2.5 rounded-xl"
                 style={{ background: 'var(--accent)', color: 'white' }}>
@@ -135,7 +135,7 @@ export default async function InsightsPage() {
                   {[
                     { label: 'Revenue', value: `$${revenue.toLocaleString()}` },
                     { label: 'Expenses', value: `$${expenses.toLocaleString()}` },
-                    { label: 'Profit', value: `$${profit.toLocaleString()}`, color: profit >= 0 ? '#10b981' : 'var(--accent)' },
+                    { label: 'Profit', value: `$${profit.toLocaleString()}`, color: profit >= 0 ? 'var(--accent)' : '#f43f5e' },
                     { label: 'Margin', value: `${margin}%` },
                   ].map(m => (
                     <div key={m.label} className="flex items-center justify-between py-1.5" style={{ borderBottom: '1px solid var(--border)' }}>

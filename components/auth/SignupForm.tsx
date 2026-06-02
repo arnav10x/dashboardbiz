@@ -72,7 +72,6 @@ export function SignupForm() {
     }
 
     router.push("/onboarding")
-    router.refresh()
   }
 
   return (

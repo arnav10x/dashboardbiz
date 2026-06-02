@@ -1,6 +1,6 @@
-# FounderOS Next Phase 3 Implemented
+# prspectve Next Phase 3 Implemented
 
-This patch adds the next architecture layer for making FounderOS more like a real founder operating system.
+This patch adds the next architecture layer for making prspectve more like a real founder operating system.
 
 ## Added
 

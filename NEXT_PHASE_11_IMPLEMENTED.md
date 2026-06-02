@@ -1,6 +1,6 @@
 # Phase 11 Implemented — Progression Depth
 
-This phase focuses on making FounderOS feel more like a long-term game loop instead of a simple dashboard.
+This phase focuses on making prspectve feel more like a long-term game loop instead of a simple dashboard.
 
 ## Added
 - Rank shields now visually progress by division.

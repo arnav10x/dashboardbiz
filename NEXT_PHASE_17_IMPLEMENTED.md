@@ -2,7 +2,7 @@
 
 ## What changed
 
-Phase 17 adds a real dopamine layer that reacts to actual FounderOS progress instead of fake animations.
+Phase 17 adds a real dopamine layer that reacts to actual prspectve progress instead of fake animations.
 
 ### Added
 - Global `DopamineLayer` mounted inside the dashboard layout.
@@ -34,4 +34,4 @@ Animations are tied to real data from `/api/gamification` and localStorage snaps
 
 ## Result
 
-FounderOS now feels more rewarding, animated, and game-like while keeping the logic grounded in real user progress.
+prspectve now feels more rewarding, animated, and game-like while keeping the logic grounded in real user progress.

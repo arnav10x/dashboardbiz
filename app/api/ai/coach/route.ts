@@ -268,7 +268,7 @@ After calling a tool, confirm in 1 sentence what was done.${(workspace as any)?.
 Founder's live metrics:
 ${dataContext}
 
-Unified FounderOS context:
+Unified prspectve context:
 ${universalContext}`
 
         const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {

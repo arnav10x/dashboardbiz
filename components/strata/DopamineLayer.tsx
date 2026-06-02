@@ -20,8 +20,8 @@ type Celebration =
   | { id: string; type: 'rank'; rank: string; level: number }
   | { id: string; type: 'streak'; streak: number }
 
-const STORAGE_KEY = 'founderos:last-gamification-snapshot'
-const SEEN_KEY = 'founderos:dopamine-layer-seen'
+const STORAGE_KEY = 'prspectve:last-gamification-snapshot'
+const SEEN_KEY = 'prspectve:dopamine-layer-seen'
 
 function readStoredSnapshot(): GamificationSnapshot | null {
   if (typeof window === 'undefined') return null
@@ -208,11 +208,11 @@ export function DopamineLayer() {
       else check()
     }
     document.addEventListener('visibilitychange', onFocus)
-    window.addEventListener('founderos:gamification-updated', onEvent as EventListener)
+    window.addEventListener('prspectve:gamification-updated', onEvent as EventListener)
     return () => {
       window.clearInterval(interval)
       document.removeEventListener('visibilitychange', onFocus)
-      window.removeEventListener('founderos:gamification-updated', onEvent as EventListener)
+      window.removeEventListener('prspectve:gamification-updated', onEvent as EventListener)
     }
   }, [check, compareAndCelebrate])
 

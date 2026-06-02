@@ -1,9 +1,22 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+function SidebarLogo() {
+  const [err, setErr] = useState(false)
+  if (err) {
+    return (
+      <div style={{ width: 28, height: 28, borderRadius: 6, background: 'linear-gradient(135deg,#8B5CF6,#6D28D9)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <span style={{ color: '#fff', fontWeight: 900, fontSize: 15, fontFamily: 'system-ui', lineHeight: 1 }}>P</span>
+      </div>
+    )
+  }
+  return <img src="/logo.png" alt="prspectve" width={28} height={28} style={{ borderRadius: 6, flexShrink: 0, display: 'block' }} onError={() => setErr(true)} />
+}
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
-  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Zap,
+  BarChart2, Trophy, Sparkles, Users, Plug, Settings,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: any; label: string; exact?: boolean }
@@ -55,7 +68,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
         gap: 10,
         padding: '9px 10px',
         borderRadius: 7,
-        background: active ? 'rgba(39,211,110,0.10)' : 'transparent',
+        background: active ? 'var(--accent-muted)' : 'transparent',
         color: active ? 'var(--accent)' : 'var(--text-muted)',
         textDecoration: 'none',
         transition: 'background 0.1s, color 0.1s',
@@ -110,11 +123,9 @@ export function Sidebar({ workspaceName }: SidebarProps) {
     >
       {/* Logo */}
       <div style={{ height: 56, display: 'flex', alignItems: 'center', gap: 10, padding: '0 16px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
-        <div style={{ width: 28, height: 28, borderRadius: 8, background: 'var(--accent-faint)', border: '1px solid var(--accent-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Zap style={{ width: 15, height: 15, color: 'var(--accent)' }} strokeWidth={2.5} />
-        </div>
+        <SidebarLogo />
         <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-          Strata
+          prspectve
         </span>
       </div>
 

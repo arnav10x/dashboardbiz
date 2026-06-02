@@ -1,4 +1,4 @@
-# FounderOS Phase 6 Started — Integration Ecosystem Foundation
+# prspectve Phase 6 Started — Integration Ecosystem Foundation
 
 This patch starts the Phase 6 integration layer while keeping the app usable without fake connection states.
 

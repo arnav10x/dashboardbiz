@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { syncGoogleCalendarEvents } from '@/lib/google-calendar'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
@@ -52,6 +53,9 @@ export async function GET(request: Request) {
         : null,
       google_cal_connected: true,
     }, { onConflict: 'user_id' })
+
+    // Immediately sync calendar events so they appear right away
+    await syncGoogleCalendarEvents(supabase as any, user.id).catch(() => null)
   }
 
   return NextResponse.redirect(`${origin}/dashboard/integrations?connected=google_calendar`)

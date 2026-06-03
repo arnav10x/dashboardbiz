@@ -231,7 +231,10 @@ Upcoming/recent calendar events: ${(events || []).map((e: any) => `${e.event_dat
 
   const wantsJson = (req.headers.get('accept') || '').toLowerCase().includes('application/json')
   if (wantsJson || !process.env.GROQ_API_KEY) {
-    return new Response(JSON.stringify({ message: buildCoachReply() }), {
+    const prefix = !process.env.GROQ_API_KEY
+      ? '**Basic mode** — GROQ_API_KEY not set, so AI is disabled. Add it to .env.local to unlock full AI coaching.\n\n'
+      : ''
+    return new Response(JSON.stringify({ message: prefix + buildCoachReply() }), {
       headers: { 'Content-Type': 'application/json' }
     })
   }

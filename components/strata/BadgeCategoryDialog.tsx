@@ -7,6 +7,7 @@ type Badge = {
   id: string
   title: string
   desc: string
+  icon?: string
   category: string
   condition: string
 }
@@ -64,13 +65,13 @@ export function BadgeCategoryDialog({
                   return (
                     <div key={item.id} className="rounded-xl p-4 transition hover:-translate-y-0.5 hover:bg-white/[.045]" style={{ background: isEarned ? `${color}10` : 'rgba(255,255,255,.025)', border: `1px solid ${isEarned ? `${color}44` : 'rgba(255,255,255,.075)'}` }}>
                       <div className="mb-3 flex items-center justify-between gap-3">
-                        <div className="grid h-12 w-12 place-items-center" style={{ filter: isEarned ? `drop-shadow(0 0 14px ${color}77)` : 'none' }}>
-                          <svg width="46" height="50" viewBox="0 0 100 110">
+                        <div style={{ position: 'relative', width: 48, height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center', filter: isEarned ? `drop-shadow(0 0 14px ${color}77)` : 'none', opacity: isEarned ? 1 : 0.5 }}>
+                          <svg width="46" height="50" viewBox="0 0 100 110" style={{ position: 'absolute', inset: 0 }}>
                             <defs><linearGradient id={`modal-${item.id}`} x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stopColor="#fff" stopOpacity=".35"/><stop offset="44%" stopColor={color}/><stop offset="100%" stopColor="#050505"/></linearGradient></defs>
                             <path d="M50 6 L84 21 L77 72 Q68 94 50 106 Q32 94 23 72 L16 21 Z" fill={isEarned ? `url(#modal-${item.id})` : 'rgba(255,255,255,.035)'} stroke={isEarned ? color : 'rgba(255,255,255,.3)'} strokeWidth="5" />
                             <path d="M50 20 L68 29 L64 66 Q60 80 50 88 Q40 80 36 66 L32 29 Z" fill="rgba(0,0,0,.24)" stroke="rgba(255,255,255,.18)" strokeWidth="2" />
-                            <path d="M50 32 L57 46 L72 47 L60 58 L64 74 L50 65 L36 74 L40 58 L28 47 L43 46 Z" fill={isEarned ? color : 'rgba(255,255,255,.14)'} stroke="rgba(255,255,255,.45)" strokeWidth="1.5" />
                           </svg>
+                          <span style={{ position: 'relative', fontSize: 18, lineHeight: 1, userSelect: 'none', filter: isEarned ? 'none' : 'grayscale(1)' }}>{item.icon || '🏆'}</span>
                         </div>
                         {isEarned ? <CheckCircle2 className="h-5 w-5" style={{ color: 'var(--accent)' }} /> : <Lock className="h-5 w-5" style={{ color: 'rgba(255,255,255,.45)' }} />}
                       </div>

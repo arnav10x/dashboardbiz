@@ -15,89 +15,89 @@ interface Achievement {
 
 const ACHIEVEMENTS: Achievement[] = [
   // Revenue — 15 badges
-  { id: 'first_dollar', title: 'First Dollar', desc: 'Log your first revenue entry.', icon: '', category: 'Revenue', condition: 'Log 1 revenue period' },
-  { id: 'profitable', title: 'In the Black', desc: 'Log a profitable period.', icon: '', category: 'Revenue', condition: 'Positive profit' },
-  { id: 'revenue_1k', title: '$1K Spark', desc: 'Log $1,000 in one period.', icon: '', category: 'Revenue', condition: '$1,000 in a period' },
-  { id: 'five_k', title: '$5K Month', desc: 'Record $5,000+ in one period.', icon: '', category: 'Revenue', condition: '$5,000 in a period' },
-  { id: 'ten_k', title: '$10K Month', desc: 'Record $10,000+ in one period.', icon: '', category: 'Revenue', condition: '$10,000 in a period' },
-  { id: 'revenue_25k', title: '$25K Breakout', desc: 'Record $25,000+ in one period.', icon: '', category: 'Revenue', condition: '$25,000 in a period' },
-  { id: 'fifty_k', title: '$50K Month', desc: 'Record $50,000+ in one period.', icon: '', category: 'Revenue', condition: '$50,000 in a period' },
-  { id: 'hundred_k', title: '$100K Month', desc: 'Record $100,000+ in one period.', icon: '', category: 'Revenue', condition: '$100,000 in a period' },
-  { id: 'profit_10k', title: '$10K Profit', desc: 'Log $10,000 total profit.', icon: '', category: 'Revenue', condition: '$10,000 total profit' },
-  { id: 'profit_50k', title: '$50K Profit', desc: 'Log $50,000 total profit.', icon: '', category: 'Revenue', condition: '$50,000 total profit' },
-  { id: 'margin_50', title: '50% Margin', desc: 'Hit a 50%+ margin period.', icon: '', category: 'Revenue', condition: '50% margin' },
-  { id: 'three_profit_periods', title: 'Profit Streak', desc: 'Log 3 profitable periods.', icon: '', category: 'Revenue', condition: '3 profitable periods' },
-  { id: 'total_100k', title: '$100K Logged', desc: 'Log $100,000 total revenue.', icon: '', category: 'Revenue', condition: '$100K total revenue' },
-  { id: 'total_500k', title: '$500K Logged', desc: 'Log $500,000 total revenue.', icon: '', category: 'Revenue', condition: '$500K total revenue' },
-  { id: 'million_logged', title: 'Million Dollar Tracker', desc: 'Log $1,000,000 total revenue.', icon: '', category: 'Revenue', condition: '$1M total revenue' },
+  { id: 'first_dollar', title: 'First Dollar', desc: 'Log your first revenue entry.', icon: '💵', category: 'Revenue', condition: 'Log 1 revenue period' },
+  { id: 'profitable', title: 'In the Black', desc: 'Log a profitable period.', icon: '📈', category: 'Revenue', condition: 'Positive profit' },
+  { id: 'revenue_1k', title: '$1K Spark', desc: 'Log $1,000 in one period.', icon: '⚡', category: 'Revenue', condition: '$1,000 in a period' },
+  { id: 'five_k', title: '$5K Month', desc: 'Record $5,000+ in one period.', icon: '🔥', category: 'Revenue', condition: '$5,000 in a period' },
+  { id: 'ten_k', title: '$10K Month', desc: 'Record $10,000+ in one period.', icon: '💰', category: 'Revenue', condition: '$10,000 in a period' },
+  { id: 'revenue_25k', title: '$25K Breakout', desc: 'Record $25,000+ in one period.', icon: '🚀', category: 'Revenue', condition: '$25,000 in a period' },
+  { id: 'fifty_k', title: '$50K Month', desc: 'Record $50,000+ in one period.', icon: '💎', category: 'Revenue', condition: '$50,000 in a period' },
+  { id: 'hundred_k', title: '$100K Month', desc: 'Record $100,000+ in one period.', icon: '👑', category: 'Revenue', condition: '$100,000 in a period' },
+  { id: 'profit_10k', title: '$10K Profit', desc: 'Log $10,000 total profit.', icon: '📊', category: 'Revenue', condition: '$10,000 total profit' },
+  { id: 'profit_50k', title: '$50K Profit', desc: 'Log $50,000 total profit.', icon: '🏆', category: 'Revenue', condition: '$50,000 total profit' },
+  { id: 'margin_50', title: '50% Margin', desc: 'Hit a 50%+ margin period.', icon: '✂️', category: 'Revenue', condition: '50% margin' },
+  { id: 'three_profit_periods', title: 'Profit Streak', desc: 'Log 3 profitable periods.', icon: '📅', category: 'Revenue', condition: '3 profitable periods' },
+  { id: 'total_100k', title: '$100K Logged', desc: 'Log $100,000 total revenue.', icon: '🎯', category: 'Revenue', condition: '$100K total revenue' },
+  { id: 'total_500k', title: '$500K Logged', desc: 'Log $500,000 total revenue.', icon: '🦁', category: 'Revenue', condition: '$500K total revenue' },
+  { id: 'million_logged', title: 'Million Dollar Tracker', desc: 'Log $1,000,000 total revenue.', icon: '🌟', category: 'Revenue', condition: '$1M total revenue' },
 
   // Outreach — 15 badges
-  { id: 'first_dm', title: 'First Outreach', desc: 'Add your first outreach lead.', icon: '', category: 'Outreach', condition: '1 lead' },
-  { id: 'five_dms', title: 'Warm Start', desc: 'Add 5 outreach leads.', icon: '', category: 'Outreach', condition: '5 leads' },
-  { id: 'ten_dms', title: '10 Prospects', desc: 'Reach 10 prospects.', icon: '', category: 'Outreach', condition: '10 leads' },
-  { id: 'twenty_five_dms', title: '25 Prospects', desc: 'Reach 25 prospects.', icon: '', category: 'Outreach', condition: '25 leads' },
-  { id: 'outreach_machine', title: 'Outreach Machine', desc: 'Reach 50 prospects.', icon: '', category: 'Outreach', condition: '50 leads' },
-  { id: 'hundred_dms', title: '100 Prospects', desc: 'Reach 100 prospects.', icon: '', category: 'Outreach', condition: '100 leads' },
-  { id: 'two_fifty_dms', title: '250 Prospects', desc: 'Reach 250 prospects.', icon: '', category: 'Outreach', condition: '250 leads' },
-  { id: 'outreach_500', title: '500 Prospect Army', desc: 'Reach 500 prospects.', icon: '', category: 'Outreach', condition: '500 leads' },
-  { id: 'outreach_1000', title: '1K Outreach Club', desc: 'Reach 1,000 prospects.', icon: '', category: 'Outreach', condition: '1,000 leads' },
-  { id: 'contacted_5', title: 'Follow-Up Five', desc: 'Move 5 leads into contacted.', icon: '', category: 'Outreach', condition: '5 contacted leads' },
-  { id: 'contacted_25', title: 'Contact Engine', desc: 'Move 25 leads into contacted.', icon: '', category: 'Outreach', condition: '25 contacted leads' },
-  { id: 'qualified_10', title: 'Qualification Loop', desc: 'Qualify 10 leads.', icon: '', category: 'Outreach', condition: '10 qualified leads' },
-  { id: 'proposal_10', title: 'Proposal Push', desc: 'Send 10 proposals.', icon: '', category: 'Outreach', condition: '10 proposals' },
-  { id: 'proposal_25', title: 'Proposal Machine', desc: 'Send 25 proposals.', icon: '', category: 'Outreach', condition: '25 proposals' },
-  { id: 'pipeline_velocity', title: 'Velocity Builder', desc: 'Move 25 leads beyond new.', icon: '', category: 'Outreach', condition: '25 advanced leads' },
+  { id: 'first_dm', title: 'First Outreach', desc: 'Add your first outreach lead.', icon: '✉️', category: 'Outreach', condition: '1 lead' },
+  { id: 'five_dms', title: 'Warm Start', desc: 'Add 5 outreach leads.', icon: '🤝', category: 'Outreach', condition: '5 leads' },
+  { id: 'ten_dms', title: '10 Prospects', desc: 'Reach 10 prospects.', icon: '📬', category: 'Outreach', condition: '10 leads' },
+  { id: 'twenty_five_dms', title: '25 Prospects', desc: 'Reach 25 prospects.', icon: '📨', category: 'Outreach', condition: '25 leads' },
+  { id: 'outreach_machine', title: 'Outreach Machine', desc: 'Reach 50 prospects.', icon: '⚙️', category: 'Outreach', condition: '50 leads' },
+  { id: 'hundred_dms', title: '100 Prospects', desc: 'Reach 100 prospects.', icon: '💌', category: 'Outreach', condition: '100 leads' },
+  { id: 'two_fifty_dms', title: '250 Prospects', desc: 'Reach 250 prospects.', icon: '🎯', category: 'Outreach', condition: '250 leads' },
+  { id: 'outreach_500', title: '500 Prospect Army', desc: 'Reach 500 prospects.', icon: '🪖', category: 'Outreach', condition: '500 leads' },
+  { id: 'outreach_1000', title: '1K Outreach Club', desc: 'Reach 1,000 prospects.', icon: '🌐', category: 'Outreach', condition: '1,000 leads' },
+  { id: 'contacted_5', title: 'Follow-Up Five', desc: 'Move 5 leads into contacted.', icon: '📞', category: 'Outreach', condition: '5 contacted leads' },
+  { id: 'contacted_25', title: 'Contact Engine', desc: 'Move 25 leads into contacted.', icon: '📟', category: 'Outreach', condition: '25 contacted leads' },
+  { id: 'qualified_10', title: 'Qualification Loop', desc: 'Qualify 10 leads.', icon: '✅', category: 'Outreach', condition: '10 qualified leads' },
+  { id: 'proposal_10', title: 'Proposal Push', desc: 'Send 10 proposals.', icon: '📄', category: 'Outreach', condition: '10 proposals' },
+  { id: 'proposal_25', title: 'Proposal Machine', desc: 'Send 25 proposals.', icon: '📋', category: 'Outreach', condition: '25 proposals' },
+  { id: 'pipeline_velocity', title: 'Velocity Builder', desc: 'Move 25 leads beyond new.', icon: '🏃', category: 'Outreach', condition: '25 advanced leads' },
 
   // Pipeline — 15 badges
-  { id: 'first_lead', title: 'First Lead', desc: 'Add your first lead.', icon: '', category: 'Pipeline', condition: '1 lead' },
-  { id: 'ten_leads', title: 'Pipeline Builder', desc: 'Add 10 leads.', icon: '', category: 'Pipeline', condition: '10 leads' },
-  { id: 'twenty_five_leads', title: 'Lead Machine', desc: 'Add 25 leads.', icon: '', category: 'Pipeline', condition: '25 leads' },
-  { id: 'fifty_leads', title: 'Pipeline Factory', desc: 'Add 50 leads.', icon: '', category: 'Pipeline', condition: '50 leads' },
-  { id: 'hundred_leads', title: 'Hundred Lead Stack', desc: 'Add 100 leads.', icon: '', category: 'Pipeline', condition: '100 leads' },
-  { id: 'first_win', title: 'First Win', desc: 'Close your first deal.', icon: '', category: 'Pipeline', condition: '1 won deal' },
-  { id: 'five_wins', title: 'Closer', desc: 'Close 5 deals.', icon: '', category: 'Pipeline', condition: '5 won deals' },
-  { id: 'ten_wins', title: 'Deal Captain', desc: 'Close 10 deals.', icon: '', category: 'Pipeline', condition: '10 won deals' },
-  { id: 'twenty_five_wins', title: '25 Deals Won', desc: 'Close 25 deals.', icon: '', category: 'Pipeline', condition: '25 won deals' },
-  { id: 'fifty_wins', title: 'Revenue Engine', desc: 'Close 50 deals.', icon: '', category: 'Pipeline', condition: '50 won deals' },
-  { id: 'hundred_wins', title: '100 Wins', desc: 'Close 100 deals.', icon: '', category: 'Pipeline', condition: '100 won deals' },
-  { id: 'pipeline_10k', title: '$10K Pipeline', desc: 'Build a $10K pipeline.', icon: '', category: 'Pipeline', condition: '$10K pipeline value' },
-  { id: 'pipeline_50k', title: '$50K Pipeline', desc: 'Build a $50K pipeline.', icon: '', category: 'Pipeline', condition: '$50K pipeline value' },
-  { id: 'pipeline_100k', title: '$100K Pipeline', desc: 'Build a $100K pipeline.', icon: '', category: 'Pipeline', condition: '$100K pipeline value' },
-  { id: 'pipeline_1m', title: '$1M Pipeline', desc: 'Build a $1M pipeline.', icon: '', category: 'Pipeline', condition: '$1M pipeline value' },
+  { id: 'first_lead', title: 'First Lead', desc: 'Add your first lead.', icon: '🌱', category: 'Pipeline', condition: '1 lead' },
+  { id: 'ten_leads', title: 'Pipeline Builder', desc: 'Add 10 leads.', icon: '🔧', category: 'Pipeline', condition: '10 leads' },
+  { id: 'twenty_five_leads', title: 'Lead Machine', desc: 'Add 25 leads.', icon: '⚙️', category: 'Pipeline', condition: '25 leads' },
+  { id: 'fifty_leads', title: 'Pipeline Factory', desc: 'Add 50 leads.', icon: '🏭', category: 'Pipeline', condition: '50 leads' },
+  { id: 'hundred_leads', title: 'Hundred Lead Stack', desc: 'Add 100 leads.', icon: '📦', category: 'Pipeline', condition: '100 leads' },
+  { id: 'first_win', title: 'First Win', desc: 'Close your first deal.', icon: '🎉', category: 'Pipeline', condition: '1 won deal' },
+  { id: 'five_wins', title: 'Closer', desc: 'Close 5 deals.', icon: '🤜', category: 'Pipeline', condition: '5 won deals' },
+  { id: 'ten_wins', title: 'Deal Captain', desc: 'Close 10 deals.', icon: '⚓', category: 'Pipeline', condition: '10 won deals' },
+  { id: 'twenty_five_wins', title: '25 Deals Won', desc: 'Close 25 deals.', icon: '🏅', category: 'Pipeline', condition: '25 won deals' },
+  { id: 'fifty_wins', title: 'Revenue Engine', desc: 'Close 50 deals.', icon: '🛠️', category: 'Pipeline', condition: '50 won deals' },
+  { id: 'hundred_wins', title: '100 Wins', desc: 'Close 100 deals.', icon: '💯', category: 'Pipeline', condition: '100 won deals' },
+  { id: 'pipeline_10k', title: '$10K Pipeline', desc: 'Build a $10K pipeline.', icon: '🔭', category: 'Pipeline', condition: '$10K pipeline value' },
+  { id: 'pipeline_50k', title: '$50K Pipeline', desc: 'Build a $50K pipeline.', icon: '🏗️', category: 'Pipeline', condition: '$50K pipeline value' },
+  { id: 'pipeline_100k', title: '$100K Pipeline', desc: 'Build a $100K pipeline.', icon: '🗼', category: 'Pipeline', condition: '$100K pipeline value' },
+  { id: 'pipeline_1m', title: '$1M Pipeline', desc: 'Build a $1M pipeline.', icon: '🌆', category: 'Pipeline', condition: '$1M pipeline value' },
 
   // Consistency — 15 badges
-  { id: 'login_streak_3', title: '3-Day Login', desc: 'Open prspectve 3 days in a row.', icon: '', category: 'Consistency', condition: '3-day login streak' },
-  { id: 'login_streak_7', title: '7-Day Login', desc: 'Open prspectve 7 days in a row.', icon: '', category: 'Consistency', condition: '7-day login streak' },
-  { id: 'login_streak_14', title: '14-Day Login', desc: 'Open prspectve 14 days in a row.', icon: '', category: 'Consistency', condition: '14-day login streak' },
-  { id: 'login_streak_30', title: '30-Day Login', desc: 'Open prspectve 30 days in a row.', icon: '', category: 'Consistency', condition: '30-day login streak' },
-  { id: 'login_streak_60', title: '60-Day Login', desc: 'Open prspectve 60 days in a row.', icon: '', category: 'Consistency', condition: '60-day login streak' },
-  { id: 'login_streak_100', title: '100-Day Login', desc: 'Open prspectve 100 days in a row.', icon: '', category: 'Consistency', condition: '100-day login streak' },
-  { id: 'task_streak_3', title: '3-Day Task Streak', desc: 'Complete tasks 3 days in a row.', icon: '', category: 'Consistency', condition: '3-day task streak' },
-  { id: 'task_streak_7', title: '7-Day Task Streak', desc: 'Complete tasks 7 days in a row.', icon: '', category: 'Consistency', condition: '7-day task streak' },
-  { id: 'task_streak_14', title: 'Two Week Operator', desc: 'Complete tasks 14 days in a row.', icon: '', category: 'Consistency', condition: '14-day task streak' },
-  { id: 'task_streak_30', title: 'Monthly Machine', desc: 'Complete tasks 30 days in a row.', icon: '', category: 'Consistency', condition: '30-day task streak' },
-  { id: 'daily_grind_10', title: '10 Tasks Done', desc: 'Complete 10 total tasks.', icon: '', category: 'Consistency', condition: '10 completed tasks' },
-  { id: 'daily_grind_50', title: '50 Tasks Done', desc: 'Complete 50 total tasks.', icon: '', category: 'Consistency', condition: '50 completed tasks' },
-  { id: 'daily_grind_100', title: '100 Tasks Done', desc: 'Complete 100 total tasks.', icon: '', category: 'Consistency', condition: '100 completed tasks' },
-  { id: 'daily_grind_250', title: '250 Tasks Done', desc: 'Complete 250 total tasks.', icon: '', category: 'Consistency', condition: '250 completed tasks' },
-  { id: 'twelve_periods', title: 'Full-Year Logger', desc: 'Log 12 business periods.', icon: '', category: 'Consistency', condition: '12 period entries' },
+  { id: 'login_streak_3', title: '3-Day Login', desc: 'Open prspectve 3 days in a row.', icon: '📆', category: 'Consistency', condition: '3-day login streak' },
+  { id: 'login_streak_7', title: '7-Day Login', desc: 'Open prspectve 7 days in a row.', icon: '🗓️', category: 'Consistency', condition: '7-day login streak' },
+  { id: 'login_streak_14', title: '14-Day Login', desc: 'Open prspectve 14 days in a row.', icon: '📅', category: 'Consistency', condition: '14-day login streak' },
+  { id: 'login_streak_30', title: '30-Day Login', desc: 'Open prspectve 30 days in a row.', icon: '🔥', category: 'Consistency', condition: '30-day login streak' },
+  { id: 'login_streak_60', title: '60-Day Login', desc: 'Open prspectve 60 days in a row.', icon: '⚡', category: 'Consistency', condition: '60-day login streak' },
+  { id: 'login_streak_100', title: '100-Day Login', desc: 'Open prspectve 100 days in a row.', icon: '🌟', category: 'Consistency', condition: '100-day login streak' },
+  { id: 'task_streak_3', title: '3-Day Task Streak', desc: 'Complete tasks 3 days in a row.', icon: '✅', category: 'Consistency', condition: '3-day task streak' },
+  { id: 'task_streak_7', title: '7-Day Task Streak', desc: 'Complete tasks 7 days in a row.', icon: '💪', category: 'Consistency', condition: '7-day task streak' },
+  { id: 'task_streak_14', title: 'Two Week Operator', desc: 'Complete tasks 14 days in a row.', icon: '🎖️', category: 'Consistency', condition: '14-day task streak' },
+  { id: 'task_streak_30', title: 'Monthly Machine', desc: 'Complete tasks 30 days in a row.', icon: '🤖', category: 'Consistency', condition: '30-day task streak' },
+  { id: 'daily_grind_10', title: '10 Tasks Done', desc: 'Complete 10 total tasks.', icon: '☑️', category: 'Consistency', condition: '10 completed tasks' },
+  { id: 'daily_grind_50', title: '50 Tasks Done', desc: 'Complete 50 total tasks.', icon: '🏋️', category: 'Consistency', condition: '50 completed tasks' },
+  { id: 'daily_grind_100', title: '100 Tasks Done', desc: 'Complete 100 total tasks.', icon: '🥇', category: 'Consistency', condition: '100 completed tasks' },
+  { id: 'daily_grind_250', title: '250 Tasks Done', desc: 'Complete 250 total tasks.', icon: '🦾', category: 'Consistency', condition: '250 completed tasks' },
+  { id: 'twelve_periods', title: 'Full-Year Logger', desc: 'Log 12 business periods.', icon: '📓', category: 'Consistency', condition: '12 period entries' },
 
   // Milestones — 15 badges
-  { id: 'workspace_created', title: 'Workspace Born', desc: 'Create your first workspace.', icon: '', category: 'Milestones', condition: 'Create workspace' },
-  { id: 'workspace_second', title: 'Multi-Workspace', desc: 'Create 2 workspaces.', icon: '', category: 'Milestones', condition: '2 workspaces' },
-  { id: 'calendar_entry', title: 'Daily Tracker', desc: 'Log your first daily P&L entry.', icon: '', category: 'Milestones', condition: '1 calendar entry' },
-  { id: 'calendar_10', title: '10 Daily Logs', desc: 'Log 10 daily P&L entries.', icon: '', category: 'Milestones', condition: '10 calendar entries' },
-  { id: 'calendar_30', title: '30 Daily Logs', desc: 'Log 30 daily P&L entries.', icon: '', category: 'Milestones', condition: '30 calendar entries' },
-  { id: 'ai_copilot', title: 'AI Powered', desc: 'Activate your AI operating partner.', icon: '', category: 'Milestones', condition: 'AI enabled' },
-  { id: 'team_first', title: 'First Teammate', desc: 'Add your first team member.', icon: '', category: 'Milestones', condition: '1 team member' },
-  { id: 'team_5', title: 'Squad Builder', desc: 'Build a 5-person team.', icon: '', category: 'Milestones', condition: '5 team members' },
-  { id: 'integration_first', title: 'First Integration', desc: 'Connect your first integration.', icon: '', category: 'Milestones', condition: '1 integration' },
-  { id: 'integration_3', title: 'Connected Stack', desc: 'Connect 3 integrations.', icon: '', category: 'Milestones', condition: '3 integrations' },
-  { id: 'username_set', title: 'Identity Claimed', desc: 'Set your prspectve username.', icon: '', category: 'Milestones', condition: 'Set username' },
-  { id: 'profile_photo', title: 'Profile Ready', desc: 'Add a profile picture.', icon: '', category: 'Milestones', condition: 'Upload avatar' },
-  { id: 'first_report', title: 'CEO Report Opened', desc: 'Open your first CEO report.', icon: '', category: 'Milestones', condition: 'Open reports' },
-  { id: 'notification_action', title: 'Inbox Operator', desc: 'Act on a notification.', icon: '', category: 'Milestones', condition: 'Use notifications' },
-  { id: 'founder_os_ready', title: 'OS Activated', desc: 'Complete the core prspectve setup loop.', icon: '', category: 'Milestones', condition: 'Workspace + task + lead + revenue' },
+  { id: 'workspace_created', title: 'Workspace Born', desc: 'Create your first workspace.', icon: '🏢', category: 'Milestones', condition: 'Create workspace' },
+  { id: 'workspace_second', title: 'Multi-Workspace', desc: 'Create 2 workspaces.', icon: '🏙️', category: 'Milestones', condition: '2 workspaces' },
+  { id: 'calendar_entry', title: 'Daily Tracker', desc: 'Log your first daily P&L entry.', icon: '📋', category: 'Milestones', condition: '1 calendar entry' },
+  { id: 'calendar_10', title: '10 Daily Logs', desc: 'Log 10 daily P&L entries.', icon: '📒', category: 'Milestones', condition: '10 calendar entries' },
+  { id: 'calendar_30', title: '30 Daily Logs', desc: 'Log 30 daily P&L entries.', icon: '📔', category: 'Milestones', condition: '30 calendar entries' },
+  { id: 'ai_copilot', title: 'AI Powered', desc: 'Activate your AI operating partner.', icon: '🤖', category: 'Milestones', condition: 'AI enabled' },
+  { id: 'team_first', title: 'First Teammate', desc: 'Add your first team member.', icon: '🤝', category: 'Milestones', condition: '1 team member' },
+  { id: 'team_5', title: 'Squad Builder', desc: 'Build a 5-person team.', icon: '👥', category: 'Milestones', condition: '5 team members' },
+  { id: 'integration_first', title: 'First Integration', desc: 'Connect your first integration.', icon: '🔌', category: 'Milestones', condition: '1 integration' },
+  { id: 'integration_3', title: 'Connected Stack', desc: 'Connect 3 integrations.', icon: '🔗', category: 'Milestones', condition: '3 integrations' },
+  { id: 'username_set', title: 'Identity Claimed', desc: 'Set your prspectve username.', icon: '🪪', category: 'Milestones', condition: 'Set username' },
+  { id: 'profile_photo', title: 'Profile Ready', desc: 'Add a profile picture.', icon: '🖼️', category: 'Milestones', condition: 'Upload avatar' },
+  { id: 'first_report', title: 'CEO Report Opened', desc: 'Open your first CEO report.', icon: '📊', category: 'Milestones', condition: 'Open reports' },
+  { id: 'notification_action', title: 'Inbox Operator', desc: 'Act on a notification.', icon: '🔔', category: 'Milestones', condition: 'Use notifications' },
+  { id: 'founder_os_ready', title: 'OS Activated', desc: 'Complete the core prspectve setup loop.', icon: '⚡', category: 'Milestones', condition: 'Workspace + task + lead + revenue' },
 ]
 
 const CATEGORIES = ['Revenue', 'Outreach', 'Pipeline', 'Consistency', 'Milestones'] as const
@@ -209,13 +209,13 @@ function RankBadge({ color, label, size = 76, active = true, division = 1 }: { c
   )
 }
 
-function SmallBadge({ color, earned }: { color: string; earned: boolean }) {
+function SmallBadge({ color, earned, icon }: { color: string; earned: boolean; icon?: string }) {
   return (
-    <div style={{ width: 28, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, opacity: earned ? 1 : .55 }}>
-      <svg width="28" height="30" viewBox="0 0 100 110" style={{ filter: earned ? `drop-shadow(0 0 8px ${color}55)` : 'none' }}>
-        <path d="M50 5 L84 19 L77 68 Q70 91 50 104 Q30 91 23 68 L16 19 Z" fill={earned ? `${color}22` : 'rgba(255,255,255,.04)'} stroke={earned ? color : 'rgba(255,255,255,.24)'} strokeWidth="6" />
-        <path d="M50 29 L58 44 L75 46 L62 58 L66 76 L50 66 L34 76 L38 58 L25 46 L42 44 Z" fill={earned ? color : 'rgba(255,255,255,.16)'} stroke="rgba(255,255,255,.42)" strokeWidth="3" />
+    <div style={{ width: 32, height: 32, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, opacity: earned ? 1 : .45 }}>
+      <svg width="32" height="32" viewBox="0 0 100 110" style={{ position: 'absolute', inset: 0, filter: earned ? `drop-shadow(0 0 8px ${color}55)` : 'none' }}>
+        <path d="M50 5 L84 19 L77 68 Q70 91 50 104 Q30 91 23 68 L16 19 Z" fill={earned ? `${color}28` : 'rgba(255,255,255,.04)'} stroke={earned ? color : 'rgba(255,255,255,.22)'} strokeWidth="6" />
       </svg>
+      <span style={{ position: 'relative', fontSize: 13, lineHeight: 1, userSelect: 'none', filter: earned ? 'none' : 'grayscale(1)' }}>{icon || '🏆'}</span>
     </div>
   )
 }
@@ -258,7 +258,7 @@ export default async function AchievementsPage() {
     supabase.from('workspaces').select('*', { count: 'exact', head: true }).eq('owner_id', user.id),
     supabase.from('team_members').select('*', { count: 'exact', head: true }).eq('user_id', user.id),
     supabase.from('integration_connections').select('*', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'connected'),
-    supabase.from('profiles').select('username, avatar_url').eq('id', user.id).maybeSingle(),
+    supabase.from('user_profiles').select('username, avatar_url').eq('user_id', user.id).maybeSingle(),
   ])
 
   const totalXp = (gamRow as any)?.total_xp ?? 0
@@ -480,7 +480,7 @@ export default async function AchievementsPage() {
 
   const scoreCards = [
     { label: 'Revenue Score', val: revScore, max: 25, Icon: DollarSign },
-    { label: 'Outreach Score', val: marginScore, max: 20, Icon: Send },
+    { label: 'Margin Score', val: marginScore, max: 20, Icon: BarChart2 },
     { label: 'Pipeline Score', val: pipeScore, max: 20, Icon: Users },
     { label: 'Streak Score', val: consistScore, max: 20, Icon: Flame },
     { label: 'Badge Score', val: achScore, max: 15, Icon: Medal },
@@ -491,11 +491,16 @@ export default async function AchievementsPage() {
   }
 
   const badgeSub: Record<string, string> = {
-    first_dollar: 'Common · +50 XP', profitable: 'Common · +50 XP', five_k: 'Rare', ten_k: 'Epic', fifty_k: 'Legendary', hundred_k: 'Legendary', million_logged: 'Legendary',
-    first_dm: 'Common · +50 XP', ten_dms: 'Uncommon', twenty_five_dms: 'Rare', outreach_machine: 'Epic', hundred_dms: 'Epic', two_fifty_dms: 'Legendary',
-    first_lead: 'Common · +50 XP', ten_leads: 'Uncommon', twenty_five_leads: 'Rare', fifty_leads: 'Epic', first_win: 'Uncommon', five_wins: 'Rare', ten_wins: 'Epic', twenty_five_wins: 'Legendary', fifty_wins: 'Legendary',
-    three_periods: 'Uncommon', six_periods: 'Rare', twelve_periods: 'Epic', task_streak_7: 'Rare', login_streak_3: 'Uncommon', login_streak_7: 'Rare', login_streak_30: 'Epic', login_streak_100: 'Legendary', task_streak_14: 'Epic', task_streak_30: 'Legendary', daily_grind_50: 'Epic', daily_grind_100: 'Legendary',
-    workspace_created: 'Common · +50 XP', ai_copilot: 'Common · +50 XP', calendar_entry: 'Common', workspace_invite: 'Uncommon', workspace_switcher: 'Rare', integration_requested: 'Uncommon',
+    // Revenue
+    first_dollar: 'Common · +50 XP', profitable: 'Common · +50 XP', revenue_1k: 'Common', five_k: 'Uncommon', ten_k: 'Rare', revenue_25k: 'Rare', fifty_k: 'Epic', hundred_k: 'Legendary', profit_10k: 'Uncommon', profit_50k: 'Epic', margin_50: 'Rare', three_profit_periods: 'Uncommon', total_100k: 'Rare', total_500k: 'Epic', million_logged: 'Legendary',
+    // Outreach
+    first_dm: 'Common · +50 XP', five_dms: 'Common', ten_dms: 'Uncommon', twenty_five_dms: 'Uncommon', outreach_machine: 'Rare', hundred_dms: 'Rare', two_fifty_dms: 'Epic', outreach_500: 'Epic', outreach_1000: 'Legendary', contacted_5: 'Common', contacted_25: 'Uncommon', qualified_10: 'Rare', proposal_10: 'Uncommon', proposal_25: 'Rare', pipeline_velocity: 'Rare',
+    // Pipeline
+    first_lead: 'Common · +50 XP', ten_leads: 'Common', twenty_five_leads: 'Uncommon', fifty_leads: 'Rare', hundred_leads: 'Epic', first_win: 'Uncommon · +50 XP', five_wins: 'Rare', ten_wins: 'Epic', twenty_five_wins: 'Epic', fifty_wins: 'Legendary', hundred_wins: 'Legendary', pipeline_10k: 'Uncommon', pipeline_50k: 'Rare', pipeline_100k: 'Epic', pipeline_1m: 'Legendary',
+    // Consistency
+    login_streak_3: 'Common', login_streak_7: 'Uncommon', login_streak_14: 'Rare', login_streak_30: 'Rare', login_streak_60: 'Epic', login_streak_100: 'Legendary', task_streak_3: 'Common', task_streak_7: 'Uncommon', task_streak_14: 'Rare', task_streak_30: 'Epic', daily_grind_10: 'Common', daily_grind_50: 'Uncommon', daily_grind_100: 'Rare', daily_grind_250: 'Epic', twelve_periods: 'Rare',
+    // Milestones
+    workspace_created: 'Common · +50 XP', workspace_second: 'Uncommon', calendar_entry: 'Common · +50 XP', calendar_10: 'Uncommon', calendar_30: 'Rare', ai_copilot: 'Common · +50 XP', team_first: 'Uncommon', team_5: 'Rare', integration_first: 'Uncommon', integration_3: 'Rare', username_set: 'Common · +50 XP', profile_photo: 'Common · +50 XP', first_report: 'Common', notification_action: 'Common', founder_os_ready: 'Epic',
   }
 
   const displayName = (user.user_metadata?.full_name as string) || user.email?.split('@')[0] || 'Akhil'
@@ -674,7 +679,7 @@ export default async function AchievementsPage() {
                       const rarityColor = sub.includes('Legendary') ? '#f6c343' : sub.includes('Epic') ? '#bf5af2' : sub.includes('Rare') ? '#3b82f6' : 'var(--accent)'
                       return (
                         <div key={a.id} className="achievement-hover-row flex items-center gap-2 px-3 py-1.5" style={{ borderTop: '1px solid rgba(255,255,255,.04)', borderLeft: '1px solid transparent', cursor: 'default' }} title={`${a.title}: ${sub}` }>
-                          <SmallBadge color={rarityColor} earned={isEarned} />
+                          <SmallBadge color={rarityColor} earned={isEarned} icon={a.icon} />
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 min-w-0">
                               <p className="truncate" style={{ fontSize: 11, fontWeight: 700, color: isEarned ? '#fff' : 'rgba(255,255,255,.62)' }}>{a.title}</p>

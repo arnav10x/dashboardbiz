@@ -1,6 +1,6 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { Plus, User, Briefcase, Trash2 } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Plus, User, Briefcase, Trash2, LogOut, Settings } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -97,6 +97,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
   const [username, setUsername] = useState('')
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     if (!showGreeting && !userName) return
@@ -118,7 +119,16 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
   const handleSignOut = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/login')
+    router.push('/')
+  }
+
+  const handleProfileEnter = () => {
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current)
+    setProfileOpen(true)
+  }
+
+  const handleProfileLeave = () => {
+    closeTimerRef.current = setTimeout(() => setProfileOpen(false), 200)
   }
 
   const displayName = fetchedName || userName || ''
@@ -168,17 +178,48 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
           )
         )}
 
-        <div className="relative" onMouseEnter={() => setProfileOpen(true)} onMouseLeave={() => setProfileOpen(false)}>
+        <div className="relative" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave}>
           <button onClick={() => setProfileOpen(o => !o)} style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             {avatarUrl ? <img src={avatarUrl} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User style={{ width: 13, height: 13, color: 'var(--text-muted)' }} />}
           </button>
-          {profileOpen && <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-strong)', boxShadow: '0 22px 60px rgba(0,0,0,.5)' }}>
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full overflow-hidden grid place-items-center" style={{ background: 'var(--accent)', color: '#041008' }}>{avatarUrl ? <img src={avatarUrl} alt="profile" className="h-full w-full object-cover" /> : <span className="font-black">{(displayName || 'F').slice(0,1).toUpperCase()}</span>}</div>
-              <div className="min-w-0"><p className="font-black truncate">{displayName || 'Founder'}</p><p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{username ? `@${username}` : 'No username set'}</p></div>
+          {profileOpen && (
+            <div
+              className="absolute right-0 top-full z-50 w-64 rounded-2xl"
+              style={{ paddingTop: 8 }}
+              onMouseEnter={handleProfileEnter}
+              onMouseLeave={handleProfileLeave}
+            >
+              <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-strong)', boxShadow: '0 22px 60px rgba(0,0,0,.5)' }}>
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 rounded-full overflow-hidden grid place-items-center flex-shrink-0" style={{ background: 'var(--accent)', color: '#041008' }}>
+                    {avatarUrl ? <img src={avatarUrl} alt="profile" className="h-full w-full object-cover" /> : <span className="font-black">{(displayName || 'F').slice(0,1).toUpperCase()}</span>}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-black truncate" style={{ color: 'var(--text-primary)' }}>{displayName || 'Founder'}</p>
+                    <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{username ? `@${username}` : 'No username set'}</p>
+                  </div>
+                </div>
+                <div className="mt-3 space-y-1">
+                  <Link
+                    href="/dashboard/settings"
+                    className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors hover:bg-white/[.05]"
+                    style={{ color: 'var(--text-secondary)', border: '1px solid var(--border)' }}
+                  >
+                    <Settings className="h-3.5 w-3.5 flex-shrink-0" />
+                    Profile settings
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold transition-colors hover:bg-red-500/10"
+                    style={{ color: '#f43f5e', border: '1px solid rgba(244,63,94,.2)' }}
+                  >
+                    <LogOut className="h-3.5 w-3.5 flex-shrink-0" />
+                    Sign out
+                  </button>
+                </div>
+              </div>
             </div>
-            <Link href="/dashboard/settings" className="mt-3 block rounded-lg px-3 py-2 text-xs font-bold hover:bg-white/[.05]" style={{ border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>Open profile settings</Link>
-          </div>}
+          )}
         </div>
       </div>
     </div>

@@ -286,7 +286,16 @@ export default function SettingsPage() {
   }
 
   const applyTheme = (theme: string) => {
-    if (theme === 'light') {
+    if (theme === 'auto') {
+      const h = new Date().getHours()
+      const resolved = h >= 6 && h < 20 ? 'light' : 'dark'
+      if (resolved === 'light') {
+        document.documentElement.classList.add('theme-light')
+      } else {
+        document.documentElement.classList.remove('theme-light')
+      }
+      localStorage.setItem('strata-theme', 'auto')
+    } else if (theme === 'light') {
       document.documentElement.classList.add('theme-light')
       localStorage.setItem('strata-theme', 'light')
     } else {
@@ -645,7 +654,7 @@ export default function SettingsPage() {
                 <div className="p-5" style={{ borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                   <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>Theme</p>
                   <p className="text-xs mb-4" style={{ color: 'var(--text-muted)' }}>Choose your base theme. Color scheme applies on top.</p>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     <button
                       onClick={() => { setAppearance(a => ({ ...a, theme: 'dark' })); applyTheme('dark') }}
                       className="p-3 text-left transition-all"
@@ -661,8 +670,19 @@ export default function SettingsPage() {
                       style={{ borderRadius: 7, border: `2px solid ${appearance.theme === 'light' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-raised)' }}
                     >
                       <div className="h-10 rounded-lg mb-2" style={{ background: '#f0f2f5', border: '1px solid rgba(0,0,0,0.08)' }} />
-                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Light (default)</p>
+                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Light</p>
                       <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>Clean, airy, and bright.</p>
+                    </button>
+                    <button
+                      onClick={() => { setAppearance(a => ({ ...a, theme: 'auto' })); applyTheme('auto') }}
+                      className="p-3 text-left transition-all"
+                      style={{ borderRadius: 7, border: `2px solid ${appearance.theme === 'auto' ? 'var(--accent)' : 'var(--border)'}`, background: 'var(--bg-raised)' }}
+                    >
+                      <div className="h-10 rounded-lg mb-2 overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+                        <div className="h-full w-full" style={{ background: 'linear-gradient(90deg, #0b0d12 50%, #f0f2f5 50%)' }} />
+                      </div>
+                      <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>Auto</p>
+                      <p className="text-[10px]" style={{ color: 'var(--text-muted)' }}>Light 6am–8pm, dark at night.</p>
                     </button>
                   </div>
                 </div>
@@ -698,25 +718,6 @@ export default function SettingsPage() {
                     >
                       Reset
                     </button>
-                  </div>
-                </div>
-
-                <div className="p-5" style={{ borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
-                  <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>Secondary / Success Color</p>
-                  <p className="text-xs mb-3" style={{ color: 'var(--text-muted)' }}>Used for positive metrics, growth indicators, and success states.</p>
-                  <div className="grid grid-cols-8 gap-2">
-                    {SECONDARY_COLORS.map(c => (
-                      <button
-                        key={c}
-                        onClick={() => setAppearance(a => ({ ...a, secondaryColor: c }))}
-                        className="h-10 rounded-lg transition-transform hover:scale-110"
-                        style={{
-                          background: c,
-                          border: appearance.secondaryColor === c ? '2px solid white' : '2px solid transparent',
-                          outline: appearance.secondaryColor === c ? `2px solid ${c}` : 'none',
-                        }}
-                      />
-                    ))}
                   </div>
                 </div>
 

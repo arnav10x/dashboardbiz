@@ -7,10 +7,16 @@ export function ThemeLoader() {
     const apply = async () => {
       // Apply from localStorage instantly; default to light if no preference set
       const cached = localStorage.getItem('strata-theme')
-      if (cached === 'dark') {
+      const resolveInstant = (theme: string | null) => {
+        if (theme === 'auto') {
+          const h = new Date().getHours()
+          return h >= 6 && h < 20 ? 'light' : 'dark'
+        }
+        return theme === 'dark' ? 'dark' : 'light'
+      }
+      if (resolveInstant(cached) === 'dark') {
         document.documentElement.classList.remove('theme-light')
       } else {
-        // First visit or explicit light → apply light
         document.documentElement.classList.add('theme-light')
       }
 
@@ -25,12 +31,21 @@ export function ThemeLoader() {
         .eq('user_id', user.id)
         .maybeSingle()
 
-      if (data?.theme === 'dark') {
+      const resolveTheme = (theme: string | null) => {
+        if (theme === 'auto') {
+          const h = new Date().getHours()
+          return h >= 6 && h < 20 ? 'light' : 'dark'
+        }
+        return theme === 'dark' ? 'dark' : 'light'
+      }
+
+      const resolved = resolveTheme(data?.theme ?? null)
+      if (resolved === 'dark') {
         document.documentElement.classList.remove('theme-light')
-        localStorage.setItem('strata-theme', 'dark')
+        localStorage.setItem('strata-theme', data?.theme === 'auto' ? 'auto' : 'dark')
       } else {
         document.documentElement.classList.add('theme-light')
-        localStorage.setItem('strata-theme', 'light')
+        localStorage.setItem('strata-theme', data?.theme === 'auto' ? 'auto' : 'light')
       }
 
       // Restore saved accent color + derived opacity variants

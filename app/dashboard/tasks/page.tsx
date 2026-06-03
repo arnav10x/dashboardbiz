@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
 import { createClient } from '@/lib/supabase/client'
-import { Check, Plus, X, Flame, Sparkles, RefreshCw, Trash2, ChevronRight } from 'lucide-react'
+import { Check, Plus, X, Flame, Sparkles, RefreshCw, Trash2, ChevronRight, Pencil } from 'lucide-react'
 
 type Priority = 'High' | 'Medium' | 'Low'
 
@@ -61,7 +61,7 @@ function card(extra: React.CSSProperties = {}): React.CSSProperties {
   }
 }
 
-function TaskRow({ task, onToggle, onRemove }: { task: Task; onToggle: (t: Task) => void; onRemove: (t: Task) => void }) {
+function TaskRow({ task, onToggle, onRemove, onEdit }: { task: Task; onToggle: (t: Task) => void; onRemove: (t: Task) => void; onEdit: (t: Task) => void }) {
   const pr = getPriority(task)
   return (
     <div className="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-white/[.025]"
@@ -93,6 +93,12 @@ function TaskRow({ task, onToggle, onRemove }: { task: Task; onToggle: (t: Task)
         </span>
       )}
       <button
+        onClick={() => onEdit(task)}
+        className="flex-shrink-0 rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/5"
+      >
+        <Pencil className="h-3.5 w-3.5" style={{ color: 'var(--text-muted)' }} />
+      </button>
+      <button
         onClick={() => onRemove(task)}
         className="flex-shrink-0 rounded-lg p-1.5 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-white/5"
       >
@@ -102,9 +108,9 @@ function TaskRow({ task, onToggle, onRemove }: { task: Task; onToggle: (t: Task)
   )
 }
 
-function PrioritySection({ label, tasks, priority, onToggle, onRemove }: {
+function PrioritySection({ label, tasks, priority, onToggle, onRemove, onEdit }: {
   label: string; tasks: Task[]; priority: Priority;
-  onToggle: (t: Task) => void; onRemove: (t: Task) => void
+  onToggle: (t: Task) => void; onRemove: (t: Task) => void; onEdit: (t: Task) => void
 }) {
   if (!tasks.length) return null
   const m = priorityMeta[priority]
@@ -117,7 +123,7 @@ function PrioritySection({ label, tasks, priority, onToggle, onRemove }: {
           style={{ background: m.bg, color: m.color }}>{tasks.length}</span>
       </div>
       <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
-        {tasks.map(t => <TaskRow key={t.id} task={t} onToggle={onToggle} onRemove={onRemove} />)}
+        {tasks.map(t => <TaskRow key={t.id} task={t} onToggle={onToggle} onRemove={onRemove} onEdit={onEdit} />)}
       </div>
     </div>
   )
@@ -192,6 +198,67 @@ function AddTaskModal({ onClose, onAdd }: {
   )
 }
 
+function EditTaskModal({ task, onClose, onSave }: {
+  task: Task
+  onClose: () => void
+  onSave: (id: string, title: string, notes: string, priority: Priority) => Promise<void>
+}) {
+  const [title, setTitle]       = useState(task.title)
+  const [notes, setNotes]       = useState(task.notes || '')
+  const [priority, setPriority] = useState<Priority>(getPriority(task))
+  const [saving, setSaving]     = useState(false)
+
+  const save = async () => {
+    if (!title.trim()) return
+    setSaving(true)
+    await onSave(task.id, title.trim(), notes.trim(), priority)
+    setSaving(false)
+    onClose()
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(0,0,0,.78)' }}
+      onClick={e => e.currentTarget === e.target && onClose()}>
+      <div className="w-full max-w-md p-5" style={card({ background: 'var(--modal-bg)', borderRadius: 20 })}>
+        <div className="mb-5 flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-black">Edit Task</h3>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Update the task details below.</p>
+          </div>
+          <button onClick={onClose} className="rounded-lg p-2 hover:bg-white/5"><X className="h-4 w-4" /></button>
+        </div>
+        <div className="space-y-3">
+          <input className="input-base" value={title} onChange={e => setTitle(e.target.value)}
+            placeholder="Task name" autoFocus onKeyDown={e => e.key === 'Enter' && save()} />
+          <input className="input-base" value={notes} onChange={e => setNotes(e.target.value)}
+            placeholder="Category or notes (optional)" />
+          <div className="grid grid-cols-3 gap-2">
+            {(['High', 'Medium', 'Low'] as Priority[]).map(p => (
+              <button key={p} onClick={() => setPriority(p)} className="py-2 text-xs font-bold"
+                style={{
+                  borderRadius: 9,
+                  border: `1px solid ${priority === p ? priorityMeta[p].color : 'var(--glass-border)'}`,
+                  background: priority === p ? priorityMeta[p].bg : 'var(--overlay-micro)',
+                  color: priorityMeta[p].color,
+                }}>{p}</button>
+            ))}
+          </div>
+        </div>
+        <div className="mt-5 flex gap-2">
+          <button onClick={onClose} className="flex-1 rounded-xl py-2 text-xs font-bold"
+            style={{ background: 'var(--overlay-faint)', border: '1px solid var(--glass-border)' }}>Cancel</button>
+          <button onClick={save} disabled={saving || !title.trim()}
+            className="flex-1 rounded-xl py-2 text-xs font-black disabled:opacity-50"
+            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008' }}>
+            {saving ? 'Saving…' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 export default function TasksPage() {
@@ -199,6 +266,7 @@ export default function TasksPage() {
   const [workspaceName, setWorkspaceName] = useState('Founder OS')
   const [loading, setLoading]           = useState(true)
   const [modalOpen, setModalOpen]       = useState(false)
+  const [editingTask, setEditingTask]   = useState<Task | null>(null)
   const [completedOpen, setCompletedOpen] = useState(false)
   const [suggestionIndex, setSuggestionIndex] = useState(0)
 
@@ -257,6 +325,12 @@ export default function TasksPage() {
     setTasks(prev => prev.filter(t => t.id !== task.id))
     const supabase = createClient()
     await supabase.from('tasks').delete().eq('id', task.id)
+  }
+
+  const editTask = async (id: string, title: string, notes: string, priority: Priority) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, title, notes, priority: priority.toLowerCase() } : t))
+    const supabase = createClient()
+    await supabase.from('tasks').update({ title, notes, priority: priority.toLowerCase() }).eq('id', id)
   }
 
   const todayLabel = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
@@ -340,9 +414,9 @@ export default function TasksPage() {
 
           {/* Left — task list ────────────────────────────────────── */}
           <div className="space-y-3">
-            <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} />
-            <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} />
-            <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} />
+            <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
+            <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
+            <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
 
             {openTasks.length === 0 && !loading && (
               <div className="rounded-2xl px-6 py-14 text-center"
@@ -378,7 +452,7 @@ export default function TasksPage() {
                 </button>
                 {completedOpen && (
                   <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
-                    {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={removeTask} />)}
+                    {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />)}
                   </div>
                 )}
               </div>
@@ -467,6 +541,7 @@ export default function TasksPage() {
       </div>
 
       {modalOpen && <AddTaskModal onClose={() => setModalOpen(false)} onAdd={addTask} />}
+      {editingTask && <EditTaskModal task={editingTask} onClose={() => setEditingTask(null)} onSave={editTask} />}
     </div>
   )
 }

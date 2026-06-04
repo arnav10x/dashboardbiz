@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
 import { createClient } from '@/lib/supabase/client'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Download, MoreVertical, Plus, RefreshCw, Settings, X } from 'lucide-react'
+import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Download, Info, Plus, X } from 'lucide-react'
 
 type DayEntry = { date: string; revenue: number; expenses: number; notes?: string | null }
 type CalEvent = { id: string; title: string; description?: string | null; event_date: string; start_time?: string | null; end_time?: string | null; all_day: boolean; color: string; source?: string | null }
@@ -33,7 +33,6 @@ export default function CalendarPage() {
   const [events, setEvents] = useState<CalEvent[]>([])
   const [scheduleEvents, setScheduleEvents] = useState<CalEvent[]>([])
   const [workspaceName, setWorkspaceName] = useState('Founder OS')
-  const [googleConnected, setGoogleConnected] = useState(false)
   const [plModal, setPLModal] = useState<PLModal | null>(null)
   const [eventModal, setEventModal] = useState<EventModal | null>(null)
   const [saving, setSaving] = useState(false)
@@ -46,18 +45,16 @@ export default function CalendarPage() {
     if (!user) return
     const start = `${year}-${String(month + 1).padStart(2, '0')}-01`
     const end = dateKey(new Date(year, month + 1, 0))
-    const [{ data: ws }, { data: cal }, { data: evts }, { data: settings }] = await Promise.all([
+    const [{ data: ws }, { data: cal }, { data: evts }] = await Promise.all([
       supabase.from('workspaces').select('name').eq('owner_id', user.id).maybeSingle(),
       supabase.from('cal_entries').select('entry_date,revenue,expenses,notes').eq('user_id', user.id).gte('entry_date', start).lte('entry_date', end),
       supabase.from('calendar_events').select('*').eq('user_id', user.id).gte('event_date', start).lte('event_date', end),
-      supabase.from('user_settings').select('google_cal_connected').eq('user_id', user.id).maybeSingle(),
     ])
     if (ws?.name) setWorkspaceName(ws.name)
     const next: Record<string, DayEntry> = {}
     ;(cal || []).forEach((r: any) => { next[r.entry_date] = { date: r.entry_date, revenue: Number(r.revenue) || 0, expenses: Number(r.expenses) || 0, notes: r.notes } })
     setEntries(next)
     setEvents((evts || []) as CalEvent[])
-    setGoogleConnected(!!settings?.google_cal_connected)
   }, [year, month])
 
   const loadSchedule = useCallback(async () => {
@@ -67,12 +64,8 @@ export default function CalendarPage() {
     const w = weekDates(weekOffset)
     const start = scheduleView === 'Month' ? `${year}-${String(month + 1).padStart(2, '0')}-01` : dateKey(w[0])
     const end = scheduleView === 'Month' ? dateKey(new Date(year, month + 1, 0)) : dateKey(w[6])
-    const [{ data: evts }, { data: settings }] = await Promise.all([
-      supabase.from('calendar_events').select('*').eq('user_id', user.id).gte('event_date', start).lte('event_date', end),
-      supabase.from('user_settings').select('google_cal_connected').eq('user_id', user.id).maybeSingle(),
-    ])
+    const { data: evts } = await supabase.from('calendar_events').select('*').eq('user_id', user.id).gte('event_date', start).lte('event_date', end)
     setScheduleEvents((evts || []) as CalEvent[])
-    setGoogleConnected(!!settings?.google_cal_connected)
   }, [weekOffset, scheduleView, year, month])
 
   useEffect(() => { loadPL() }, [loadPL])
@@ -110,8 +103,6 @@ export default function CalendarPage() {
 
   const openPL = (d: number) => { const k = keyFor(d); const e = entries[k]; setPLModal({ date: k, revenue: e ? String(e.revenue) : '', expenses: e ? String(e.expenses) : '', notes: e?.notes || '' }) }
   const openEvent = (date: string, ev?: CalEvent) => setEventModal({ id: ev?.id, date, title: ev?.title || '', description: ev?.description || '', start_time: ev?.start_time?.slice(0,5) || '', end_time: ev?.end_time?.slice(0,5) || '', all_day: ev?.all_day ?? false, color: ev?.color || '#23c767' })
-  const connectGoogle = () => { window.location.href = '/api/auth/google-calendar' }
-
   const savePL = async () => {
     if (!plModal) return
     setSaving(true)
@@ -206,8 +197,21 @@ export default function CalendarPage() {
             </div>}
             <div className="mt-3 flex gap-4 text-xs" style={{ color: 'var(--text-secondary)' }}>{['Meeting','Call','Focus Time','Sales','Personal','Learning','Marketing'].map((l, i) => <span key={l} className="flex items-center gap-2"><i className="h-2 w-2 rounded-full" style={{ background: EVENT_COLORS[i] }} />{l}</span>)}</div>
             <div className="mt-5 grid gap-4 xl:grid-cols-[.9fr_1.6fr]">
-              <div className="p-5" style={panel()}><div className="mb-4 flex justify-between"><h3 className="font-black">Connected Calendars</h3><Settings className="h-4 w-4" /></div><div className="mb-3 flex items-center gap-3"><div className="grid h-9 w-9 place-items-center rounded-lg bg-white text-black font-black">G</div><div className="flex-1"><p className="font-bold">Google Calendar</p><p className="text-xs" style={{ color: 'var(--text-muted)' }}>{googleConnected ? 'Connected to your account' : 'Connect to sync real events'}</p></div><button onClick={connectGoogle} className="rounded-lg px-3 py-1 text-xs font-bold" style={{ background: googleConnected ? 'var(--accent-muted)' : 'var(--overlay-faint)', color: googleConnected ? 'var(--accent)' : 'var(--text-secondary)', border: '1px solid var(--divider)' }}>{googleConnected ? 'Connected' : 'Connect'}</button><MoreVertical className="h-4 w-4" /></div><button onClick={connectGoogle} className="mt-1 flex items-center gap-2 text-sm font-bold" style={{ color: 'var(--accent)' }}><Plus className="h-4 w-4" /> Connect calendar</button></div>
-              <div className="p-5" style={panel()}><div className="mb-4 flex justify-between"><h3 className="font-black">Upcoming Events</h3><button onClick={()=>setScheduleView('Agenda')} className="text-sm font-bold" style={{ color: 'var(--accent)' }}>View full agenda →</button></div>{displayEvents.filter(e=>!e.all_day).slice(0,5).length ? displayEvents.filter(e=>!e.all_day).slice(0,5).map(e=><button key={e.id} onClick={()=>openEvent(e.event_date,e)} className="mb-3 flex w-full items-center gap-3 text-left"><div className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: `${e.color}20`, color: e.color }}><CalendarDays className="h-4 w-4" /></div><p className="flex-1 font-bold">{e.title}</p><span className="text-sm" style={{ color: 'var(--text-muted)' }}>{e.start_time?.slice(0,5)} – {e.end_time?.slice(0,5)}</span><span className="rounded-md px-2 py-1 text-xs" style={{ color: e.color, background: `${e.color}18` }}>Event</span></button>) : <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No upcoming events yet. Click Add Event or double-click a calendar slot to create one.</p>}</div>
+              <div className="p-5" style={panel()}>
+                <div className="mb-3 flex items-center gap-2">
+                  <Info className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--accent)' }} />
+                  <h3 className="font-black">How to add events</h3>
+                </div>
+                <div className="space-y-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  <p><strong style={{ color: 'var(--text-primary)' }}>Double-click</strong> any time slot or day cell to create an event.</p>
+                  <p><strong style={{ color: 'var(--text-primary)' }}>Click an existing event</strong> to edit or delete it.</p>
+                  <p><strong style={{ color: 'var(--text-primary)' }}>All-day events</strong> appear in the top row of the week view.</p>
+                </div>
+                <div className="mt-4 rounded-lg px-3 py-2 text-xs" style={{ background: 'var(--accent-faint)', border: '1px solid var(--accent-ring)', color: 'var(--accent)' }}>
+                  Google Calendar sync coming soon
+                </div>
+              </div>
+              <div className="p-5" style={panel()}><div className="mb-4 flex justify-between"><h3 className="font-black">Upcoming Events</h3><button onClick={()=>setScheduleView('Agenda')} className="text-sm font-bold" style={{ color: 'var(--accent)' }}>View full agenda →</button></div>{displayEvents.filter(e=>!e.all_day).slice(0,5).length ? displayEvents.filter(e=>!e.all_day).slice(0,5).map(e=><button key={e.id} onClick={()=>openEvent(e.event_date,e)} className="mb-3 flex w-full items-center gap-3 text-left"><div className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: `${e.color}20`, color: e.color }}><CalendarDays className="h-4 w-4" /></div><p className="flex-1 font-bold">{e.title}</p><span className="text-sm" style={{ color: 'var(--text-muted)' }}>{e.start_time?.slice(0,5)} – {e.end_time?.slice(0,5)}</span><span className="rounded-md px-2 py-1 text-xs" style={{ color: e.color, background: `${e.color}18` }}>Event</span></button>) : <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No upcoming events yet. Double-click any time slot in the week view to create one.</p>}</div>
             </div>
           </>
         ) : (

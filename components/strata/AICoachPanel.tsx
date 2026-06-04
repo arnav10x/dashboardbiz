@@ -1,15 +1,9 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Send, RefreshCw, TrendingUp, TrendingDown, Minus, ExternalLink } from 'lucide-react'
+import { Send, RefreshCw, TrendingUp, ExternalLink, ChevronRight, ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
-
-interface Insight {
-  type: 'up' | 'down' | 'neutral' | 'focus' | 'fix'
-  label?: string
-  text: string
-  num?: number
-}
 
 function generateInsights(data: {
   revenue: number; prevRevenue: number; expenses: number
@@ -80,6 +74,8 @@ interface AICoachPanelProps {
 }
 
 export function AICoachPanel({ userName }: AICoachPanelProps) {
+  const pathname = usePathname()
+  const [collapsed, setCollapsed] = useState(false)
   const [insights, setInsights] = useState<ReturnType<typeof generateInsights> | null>(null)
   const [loading, setLoading] = useState(true)
   const [messages, setMessages] = useState<ChatMessage[]>([])
@@ -87,6 +83,26 @@ export function AICoachPanel({ userName }: AICoachPanelProps) {
   const [sending, setSending] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Init collapsed state from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('ai-panel-collapsed')
+    setCollapsed(saved === 'true')
+  }, [])
+
+  // Auto-collapse when on the AI Coach page
+  useEffect(() => {
+    if (pathname === '/dashboard/ai-copilot') {
+      setCollapsed(true)
+      localStorage.setItem('ai-panel-collapsed', 'true')
+    }
+  }, [pathname])
+
+  const toggleCollapsed = () => {
+    const next = !collapsed
+    setCollapsed(next)
+    localStorage.setItem('ai-panel-collapsed', String(next))
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -144,6 +160,33 @@ export function AICoachPanel({ userName }: AICoachPanelProps) {
     setSending(false)
   }
 
+  // Collapsed state — slim strip with toggle
+  if (collapsed) {
+    return (
+      <div
+        className="hidden lg:flex flex-col h-screen flex-shrink-0 items-center"
+        style={{ width: 36, borderLeft: '1px solid var(--border)', background: 'var(--bg-base)', paddingTop: 12, gap: 10 }}
+      >
+        <button
+          onClick={toggleCollapsed}
+          title="Open AI Coach"
+          className="flex items-center justify-center rounded-md hover:bg-white/[.06] transition-colors"
+          style={{ width: 28, height: 28, color: 'var(--text-muted)', border: '1px solid var(--border)', background: 'var(--bg-card)', cursor: 'pointer', flexShrink: 0 }}
+        >
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </button>
+        <span
+          style={{
+            fontSize: 10, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase',
+            letterSpacing: '0.1em', writingMode: 'vertical-lr', transform: 'rotate(180deg)', opacity: 0.5,
+          }}
+        >
+          AI Coach
+        </span>
+      </div>
+    )
+  }
+
   return (
     <div
       className="hidden lg:flex flex-col h-screen flex-shrink-0 overflow-hidden"
@@ -171,6 +214,14 @@ export function AICoachPanel({ userName }: AICoachPanelProps) {
             style={{ color: 'var(--text-muted)' }}>
             <ExternalLink className="h-3 w-3" />
           </Link>
+          <button
+            onClick={toggleCollapsed}
+            title="Collapse AI Coach"
+            className="h-6 w-6 flex items-center justify-center rounded-md hover:bg-white/[0.05]"
+            style={{ color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            <ChevronRight className="h-3 w-3" />
+          </button>
         </div>
       </div>
 
@@ -182,18 +233,13 @@ export function AICoachPanel({ userName }: AICoachPanelProps) {
           </div>
         ) : insights ? (
           <>
-            {/* Main insight */}
             <div style={{ padding: '10px 12px', borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
               <p style={{ fontSize: 11, lineHeight: 1.6, color: 'var(--text-secondary)' }}>{insights.main}</p>
             </div>
-
-            {/* Primary focus */}
             <div style={{ padding: '10px 12px', borderRadius: 8, background: 'rgba(251,191,36,0.07)', border: '1px solid rgba(251,191,36,0.18)' }}>
               <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#fbbf24', marginBottom: 4 }}>Primary Focus</p>
               <p style={{ fontSize: 11, fontWeight: 600, lineHeight: 1.5, color: '#fbbf24' }}>{insights.focus}</p>
             </div>
-
-            {/* Numbered fixes */}
             {insights.fixes.map((fix, i) => (
               <div key={i} style={{ padding: '10px 12px', borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>

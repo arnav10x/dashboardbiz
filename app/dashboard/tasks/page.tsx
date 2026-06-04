@@ -275,9 +275,18 @@ export default function TasksPage() {
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { setLoading(false); return }
+    const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+    // Delete stale completed tasks server-side (fire and forget)
+    supabase.from('tasks').delete()
+      .eq('user_id', user.id)
+      .eq('is_completed', true)
+      .lt('completed_at', threeDaysAgo)
+      .then(() => {})
     const [{ data: ws }, { data }] = await Promise.all([
       supabase.from('workspaces').select('name').eq('owner_id', user.id).maybeSingle(),
-      supabase.from('tasks').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
+      supabase.from('tasks').select('*').eq('user_id', user.id)
+        .or(`is_completed.eq.false,completed_at.gte.${threeDaysAgo}`)
+        .order('created_at', { ascending: false }),
     ])
     if (ws?.name) setWorkspaceName(ws.name)
     setTasks((data || []) as Task[])

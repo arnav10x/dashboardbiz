@@ -59,6 +59,7 @@ export default function SettingsPage() {
   const saveQuickLinks = (links: QuickLink[]) => {
     setQuickLinks(links)
     localStorage.setItem('prspectve-quick-links', JSON.stringify(links))
+    window.dispatchEvent(new Event('prspectve-links-changed'))
   }
 
   const addQuickLink = () => {

@@ -16,7 +16,7 @@ function SidebarLogo() {
 }
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
-  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X,
+  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X, DollarSign,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: any; label: string; exact?: boolean }
@@ -28,6 +28,7 @@ const TOP_NAV: NavSection[] = [
       { href: '/dashboard',             icon: LayoutDashboard, label: 'Overview',    exact: true },
       { href: '/dashboard/tasks',       icon: CheckSquare,     label: 'Tasks' },
       { href: '/dashboard/pipeline',    icon: TrendingUp,      label: 'Pipeline' },
+      { href: '/dashboard/finance',     icon: DollarSign,      label: 'Finance' },
       { href: '/dashboard/pl-calendar', icon: CalendarDays,    label: 'Calendar' },
     ],
   },
@@ -118,15 +119,21 @@ export function Sidebar({ workspaceName }: SidebarProps) {
   const [newUrl, setNewUrl] = useState('')
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('prspectve-quick-links')
-      if (saved) setQuickLinks(JSON.parse(saved))
-    } catch {}
+    const load = () => {
+      try {
+        const saved = localStorage.getItem('prspectve-quick-links')
+        setQuickLinks(saved ? JSON.parse(saved) : [])
+      } catch {}
+    }
+    load()
+    window.addEventListener('prspectve-links-changed', load)
+    return () => window.removeEventListener('prspectve-links-changed', load)
   }, [])
 
   const saveLinks = (links: QuickLink[]) => {
     setQuickLinks(links)
     localStorage.setItem('prspectve-quick-links', JSON.stringify(links))
+    window.dispatchEvent(new Event('prspectve-links-changed'))
   }
 
   const addLink = () => {
@@ -139,8 +146,6 @@ export function Sidebar({ workspaceName }: SidebarProps) {
     setNewUrl('')
     setAddOpen(false)
   }
-
-  const removeLink = (id: string) => saveLinks(quickLinks.filter(l => l.id !== id))
 
   const linkHoverStyle = (e: React.MouseEvent, enter: boolean) => {
     const el = e.currentTarget as HTMLElement
@@ -227,27 +232,19 @@ export function Sidebar({ workspaceName }: SidebarProps) {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: 8 }}>
           {quickLinks.map(link => (
-            <div key={link.id} className="group" style={{ position: 'relative' }}>
+            <div key={link.id} style={{ position: 'relative' }}>
               <a
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 title={link.url}
-                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', paddingRight: 28, borderRadius: 7, color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'background 0.1s, color 0.1s' }}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 7, color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'background 0.1s, color 0.1s' }}
                 onMouseEnter={e => linkHoverStyle(e, true)}
                 onMouseLeave={e => linkHoverStyle(e, false)}
               >
                 <Link2 style={{ width: 16, height: 16, flexShrink: 0 }} />
                 <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.2 }}>{link.title}</span>
               </a>
-              <button
-                onClick={() => removeLink(link.id)}
-                title="Remove"
-                className="opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 4, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
-              >
-                <X style={{ width: 11, height: 11 }} />
-              </button>
             </div>
           ))}
 

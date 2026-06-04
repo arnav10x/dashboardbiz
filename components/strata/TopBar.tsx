@@ -155,7 +155,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
       </div>
 
       {/* Right */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
         <NotificationBell />
 
         {(actionLabel || actionHref) && (
@@ -179,8 +179,8 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
         )}
 
         <div className="relative" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave}>
-          <button onClick={() => setProfileOpen(o => !o)} style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--bg-card)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-            {avatarUrl ? <img src={avatarUrl} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User style={{ width: 13, height: 13, color: 'var(--text-muted)' }} />}
+          <button onClick={() => setProfileOpen(o => !o)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--bg-card)', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+            {avatarUrl ? <img src={avatarUrl} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User style={{ width: 16, height: 16, color: 'var(--text-muted)' }} />}
           </button>
           {profileOpen && (
             <div

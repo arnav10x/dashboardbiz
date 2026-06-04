@@ -102,14 +102,21 @@ function QuickLogModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { setSaving(false); return }
     const { data: ws } = await supabase.from('workspaces').select('id').eq('owner_id', user.id).maybeSingle()
-    const periodDate = new Date().toISOString().split('T')[0].slice(0, 7) + '-01'
-    const { error: err } = await supabase.from('period_entries').upsert({
-      user_id: user.id, workspace_id: ws?.id?.toString() ?? null, period_date: periodDate,
-      revenue: Number(revenue) || 0, expenses: Number(expenses) || 0,
-      leads: 0, customers: 0, proposals: 0,
-    }, { onConflict: 'user_id,period_date' })
+    const today = new Date().toISOString().split('T')[0]
+    const periodDate = today.slice(0, 7) + '-01'
+    const [{ error: err1 }, { error: err2 }] = await Promise.all([
+      supabase.from('period_entries').upsert({
+        user_id: user.id, workspace_id: ws?.id?.toString() ?? null, period_date: periodDate,
+        revenue: Number(revenue) || 0, expenses: Number(expenses) || 0,
+        leads: 0, customers: 0, proposals: 0,
+      }, { onConflict: 'user_id,period_date' }),
+      supabase.from('cal_entries').upsert({
+        user_id: user.id, workspace_id: ws?.id?.toString() ?? null, entry_date: today,
+        revenue: Number(revenue) || 0, expenses: Number(expenses) || 0,
+      }, { onConflict: 'user_id,entry_date' }),
+    ])
     setSaving(false)
-    if (err) { setError(err.message); return }
+    if (err1 || err2) { setError((err1 || err2)?.message ?? 'Save failed'); return }
     onSaved()
   }
   return (

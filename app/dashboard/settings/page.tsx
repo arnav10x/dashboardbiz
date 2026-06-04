@@ -1,11 +1,11 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { TopBar } from '@/components/strata/TopBar'
-import { Upload, Check, AlertTriangle, X, Trash2, UserRound, LogOut } from 'lucide-react'
+import { Upload, Check, AlertTriangle, X, Trash2, UserRound, LogOut, Link2, Plus, ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
-type Tab = 'profile' | 'preferences' | 'goals' | 'appearance' | 'account'
+type Tab = 'profile' | 'preferences' | 'goals' | 'appearance' | 'account' | 'links'
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'profile', label: 'Business profile' },
@@ -13,7 +13,10 @@ const TABS: { key: Tab; label: string }[] = [
   { key: 'goals', label: 'Goals & targets' },
   { key: 'appearance', label: 'Appearance' },
   { key: 'account', label: 'Account & data' },
+  { key: 'links', label: 'Quick Links' },
 ]
+
+type QuickLink = { id: string; title: string; url: string }
 
 const ACCENT_COLORS = [
   '#4F8EF7', '#7B61FF', '#A855F7', '#EC4899', '#f43f5e',
@@ -34,7 +37,41 @@ const FREQUENCIES = ['Weekly', 'Monthly', 'Quarterly']
 
 export default function SettingsPage() {
   const router = useRouter()
-  const [tab, setTab] = useState<Tab>('profile')
+  const searchParams = useSearchParams()
+  const [tab, setTab] = useState<Tab>(() => {
+    const t = searchParams?.get('tab')
+    if (t && ['profile','preferences','goals','appearance','account','links'].includes(t)) return t as Tab
+    return 'profile'
+  })
+
+  // Quick links state
+  const [quickLinks, setQuickLinks] = useState<QuickLink[]>([])
+  const [newLinkTitle, setNewLinkTitle] = useState('')
+  const [newLinkUrl, setNewLinkUrl] = useState('')
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('prspectve-quick-links')
+      if (saved) setQuickLinks(JSON.parse(saved))
+    } catch {}
+  }, [])
+
+  const saveQuickLinks = (links: QuickLink[]) => {
+    setQuickLinks(links)
+    localStorage.setItem('prspectve-quick-links', JSON.stringify(links))
+  }
+
+  const addQuickLink = () => {
+    const title = newLinkTitle.trim()
+    const raw = newLinkUrl.trim()
+    if (!title || !raw) return
+    const url = raw.startsWith('http') ? raw : `https://${raw}`
+    saveQuickLinks([...quickLinks, { id: Date.now().toString(), title, url }])
+    setNewLinkTitle('')
+    setNewLinkUrl('')
+  }
+
+  const removeQuickLink = (id: string) => saveQuickLinks(quickLinks.filter(l => l.id !== id))
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [saveError, setSaveError] = useState('')
@@ -729,6 +766,72 @@ export default function SettingsPage() {
                 >
                   {saved ? <><Check className="h-3.5 w-3.5" /> Saved</> : saving ? 'Saving...' : 'Save appearance'}
                 </button>
+              </div>
+            )}
+
+            {/* Quick Links */}
+            {tab === 'links' && (
+              <div className="space-y-4">
+                <div className="p-5" style={{ borderRadius: 8, background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+                  <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>Quick Links</p>
+                  <p className="text-xs mb-5" style={{ color: 'var(--text-muted)' }}>
+                    Add shortcuts to sites and tools you use every day. They appear in the sidebar under Quick Links.
+                  </p>
+
+                  {/* Existing links */}
+                  {quickLinks.length > 0 && (
+                    <div className="space-y-2 mb-5">
+                      {quickLinks.map(link => (
+                        <div key={link.id} className="flex items-center gap-3 rounded-lg px-3 py-2.5" style={{ background: 'var(--bg-raised)', border: '1px solid var(--border)' }}>
+                          <Link2 className="h-4 w-4 flex-shrink-0" style={{ color: 'var(--text-muted)' }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{link.title}</p>
+                            <p className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{link.url}</p>
+                          </div>
+                          <a href={link.url} target="_blank" rel="noopener noreferrer" className="flex-shrink-0 p-1 rounded" style={{ color: 'var(--text-muted)' }}>
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                          <button onClick={() => removeQuickLink(link.id)} className="flex-shrink-0 p-1 rounded hover:bg-red-500/10" style={{ color: '#f43f5e' }}>
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {quickLinks.length === 0 && (
+                    <div className="mb-5 rounded-lg px-4 py-6 text-center" style={{ border: '1px dashed var(--border-strong)' }}>
+                      <Link2 className="mx-auto mb-2 h-6 w-6" style={{ color: 'var(--text-muted)' }} />
+                      <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No quick links yet. Add your first one below.</p>
+                    </div>
+                  )}
+
+                  {/* Add new link form */}
+                  <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: 'var(--text-muted)' }}>Add new link</p>
+                  <div className="space-y-2">
+                    <input
+                      className="input-base"
+                      placeholder="Label (e.g. Stripe Dashboard)"
+                      value={newLinkTitle}
+                      onChange={e => setNewLinkTitle(e.target.value)}
+                    />
+                    <input
+                      className="input-base"
+                      placeholder="URL (e.g. stripe.com/dashboard)"
+                      value={newLinkUrl}
+                      onChange={e => setNewLinkUrl(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && addQuickLink()}
+                    />
+                    <button
+                      onClick={addQuickLink}
+                      disabled={!newLinkTitle.trim() || !newLinkUrl.trim()}
+                      className="flex items-center gap-1.5 text-xs font-bold px-4 py-2 rounded-lg disabled:opacity-40"
+                      style={{ background: 'var(--accent)', color: 'white' }}
+                    >
+                      <Plus className="h-3.5 w-3.5" /> Add link
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 

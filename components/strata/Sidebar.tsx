@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -16,7 +16,7 @@ function SidebarLogo() {
 }
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
-  BarChart2, Trophy, Sparkles, Users, Plug, Settings,
+  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: any; label: string; exact?: boolean }
@@ -34,7 +34,7 @@ const TOP_NAV: NavSection[] = [
   {
     label: 'Tools',
     items: [
-      { href: '/dashboard/ai-copilot',   icon: Sparkles, label: 'AI Copilot' },
+      { href: '/dashboard/ai-copilot',   icon: Sparkles, label: 'AI Coach' },
       { href: '/dashboard/team',         icon: Users,    label: 'Team' },
       { href: '/dashboard/integrations', icon: Plug,     label: 'Integrations' },
     ],
@@ -56,6 +56,8 @@ const BOTTOM_NAV: NavSection[] = [
     ],
   },
 ]
+
+type QuickLink = { id: string; title: string; url: string }
 
 function NavLink({ item, active }: { item: NavItem; active: boolean }) {
   const Icon = item.icon
@@ -110,6 +112,42 @@ export function Sidebar({ workspaceName }: SidebarProps) {
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname.startsWith(href)
 
+  const [quickLinks, setQuickLinks] = useState<QuickLink[]>([])
+  const [addOpen, setAddOpen] = useState(false)
+  const [newTitle, setNewTitle] = useState('')
+  const [newUrl, setNewUrl] = useState('')
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('prspectve-quick-links')
+      if (saved) setQuickLinks(JSON.parse(saved))
+    } catch {}
+  }, [])
+
+  const saveLinks = (links: QuickLink[]) => {
+    setQuickLinks(links)
+    localStorage.setItem('prspectve-quick-links', JSON.stringify(links))
+  }
+
+  const addLink = () => {
+    const title = newTitle.trim()
+    const raw = newUrl.trim()
+    if (!title || !raw) return
+    const url = raw.startsWith('http') ? raw : `https://${raw}`
+    saveLinks([...quickLinks, { id: Date.now().toString(), title, url }])
+    setNewTitle('')
+    setNewUrl('')
+    setAddOpen(false)
+  }
+
+  const removeLink = (id: string) => saveLinks(quickLinks.filter(l => l.id !== id))
+
+  const linkHoverStyle = (e: React.MouseEvent, enter: boolean) => {
+    const el = e.currentTarget as HTMLElement
+    el.style.background = enter ? 'var(--bg-hover)' : 'transparent'
+    el.style.color = enter ? 'var(--text-secondary)' : 'var(--text-muted)'
+  }
+
   return (
     <div
       className="hidden md:flex flex-col h-screen sticky top-0 flex-shrink-0"
@@ -147,6 +185,83 @@ export function Sidebar({ workspaceName }: SidebarProps) {
             </div>
           </div>
         ))}
+
+        {/* Quick Links section */}
+        <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px 8px' }} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 10px 5px' }}>
+          <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', opacity: 0.55, margin: 0 }}>
+            Quick Links
+          </p>
+          <button
+            onClick={() => setAddOpen(o => !o)}
+            title="Add link"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 16, height: 16, borderRadius: 4, color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', opacity: 0.65, flexShrink: 0 }}
+          >
+            {addOpen ? <X style={{ width: 12, height: 12 }} /> : <Plus style={{ width: 12, height: 12 }} />}
+          </button>
+        </div>
+
+        {addOpen && (
+          <div style={{ padding: '0 8px 8px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <input
+              value={newTitle}
+              onChange={e => setNewTitle(e.target.value)}
+              placeholder="Label"
+              style={{ fontSize: 11, padding: '5px 8px', borderRadius: 5, background: 'var(--bg-card)', border: '1px solid var(--border-strong)', color: 'var(--text-primary)', width: '100%', outline: 'none' }}
+            />
+            <input
+              value={newUrl}
+              onChange={e => setNewUrl(e.target.value)}
+              placeholder="URL"
+              onKeyDown={e => e.key === 'Enter' && addLink()}
+              style={{ fontSize: 11, padding: '5px 8px', borderRadius: 5, background: 'var(--bg-card)', border: '1px solid var(--border-strong)', color: 'var(--text-primary)', width: '100%', outline: 'none' }}
+            />
+            <button
+              onClick={addLink}
+              style={{ fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 5, background: 'var(--accent)', color: '#031008', border: 'none', cursor: 'pointer' }}
+            >
+              Add
+            </button>
+          </div>
+        )}
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 1, marginBottom: 8 }}>
+          {quickLinks.map(link => (
+            <div key={link.id} className="group" style={{ position: 'relative' }}>
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={link.url}
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', paddingRight: 28, borderRadius: 7, color: 'var(--text-muted)', textDecoration: 'none', fontSize: 13, fontWeight: 500, transition: 'background 0.1s, color 0.1s' }}
+                onMouseEnter={e => linkHoverStyle(e, true)}
+                onMouseLeave={e => linkHoverStyle(e, false)}
+              >
+                <Link2 style={{ width: 16, height: 16, flexShrink: 0 }} />
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.2 }}>{link.title}</span>
+              </a>
+              <button
+                onClick={() => removeLink(link.id)}
+                title="Remove"
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ position: 'absolute', right: 6, top: '50%', transform: 'translateY(-50%)', width: 18, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 4, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
+              >
+                <X style={{ width: 11, height: 11 }} />
+              </button>
+            </div>
+          ))}
+
+          {/* Manage links → settings */}
+          <Link
+            href="/dashboard/settings?tab=links"
+            style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 7, color: 'var(--text-muted)', textDecoration: 'none', fontSize: 12, fontWeight: 500, opacity: 0.65, transition: 'background 0.1s, color 0.1s' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover)'; (e.currentTarget as HTMLElement).style.opacity = '1' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; (e.currentTarget as HTMLElement).style.opacity = '0.65' }}
+          >
+            <Settings style={{ width: 13, height: 13, flexShrink: 0 }} />
+            <span style={{ whiteSpace: 'nowrap', lineHeight: 1.2 }}>Manage links</span>
+          </Link>
+        </div>
 
         {/* Spacer pushes bottom sections down */}
         <div style={{ flex: 1 }} />

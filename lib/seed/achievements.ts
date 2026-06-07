@@ -32,7 +32,7 @@ export async function ensureAchievementsSeeded(supabase: any) {
     if (toInsert.length > 0) {
       await supabase.from('achievements').insert(toInsert);
     }
-  } catch (error) {
-    console.error("Seed error:", error);
+  } catch {
+    // seed failures are non-fatal
   }
 }

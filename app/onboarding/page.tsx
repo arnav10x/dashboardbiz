@@ -43,7 +43,7 @@ export default function OnboardingPage() {
         supabase.from('workspaces').select('name, business_type, stage').eq('owner_id', user.id).maybeSingle(),
       ])
 
-      if (settings?.onboarding_completed) {
+      if (settings?.onboarding_completed === true) {
         router.push('/dashboard')
         return
       }

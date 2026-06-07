@@ -147,7 +147,6 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
               {getGreeting(displayName)}
             </span>
             <ClockPills />
-            <WorkspaceSwitcher currentName={workspaceName} />
           </>
         ) : (
           <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{title}</h1>

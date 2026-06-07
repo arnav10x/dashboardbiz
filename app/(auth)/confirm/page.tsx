@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Check Your Email | Founder OS',
+  title: 'Check Your Email | prspectve',
 }
 
 export default function ConfirmPage() {

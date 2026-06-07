@@ -4,7 +4,7 @@ import { Metadata } from 'next'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Sign Up | Founder OS',
+  title: 'Sign Up | prspectve',
   description: 'Start your 30-day journey to your first paying clients.',
 }
 
@@ -13,7 +13,7 @@ export default function SignupPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#050505] px-4 py-12 text-[#fafafa]">
       <div className="mx-auto w-full max-w-[400px] space-y-6">
         <div className="flex flex-col space-y-2 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">Founder OS</h1>
+          <h1 className="text-3xl font-bold tracking-tight">prspectve</h1>
           <p className="text-sm text-zinc-400">
             Commit to the 30-day performance sprint.
           </p>

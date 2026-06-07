@@ -263,7 +263,7 @@ const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 export default function TasksPage() {
   const [tasks, setTasks]               = useState<Task[]>([])
-  const [workspaceName, setWorkspaceName] = useState('Founder OS')
+  const [workspaceName, setWorkspaceName] = useState('prspectve')
   const [loading, setLoading]           = useState(true)
   const [modalOpen, setModalOpen]       = useState(false)
   const [editingTask, setEditingTask]   = useState<Task | null>(null)

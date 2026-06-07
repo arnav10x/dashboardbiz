@@ -32,7 +32,7 @@ export default function CalendarPage() {
   const [entries, setEntries] = useState<Record<string, DayEntry>>({})
   const [events, setEvents] = useState<CalEvent[]>([])
   const [scheduleEvents, setScheduleEvents] = useState<CalEvent[]>([])
-  const [workspaceName, setWorkspaceName] = useState('Founder OS')
+  const [workspaceName, setWorkspaceName] = useState('prspectve')
   const [plModal, setPLModal] = useState<PLModal | null>(null)
   const [eventModal, setEventModal] = useState<EventModal | null>(null)
   const [saving, setSaving] = useState(false)

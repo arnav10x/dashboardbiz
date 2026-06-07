@@ -88,7 +88,7 @@ const ChartTip = ({ active, payload, label }: any) => {
 
 /* ─── Main Page ──────────────────────────────────────────────── */
 export default function FinancePage() {
-  const [wsName, setWsName]       = useState('Founder OS')
+  const [wsName, setWsName]       = useState('prspectve')
   const [periods, setPeriods]     = useState<PeriodEntry[]>([])
   const [revLogs, setRevLogs]     = useState<RevenueLog[]>([])
   const [expLogs, setExpLogs]     = useState<ExpenseLog[]>([])

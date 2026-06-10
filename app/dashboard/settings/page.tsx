@@ -76,17 +76,6 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [saveError, setSaveError] = useState('')
-
-  // Unsaved changes tracking
-  const [snapshot, setSnapshot] = useState<{ profile: typeof profile; prefs: typeof prefs; goals: typeof goals; appearance: typeof appearance } | null>(null)
-  const isDirty = (() => {
-    if (!snapshot) return false
-    if (tab === 'profile')    return JSON.stringify(profile)    !== JSON.stringify(snapshot.profile)
-    if (tab === 'preferences') return JSON.stringify(prefs)      !== JSON.stringify(snapshot.prefs)
-    if (tab === 'goals')      return JSON.stringify(goals)       !== JSON.stringify(snapshot.goals)
-    if (tab === 'appearance') return JSON.stringify(appearance)  !== JSON.stringify(snapshot.appearance)
-    return false
-  })()
   const [avatarLetter, setAvatarLetter] = useState('A')
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [username, setUsername] = useState('')
@@ -111,6 +100,18 @@ export default function SettingsPage() {
     monthlyClients: '5', maxHours: '80',
   })
   const [appearance, setAppearance] = useState({ theme: 'light', accentColor: '#8B5CF6', secondaryColor: '#8B5CF6' })
+
+  // Unsaved changes tracking — declared after all form states
+  const [snapshot, setSnapshot] = useState<{ profile: typeof profile; prefs: typeof prefs; goals: typeof goals; appearance: typeof appearance } | null>(null)
+  const isDirty = (() => {
+    if (!snapshot) return false
+    if (tab === 'profile')     return JSON.stringify(profile)    !== JSON.stringify(snapshot.profile)
+    if (tab === 'preferences') return JSON.stringify(prefs)      !== JSON.stringify(snapshot.prefs)
+    if (tab === 'goals')       return JSON.stringify(goals)       !== JSON.stringify(snapshot.goals)
+    if (tab === 'appearance')  return JSON.stringify(appearance)  !== JSON.stringify(snapshot.appearance)
+    return false
+  })()
+
   const [entryCount, setEntryCount] = useState(0)
   const [clearConfirmOpen, setClearConfirmOpen] = useState(false)
   const [clearing, setClearing] = useState(false)

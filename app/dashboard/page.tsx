@@ -15,8 +15,8 @@ export default async function OverviewPage() {
     supabase.from('user_settings').select('onboarding_completed, revenue_target').eq('user_id', user.id).maybeSingle(),
   ])
 
-  // Redirect new users to onboarding if they haven't completed it
-  if (!userSettings?.onboarding_completed) {
+  // Redirect new users to onboarding — only true (not null/false/undefined) passes
+  if (userSettings?.onboarding_completed !== true) {
     redirect('/onboarding')
   }
 

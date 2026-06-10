@@ -36,7 +36,7 @@ export async function incrementOutreach(userId: string) {
 
   // Trigger achievement evaluation asynchronously cleanly
   // Note: Since Supabase constraints are intact, this safely processes triggers headless based on updated db states.
-  evaluateAchievementTriggers(userId).catch(e => console.error("Achievement error:", e));
+  evaluateAchievementTriggers(userId).catch(() => {});
 
   return newData;
 }

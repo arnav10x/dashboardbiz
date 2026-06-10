@@ -100,6 +100,18 @@ export default function SettingsPage() {
     monthlyClients: '5', maxHours: '80',
   })
   const [appearance, setAppearance] = useState({ theme: 'light', accentColor: '#8B5CF6', secondaryColor: '#8B5CF6' })
+
+  // Unsaved changes tracking — declared after all form states
+  const [snapshot, setSnapshot] = useState<{ profile: typeof profile; prefs: typeof prefs; goals: typeof goals; appearance: typeof appearance } | null>(null)
+  const isDirty = (() => {
+    if (!snapshot) return false
+    if (tab === 'profile')     return JSON.stringify(profile)    !== JSON.stringify(snapshot.profile)
+    if (tab === 'preferences') return JSON.stringify(prefs)      !== JSON.stringify(snapshot.prefs)
+    if (tab === 'goals')       return JSON.stringify(goals)       !== JSON.stringify(snapshot.goals)
+    if (tab === 'appearance')  return JSON.stringify(appearance)  !== JSON.stringify(snapshot.appearance)
+    return false
+  })()
+
   const [entryCount, setEntryCount] = useState(0)
   const [clearConfirmOpen, setClearConfirmOpen] = useState(false)
   const [clearing, setClearing] = useState(false)
@@ -164,6 +176,37 @@ export default function SettingsPage() {
       const { data: authUser } = await supabase.auth.getUser()
       const name = (authUser.user?.user_metadata?.full_name as string) || authUser.user?.email?.split('@')[0] || 'A'
       setAvatarLetter(name.charAt(0).toUpperCase())
+
+      // Capture snapshot of loaded state for dirty tracking
+      setSnapshot({
+        profile: {
+          businessName: ws?.name || '',
+          yourName: settings?.full_name || (authUser.user?.user_metadata?.full_name as string) || '',
+          businessType: ws?.business_type || 'Agency',
+          industry: ws?.industry || 'Lead Tracker Business',
+          stage: ws?.stage || 'Early Stage',
+          trackingFrequency: ws?.tracking_frequency || 'Weekly',
+          businessSummary: ws?.business_summary || '',
+        },
+        prefs: {
+          weeklySummary: settings?.weekly_ai_summary ?? true,
+          riskAlerts: settings?.risk_alerts ?? true,
+          goalReminders: settings?.goal_reminders ?? false,
+          autoInsights: settings?.auto_generate_insights ?? true,
+        },
+        goals: {
+          primaryGoal: settings?.primary_goal || 'Hit $10k/month',
+          revenueTarget: settings?.revenue_target?.toString() || '',
+          profitMargin: settings?.profit_margin_target?.toString() || '60',
+          monthlyClients: settings?.monthly_client_target?.toString() || '5',
+          maxHours: settings?.max_hours_month?.toString() || '80',
+        },
+        appearance: {
+          theme: settings?.theme || 'light',
+          accentColor: settings?.accent_color || '#8B5CF6',
+          secondaryColor: settings?.secondary_color || '#8B5CF6',
+        },
+      })
     }
     load()
   }, [])
@@ -247,10 +290,37 @@ export default function SettingsPage() {
       } else {
         setSaved(true)
         setTimeout(() => setSaved(false), 2000)
+        // Update snapshot so dirty indicator resets
+        setSnapshot(prev => {
+          if (!prev) return prev
+          if (tab === 'profile')     return { ...prev, profile }
+          if (tab === 'preferences') return { ...prev, prefs }
+          if (tab === 'goals')       return { ...prev, goals }
+          if (tab === 'appearance')  return { ...prev, appearance }
+          return prev
+        })
       }
     } finally {
       setSaving(false)
     }
+  }
+
+  const handleDiscard = () => {
+    if (!snapshot) return
+    if (tab === 'profile')     setProfile(snapshot.profile)
+    if (tab === 'preferences') setPrefs(snapshot.prefs)
+    if (tab === 'goals')       setGoals(snapshot.goals)
+    if (tab === 'appearance') {
+      setAppearance(snapshot.appearance)
+      applyAccent(snapshot.appearance.accentColor)
+      applyTheme(snapshot.appearance.theme)
+    }
+  }
+
+  const handleTabChange = (next: Tab) => {
+    if (isDirty && !window.confirm('You have unsaved changes. Discard them?')) return
+    if (isDirty) handleDiscard()
+    setTab(next)
   }
 
 
@@ -483,7 +553,7 @@ export default function SettingsPage() {
               {TABS.map(t => (
                 <button
                   key={t.key}
-                  onClick={() => setTab(t.key)}
+                  onClick={() => handleTabChange(t.key)}
                   className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors"
                   style={{
                     background: tab === t.key ? 'var(--accent-muted)' : 'transparent',
@@ -498,6 +568,21 @@ export default function SettingsPage() {
 
           {/* Content */}
           <div className="flex-1 max-w-xl">
+            {/* Unsaved changes banner */}
+            {isDirty && (
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', marginBottom: 16, borderRadius: 8, background: 'rgba(234,179,8,0.08)', border: '1px solid rgba(234,179,8,0.25)' }}
+              >
+                <AlertTriangle style={{ width: 14, height: 14, color: '#eab308', flexShrink: 0 }} />
+                <span style={{ flex: 1, fontSize: 12, fontWeight: 600, color: '#eab308' }}>You have unsaved changes</span>
+                <button onClick={handleDiscard} style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 5, background: 'transparent', border: '1px solid rgba(234,179,8,0.35)', color: '#eab308', cursor: 'pointer' }}>
+                  Discard
+                </button>
+                <button onClick={handleSave} disabled={saving} style={{ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 5, background: '#eab308', color: '#000', border: 'none', cursor: 'pointer' }}>
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+              </div>
+            )}
             {/* Profile */}
             {tab === 'profile' && (
               <div className="space-y-5">

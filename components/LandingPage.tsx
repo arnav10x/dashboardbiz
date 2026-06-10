@@ -94,17 +94,20 @@ function LogoMark({ size = 34 }: { size?: number }) {
   return <img src="/logo.png" alt="prspectve" width={size} height={size} style={{ display: 'block', flexShrink: 0, borderRadius: r }} onError={() => setErr(true)} />
 }
 
-// ─── Animated Glow Button (UIVerse adapted to purple) ─────────────────────────
+// ─── Glow Button (UIVerse by Creatlydev, adapted) ─────────────────────────────
 
 function GlowButton({ href, size = 'md', children }: { href: string; size?: 'md' | 'lg'; children: React.ReactNode }) {
   const isLg = size === 'lg'
   return (
     <Link href={href} style={{ textDecoration: 'none', display: 'inline-block' }}>
       <button className={`prsp-btn ${isLg ? 'prsp-btn-lg' : ''}`}>
-        <div className="prsp-btn-wrapper">
-          <span className="prsp-btn-label">{children}</span>
-          {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => <div key={n} className={`prsp-circle prsp-circle-${n}`} />)}
-        </div>
+        <svg strokeLinejoin="round" strokeLinecap="round" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="prsp-btn-icon" xmlns="http://www.w3.org/2000/svg">
+          <path fill="none" d="M0 0h24v24H0z" stroke="none"></path>
+          <path d="M5 12h14"></path>
+          <path d="M13 18l6 -6"></path>
+          <path d="M13 6l6 6"></path>
+        </svg>
+        <span className="prsp-btn-label">{children}</span>
       </button>
     </Link>
   )
@@ -516,65 +519,22 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         @keyframes lp-aurora{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:.9;transform:scale(1.06)}}
         @keyframes lp-glow-ring{0%,100%{opacity:.55}50%{opacity:1}}
 
-        /* ── Animated button ── */
+        /* ── Button (UIVerse by Creatlydev) ── */
         .prsp-btn{
-          --dur:7s;--ease:linear;
-          --c1:#7c3aed;--c2:#4c1d95;--c3:#a855f7;--c4:rgba(233,213,255,.95);
-          --c5:rgba(109,40,217,.9);--c6:rgba(196,181,253,.8);--c7:#5b21b6;--c8:rgba(245,240,255,.9);
-          --cshadow:rgba(139,92,246,.5);--cit:rgba(139,92,246,.9);--cib:rgba(196,167,255,.8);
-          --cri:#5b21b6;--cro:#8b5cf6;--cc:#fff;
-          -webkit-tap-highlight-color:transparent;-webkit-appearance:none;outline:none;
-          position:relative;cursor:pointer;border:none;display:table;border-radius:24px;
-          padding:0;margin:0;text-align:center;font-weight:700;font-size:16px;
-          letter-spacing:.03em;line-height:1.5;color:var(--cc);
-          background:radial-gradient(circle,var(--cri),var(--cro) 80%);
-          box-shadow:0 0 18px var(--cshadow);
-          transition:box-shadow .2s ease,transform .2s ease;
+          line-height:1;background:linear-gradient(90deg,rgba(77,54,208,1) 0%,rgba(132,116,254,1) 100%);
+          cursor:pointer;display:inline-flex;align-items:center;gap:.4em;
+          padding:.72em .95em;padding-right:1.2em;
+          color:#fff;border:1px solid transparent;font-weight:700;border-radius:2em;
+          font-size:1rem;box-shadow:0 0.7em 1.5em -0.5em hsla(249,62%,51%,.74);
+          transition:border-color .2s,transform .3s,box-shadow .2s;
+          -webkit-tap-highlight-color:transparent;-webkit-appearance:none;
         }
-        .prsp-btn:hover{--dur:1400ms;transform:translateY(-2px);box-shadow:0 0 28px var(--cshadow),0 8px 24px rgba(109,40,217,.25);}
-        .prsp-btn:active{transform:translateY(0px)}
-        .prsp-btn::before{content:'';pointer-events:none;position:absolute;z-index:3;left:0;top:0;right:0;bottom:0;border-radius:24px;box-shadow:inset 0 3px 12px var(--cit),inset 0 -3px 4px var(--cib);}
-        .prsp-btn-wrapper{-webkit-mask-image:-webkit-radial-gradient(white,black);overflow:hidden;border-radius:24px;min-width:140px;padding:13px 0;}
-        .prsp-btn-lg .prsp-btn-wrapper{padding:16px 0;min-width:180px;}
-        .prsp-btn-label{display:inline-block;position:relative;z-index:1;padding:0 28px;}
-        .prsp-btn-lg .prsp-btn-label{padding:0 36px;font-size:18px;}
-        .prsp-circle{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;filter:blur(var(--blur,10px));background:var(--background,transparent);transform:translate(var(--x,0),var(--y,0)) translateZ(0);animation:var(--animation,none) var(--dur) var(--ease) infinite;}
-        .prsp-circle-1{--background:var(--c4);--blur:8px}
-        .prsp-circle-2{--background:var(--c1);--blur:12px}
-        .prsp-circle-3{--background:var(--c2);--blur:14px}
-        .prsp-circle-4{--background:var(--c7);--blur:13px}
-        .prsp-circle-5{--background:var(--c3);--blur:16px}
-        .prsp-circle-6{--background:var(--c6);--blur:11px}
-        .prsp-circle-7{--background:var(--c5);--blur:15px}
-        .prsp-circle-8{--background:var(--c8);--blur:9px}
-        .prsp-circle-9{--background:var(--c4);--blur:10px}
-        .prsp-circle-10{--background:var(--c2);--blur:14px}
-        .prsp-circle-11{--background:var(--c6);--blur:12px}
-        .prsp-circle-12{--background:var(--c3);--blur:13px}
-        .prsp-circle-1{--x:0;--y:-40px;--animation:circle-1}
-        .prsp-circle-2{--x:92px;--y:8px;--animation:circle-2}
-        .prsp-circle-3{--x:-12px;--y:-12px;--animation:circle-3}
-        .prsp-circle-4{--x:80px;--y:-12px;--animation:circle-4}
-        .prsp-circle-5{--x:12px;--y:-4px;--animation:circle-5}
-        .prsp-circle-6{--x:56px;--y:16px;--animation:circle-6}
-        .prsp-circle-7{--x:8px;--y:28px;--animation:circle-7}
-        .prsp-circle-8{--x:28px;--y:-4px;--animation:circle-8}
-        .prsp-circle-9{--x:20px;--y:-12px;--animation:circle-9}
-        .prsp-circle-10{--x:64px;--y:16px;--animation:circle-10}
-        .prsp-circle-11{--x:4px;--y:4px;--animation:circle-11}
-        .prsp-circle-12{--blur:14px;--x:52px;--y:4px;--animation:circle-12}
-        @keyframes circle-1{33%{transform:translate(0,16px) translateZ(0)}66%{transform:translate(12px,64px) translateZ(0)}}
-        @keyframes circle-2{33%{transform:translate(80px,-10px) translateZ(0)}66%{transform:translate(72px,-48px) translateZ(0)}}
-        @keyframes circle-3{33%{transform:translate(20px,12px) translateZ(0)}66%{transform:translate(12px,4px) translateZ(0)}}
-        @keyframes circle-4{33%{transform:translate(76px,-12px) translateZ(0)}66%{transform:translate(112px,-8px) translateZ(0)}}
-        @keyframes circle-5{33%{transform:translate(84px,28px) translateZ(0)}66%{transform:translate(40px,-32px) translateZ(0)}}
-        @keyframes circle-6{33%{transform:translate(28px,-16px) translateZ(0)}66%{transform:translate(76px,-56px) translateZ(0)}}
-        @keyframes circle-7{33%{transform:translate(8px,28px) translateZ(0)}66%{transform:translate(20px,-60px) translateZ(0)}}
-        @keyframes circle-8{33%{transform:translate(32px,-4px) translateZ(0)}66%{transform:translate(56px,-20px) translateZ(0)}}
-        @keyframes circle-9{33%{transform:translate(20px,-12px) translateZ(0)}66%{transform:translate(80px,-8px) translateZ(0)}}
-        @keyframes circle-10{33%{transform:translate(68px,20px) translateZ(0)}66%{transform:translate(100px,28px) translateZ(0)}}
-        @keyframes circle-11{33%{transform:translate(4px,4px) translateZ(0)}66%{transform:translate(68px,20px) translateZ(0)}}
-        @keyframes circle-12{33%{transform:translate(56px,0) translateZ(0)}66%{transform:translate(60px,-32px) translateZ(0)}}
+        .prsp-btn-lg{font-size:1.13rem;padding:.85em 1.1em;padding-right:1.4em;}
+        .prsp-btn:hover{border-color:#f4f5f2;}
+        .prsp-btn:active{transform:scale(.98);box-shadow:0 .5em 1.5em -.5em hsla(249,62%,51%,.74);}
+        .prsp-btn-icon{width:1.4em;height:1.4em;flex-shrink:0;}
+        .prsp-btn-lg .prsp-btn-icon{width:1.55em;height:1.55em;}
+        .prsp-btn-label{white-space:nowrap;}
 
         /* ── Scroll reveal ── */
         .lp-reveal{opacity:0;transform:translateY(28px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}

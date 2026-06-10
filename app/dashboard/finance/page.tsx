@@ -44,7 +44,7 @@ const CATS = [
   { id: 'payroll',   label: 'Payroll / Contractors', color: '#22c55e', icon: Users       },
   { id: 'marketing', label: 'Marketing / Ads',       color: '#ec4899', icon: Megaphone   },
   { id: 'office',    label: 'Office / Rent',         color: '#f59e0b', icon: Building2   },
-  { id: 'tools',     label: 'Tools / Equipment',     color: '#f97316', icon: Wrench      },
+  { id: 'tools',     label: 'Tools / Equipment',     color: 'var(--accent)', icon: Wrench      },
   { id: 'other',     label: 'Other',                 color: '#94a3b8', icon: MoreHorizontal },
 ]
 
@@ -327,7 +327,7 @@ export default function FinancePage() {
                     <span style={S.label}>Expenses</span>
                     <CreditCard style={{ width: 13, height: 13, color: 'var(--accent)', opacity: 0.7 }} />
                   </div>
-                  <p style={{ ...S.big, color: '#f97316', marginBottom: 4 }}>{money(thisExp)}</p>
+                  <p style={{ ...S.big, color: 'var(--accent)', marginBottom: 4 }}>{money(thisExp)}</p>
                   <p style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>
                     {thisRev > 0 ? `${pct(thisExp, thisRev)}% of revenue` : 'This month'}
                   </p>
@@ -391,7 +391,7 @@ export default function FinancePage() {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
                     <span style={S.label}>Expense Breakdown</span>
                     <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-                      {expLogs.length} entries · <strong style={{ color: '#f97316' }}>{money(totalLoggedExp)}</strong>
+                      {expLogs.length} entries · <strong style={{ color: 'var(--accent)' }}>{money(totalLoggedExp)}</strong>
                     </span>
                   </div>
 
@@ -465,10 +465,10 @@ export default function FinancePage() {
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                         <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>Expenses</span>
-                        <span style={{ fontSize: 14, fontWeight: 800, color: '#f97316', fontVariantNumeric: 'tabular-nums' }}>{money(thisExp)}</span>
+                        <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent)', fontVariantNumeric: 'tabular-nums' }}>{money(thisExp)}</span>
                       </div>
                       <div style={{ height: 6, borderRadius: 999, background: 'var(--fo-soft-line-bg)' }}>
-                        <div style={{ height: '100%', width: `${Math.min(100, thisRev > 0 ? pct(thisExp, thisRev) : 100)}%`, background: 'linear-gradient(90deg, #f97316, #fb923c)', borderRadius: 999 }} />
+                        <div style={{ height: '100%', width: `${Math.min(100, thisRev > 0 ? pct(thisExp, thisRev) : 100)}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', opacity: 0.65, borderRadius: 999 }} />
                       </div>
                     </div>
 
@@ -640,7 +640,7 @@ export default function FinancePage() {
                                   {cat.label}
                                 </span>
                               </td>
-                              <td style={{ padding: '9px 10px', textAlign: 'right', color: '#f97316', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
+                              <td style={{ padding: '9px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
                                 {money(exp.amount)}
                               </td>
                               <td style={{ padding: '9px 4px', textAlign: 'right' }}>
@@ -683,7 +683,7 @@ export default function FinancePage() {
                         <span style={{ width: 7, height: 7, borderRadius: 2, background: 'var(--accent)', display: 'inline-block' }} />Revenue
                       </span>
                       <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span style={{ width: 7, height: 7, borderRadius: 2, background: '#f97316', display: 'inline-block' }} />Expenses
+                        <span style={{ width: 7, height: 7, borderRadius: 2, background: 'var(--accent)', opacity: 0.55, display: 'inline-block' }} />Expenses
                       </span>
                     </div>
                   </div>
@@ -694,7 +694,7 @@ export default function FinancePage() {
                       <YAxis hide />
                       <Tooltip content={<ChartTip />} cursor={{ fill: 'rgba(255,255,255,0.025)' }} />
                       <Bar dataKey="Revenue" fill="var(--accent)" radius={[3, 3, 0, 0]} maxBarSize={26} />
-                      <Bar dataKey="Expenses" fill="#f97316" radius={[3, 3, 0, 0]} maxBarSize={26} />
+                      <Bar dataKey="Expenses" fill="var(--accent)" fillOpacity={0.5} radius={[3, 3, 0, 0]} maxBarSize={26} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -813,7 +813,7 @@ export default function FinancePage() {
                             {new Date(e.period_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
                           </td>
                           <td style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{money(e.revenue)}</td>
-                          <td style={{ padding: '8px 10px', textAlign: 'right', color: '#f97316', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{money(e.expenses)}</td>
+                          <td style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{money(e.expenses)}</td>
                           <td style={{ padding: '8px 10px', textAlign: 'right', color: profit >= 0 ? 'var(--accent)' : '#f43f5e', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{money(profit)}</td>
                           <td style={{ padding: '8px 10px', textAlign: 'right' }}>
                             <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 4, color: margin >= 40 ? '#22c55e' : margin >= 20 ? '#f5a623' : '#f43f5e', background: margin >= 40 ? '#22c55e18' : margin >= 20 ? 'rgba(245,166,35,0.12)' : 'rgba(244,63,94,0.1)' }}>
@@ -830,7 +830,7 @@ export default function FinancePage() {
                     <tr style={{ borderTop: '2px solid var(--border)' }}>
                       <td style={{ padding: '8px 10px', fontWeight: 800, fontSize: 11, color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Total</td>
                       <td style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{money(totalRev)}</td>
-                      <td style={{ padding: '8px 10px', textAlign: 'right', color: '#f97316', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{money(totalExp)}</td>
+                      <td style={{ padding: '8px 10px', textAlign: 'right', color: 'var(--accent)', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{money(totalExp)}</td>
                       <td style={{ padding: '8px 10px', textAlign: 'right', color: totalProfit >= 0 ? 'var(--accent)' : '#f43f5e', fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>{money(totalProfit)}</td>
                       <td style={{ padding: '8px 10px', textAlign: 'right' }}>
                         <span style={{ fontSize: 10, fontWeight: 800, padding: '2px 6px', borderRadius: 4, color: avgMargin >= 40 ? '#22c55e' : avgMargin >= 20 ? '#f5a623' : '#f43f5e', background: avgMargin >= 40 ? '#22c55e18' : avgMargin >= 20 ? 'rgba(245,166,35,0.12)' : 'rgba(244,63,94,0.1)' }}>

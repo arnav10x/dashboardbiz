@@ -372,53 +372,6 @@ export function OverviewClient({ userName, workspaceName, businessType, business
         ))}
       </div>
 
-      {/* Business health */}
-      {hasData && (
-        <div className="app-card">
-        <div className="app-card-inner" style={{ padding: '18px 20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-              <div style={{ position: 'relative' }}>
-                <Ring pct={health.total} size={70} stroke={7} color={healthColor} />
-                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <span style={{ fontSize: 20, fontWeight: 950, color: healthColor }}>{animHealth}</span>
-                </div>
-              </div>
-              <div>
-                <p style={{ ...S.label, marginBottom: 4 }}>Business Health</p>
-                <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 4, background: `${healthColor}18`, color: healthColor }}>
-                  {healthLabel}
-                </span>
-              </div>
-            </div>
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 22, minWidth: 0 }}>
-              {[
-                { label: 'Revenue Pacing', score: health.pacing },
-                { label: 'Margin Health', score: health.marginScore },
-                { label: 'Pipeline', score: health.pipeline },
-                { label: 'Execution', score: health.execution },
-              ].map(s => {
-                const pct = (s.score / 25) * 100
-                const c = pct >= 60 ? 'var(--accent)' : '#ff4d4d'
-                return (
-                  <div key={s.label}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
-                      <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-muted)' }}>{s.label}</span>
-                      <span style={{ fontSize: 9, fontWeight: 900, color: c }}>{s.score}/25</span>
-                    </div>
-                    <div style={S.bar}>
-                      <div style={{ height: '100%', width: `${pct}%`, background: c, borderRadius: 1, transition: 'width 1s ease' }} />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        <div className="app-card-glow" />
-        </div>
-      )}
-
       {/* 3-col: Revenue History | Monthly Target | Lead Pipeline */}
       <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1.1fr 0.8fr', gap: 14 }}>
 
@@ -647,6 +600,53 @@ export function OverviewClient({ userName, workspaceName, businessType, business
         <span style={{ fontSize: 12, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)' }}>{leads > 0 ? `${conversionRate}% conversion rate across ${leads} logged leads` : tasks.length ? `${completedCount}/${tasks.length} tasks completed today` : 'Log leads, revenue, or tasks to generate alerts'}</span>
         <ChevronRight style={{ marginLeft: 'auto', width: 14, height: 14, color: 'var(--text-muted)', transform: 'rotate(90deg)' }} />
       </div><div className="app-card-glow" /></div>
+
+      {/* Business Health — bottom of dashboard */}
+      {hasData && (
+        <div className="app-card">
+        <div className="app-card-inner" style={{ padding: '18px 20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+              <div style={{ position: 'relative' }}>
+                <Ring pct={health.total} size={70} stroke={7} color={healthColor} />
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: 20, fontWeight: 950, color: healthColor }}>{animHealth}</span>
+                </div>
+              </div>
+              <div>
+                <p style={{ ...S.label, marginBottom: 4 }}>Business Health</p>
+                <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 4, background: `${healthColor}18`, color: healthColor }}>
+                  {healthLabel}
+                </span>
+              </div>
+            </div>
+            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 22, minWidth: 0 }}>
+              {[
+                { label: 'Revenue Pacing', score: health.pacing },
+                { label: 'Margin Health', score: health.marginScore },
+                { label: 'Pipeline', score: health.pipeline },
+                { label: 'Execution', score: health.execution },
+              ].map(s => {
+                const pct = (s.score / 25) * 100
+                const c = pct >= 60 ? 'var(--accent)' : '#ff4d4d'
+                return (
+                  <div key={s.label}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
+                      <span style={{ fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', color: 'var(--text-muted)' }}>{s.label}</span>
+                      <span style={{ fontSize: 9, fontWeight: 900, color: c }}>{s.score}/25</span>
+                    </div>
+                    <div style={S.bar}>
+                      <div style={{ height: '100%', width: `${pct}%`, background: c, borderRadius: 1, transition: 'width 1s ease' }} />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+        <div className="app-card-glow" />
+        </div>
+      )}
 
       <div style={{ display: 'none' }}>
       <ProactiveAlerts

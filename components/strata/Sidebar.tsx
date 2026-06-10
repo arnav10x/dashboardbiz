@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { FeedbackModal } from '@/components/strata/FeedbackModal'
 
 function SidebarLogo() {
   const [err, setErr] = useState(false)
@@ -16,7 +17,7 @@ function SidebarLogo() {
 }
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
-  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X, DollarSign,
+  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X, DollarSign, MessageSquare,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: any; label: string; exact?: boolean }
@@ -111,6 +112,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
   const isActive = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname.startsWith(href)
 
+  const [feedbackOpen, setFeedbackOpen] = useState(false)
   const [quickLinks, setQuickLinks] = useState<QuickLink[]>([])
   const [addOpen, setAddOpen] = useState(false)
   const [newTitle, setNewTitle] = useState('')
@@ -293,7 +295,22 @@ export function Sidebar({ workspaceName }: SidebarProps) {
               </div>
             </div>
           ))}
+
+          {/* Feedback button */}
+          <div style={{ height: 1, background: 'var(--border)', margin: '8px 4px 8px' }} />
+          <button
+            onClick={() => setFeedbackOpen(true)}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 7, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: 13, fontWeight: 500, textAlign: 'left' }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--bg-hover)'; (e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)' }}
+          >
+            <MessageSquare style={{ width: 16, height: 16, flexShrink: 0 }} />
+            <span style={{ whiteSpace: 'nowrap', lineHeight: 1.2 }}>Feedback</span>
+            <span style={{ marginLeft: 'auto', fontSize: 9, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '2px 5px', borderRadius: 4, background: 'var(--accent-faint)', color: 'var(--accent)', border: '1px solid var(--accent-ring)', flexShrink: 0 }}>Beta</span>
+          </button>
         </div>
+
+        {feedbackOpen && <FeedbackModal onClose={() => setFeedbackOpen(false)} />}
       </div>
     </div>
   )

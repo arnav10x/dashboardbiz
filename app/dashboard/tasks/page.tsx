@@ -347,10 +347,10 @@ export default function TasksPage() {
   return (
     <div className="flex min-h-full flex-col">
       <TopBar title="Tasks" workspaceName={workspaceName} showGreeting />
-      <div className="flex-1 overflow-y-auto px-7 py-7 animate-in">
+      <div className="flex-1 overflow-y-auto px-4 md:px-7 py-5 md:py-7 animate-in">
 
         {/* ── Productivity Streak Banner ─────────────────────────── */}
-        <div className="mb-6 flex flex-wrap items-center gap-5 rounded-2xl px-6 py-4"
+        <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl px-4 md:px-6 py-4"
           style={{
             background: 'linear-gradient(135deg, rgba(245,166,35,.11) 0%, rgba(255,107,53,.07) 100%)',
             border: '1px solid rgba(245,166,35,.22)',
@@ -400,15 +400,15 @@ export default function TasksPage() {
         </div>
 
         {/* ── Header ─────────────────────────────────────────────── */}
-        <div className="mb-4 flex items-center justify-between gap-4">
+        <div className="mb-4 flex items-center justify-between gap-3">
           <div>
-            <h1 className="text-[26px] font-black tracking-tight">Today&rsquo;s Tasks</h1>
+            <h1 className="text-xl md:text-[26px] font-black tracking-tight">Today&rsquo;s Tasks</h1>
             <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{todayLabel}</p>
           </div>
           <button onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-black"
+            className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black flex-shrink-0"
             style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg, #031008)' }}>
-            <Plus className="h-4 w-4" /> New Task
+            <Plus className="h-4 w-4" /><span className="hidden sm:inline">New Task</span><span className="sm:hidden">New</span>
           </button>
         </div>
 

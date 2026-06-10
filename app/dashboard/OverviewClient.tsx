@@ -311,12 +311,12 @@ export function OverviewClient({ userName, workspaceName, businessType, business
 
 
   return (
-    <div className="flex-1 overflow-y-auto fo-page" style={{ padding: '20px 28px 22px', display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0 }}>
+    <div className="flex-1 overflow-y-auto fo-page ov-page-padding" style={{ display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0 }}>
 
       {showModal && <QuickLogModal onClose={() => setShowModal(false)} onSaved={() => { setShowModal(false); window.location.reload() }} />}
 
       {toast && (
-        <div className="fixed bottom-6 left-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-xl"
+        <div className="fixed bottom-24 md:bottom-6 left-1/2 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-xl"
           style={{ transform: 'translateX(-50%)', background: 'var(--bg-card)', border: '1px solid var(--border-strong)' }}>
           <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" style={{ color: 'var(--accent)' }} />
           <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>{toast}</p>
@@ -346,7 +346,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       )}
 
       {/* KPI row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 14 }}>
+      <div className="ov-kpi-grid">
         {[
           { label: 'Revenue', value: `$${animRevenue.toLocaleString()}`, sub: revenueTarget > 0 ? `$${Math.max(0, revenueTarget - revenue).toLocaleString()} to goal` : 'No target set', icon: Target, color: 'var(--text-primary)', bar: revenueTarget > 0, barPct: goalPct },
           { label: 'Net Profit', value: `$${animProfit.toLocaleString()}`, sub: `${margin}% margin`, icon: TrendingUp, color: profit < 0 ? '#f43f5e' : 'var(--text-primary)', bar: false },
@@ -373,7 +373,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       </div>
 
       {/* 3-col: Revenue History | Monthly Target | Lead Pipeline */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 1.1fr 0.8fr', gap: 14 }}>
+      <div className="ov-chart-grid">
 
         {/* Revenue History */}
         <div className="app-card">
@@ -500,7 +500,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       </div>
 
       {/* Bottom: Tasks | TodaysFocus */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1.05fr 1.45fr', gap: 14, alignItems: 'stretch' }}>
+      <div className="ov-bottom-grid">
 
         {/* Tasks */}
         <div className="app-card">
@@ -620,7 +620,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                 </span>
               </div>
             </div>
-            <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 22, minWidth: 0 }}>
+            <div className="ov-health-scores">
               {[
                 { label: 'Revenue Pacing', score: health.pacing },
                 { label: 'Margin Health', score: health.marginScore },

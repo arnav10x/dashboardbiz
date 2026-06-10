@@ -519,9 +519,10 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         /* ── Animated button ── */
         .prsp-btn{
           --dur:7s;--ease:linear;
-          --c1:rgba(167,139,250,.75);--c2:#6d28d9;--c3:#9333ea;--c4:rgba(196,167,255,.75);
+          --c1:#7c3aed;--c2:#4c1d95;--c3:#a855f7;--c4:rgba(233,213,255,.95);
+          --c5:rgba(109,40,217,.9);--c6:rgba(196,181,253,.8);--c7:#5b21b6;--c8:rgba(245,240,255,.9);
           --cshadow:rgba(139,92,246,.5);--cit:rgba(139,92,246,.9);--cib:rgba(196,167,255,.8);
-          --cri:#6d28d9;--cro:#8b5cf6;--cc:#fff;
+          --cri:#5b21b6;--cro:#8b5cf6;--cc:#fff;
           -webkit-tap-highlight-color:transparent;-webkit-appearance:none;outline:none;
           position:relative;cursor:pointer;border:none;display:table;border-radius:24px;
           padding:0;margin:0;text-align:center;font-weight:700;font-size:16px;
@@ -537,11 +538,19 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         .prsp-btn-lg .prsp-btn-wrapper{padding:16px 0;min-width:180px;}
         .prsp-btn-label{display:inline-block;position:relative;z-index:1;padding:0 28px;}
         .prsp-btn-lg .prsp-btn-label{padding:0 36px;font-size:18px;}
-        .prsp-circle{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;filter:blur(var(--blur,8px));background:var(--background,transparent);transform:translate(var(--x,0),var(--y,0)) translateZ(0);animation:var(--animation,none) var(--dur) var(--ease) infinite;}
-        .prsp-circle-1,.prsp-circle-9,.prsp-circle-10{--background:var(--c4)}
-        .prsp-circle-3,.prsp-circle-4{--background:var(--c2);--blur:14px}
-        .prsp-circle-5,.prsp-circle-6{--background:var(--c3);--blur:16px}
-        .prsp-circle-2,.prsp-circle-7,.prsp-circle-8,.prsp-circle-11,.prsp-circle-12{--background:var(--c1);--blur:12px}
+        .prsp-circle{position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;filter:blur(var(--blur,10px));background:var(--background,transparent);transform:translate(var(--x,0),var(--y,0)) translateZ(0);animation:var(--animation,none) var(--dur) var(--ease) infinite;}
+        .prsp-circle-1{--background:var(--c4);--blur:8px}
+        .prsp-circle-2{--background:var(--c1);--blur:12px}
+        .prsp-circle-3{--background:var(--c2);--blur:14px}
+        .prsp-circle-4{--background:var(--c7);--blur:13px}
+        .prsp-circle-5{--background:var(--c3);--blur:16px}
+        .prsp-circle-6{--background:var(--c6);--blur:11px}
+        .prsp-circle-7{--background:var(--c5);--blur:15px}
+        .prsp-circle-8{--background:var(--c8);--blur:9px}
+        .prsp-circle-9{--background:var(--c4);--blur:10px}
+        .prsp-circle-10{--background:var(--c2);--blur:14px}
+        .prsp-circle-11{--background:var(--c6);--blur:12px}
+        .prsp-circle-12{--background:var(--c3);--blur:13px}
         .prsp-circle-1{--x:0;--y:-40px;--animation:circle-1}
         .prsp-circle-2{--x:92px;--y:8px;--animation:circle-2}
         .prsp-circle-3{--x:-12px;--y:-12px;--animation:circle-3}

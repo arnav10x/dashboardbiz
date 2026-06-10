@@ -500,26 +500,26 @@ export default function PipelinePage() {
     <div className="flex flex-col h-full fo-page">
       <TopBar title="Pipeline" workspaceName={workspaceName} hasData={leads.length > 0} showGreeting />
 
-      <div className="flex-1 overflow-y-auto px-6 py-5 animate-in">
-        <div className="relative flex items-end justify-between mb-5">
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-5 animate-in">
+        <div className="relative flex flex-col gap-3 md:flex-row md:items-end md:justify-between mb-5">
           <div>
             <h2 className="text-2xl font-black tracking-tight" style={{ color: 'var(--text-primary)' }}>Pipeline</h2>
             <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Track leads, follow up, and close more deals.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: 'var(--text-muted)' }} />
-              <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search leads..." className="h-9 w-52 pl-9 pr-3 text-xs outline-none fo-card-2" style={{ color: 'var(--text-primary)' }} />
+              <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search leads..." className="h-9 w-full sm:w-52 pl-9 pr-3 text-xs outline-none fo-card-2" style={{ color: 'var(--text-primary)' }} />
             </div>
             <button onClick={() => setShowFilters(v => !v)} className="h-9 px-4 flex items-center gap-2 text-xs font-bold fo-card-2" style={{ color: showFilters || stageFilter !== 'all' ? 'var(--accent)' : 'var(--text-secondary)' }}>
-              <Filter className="h-4 w-4" /> Filters
+              <Filter className="h-4 w-4" /><span className="hidden sm:inline">Filters</span>
             </button>
             <div className="flex overflow-hidden fo-card-2">
               <button onClick={() => setViewMode('table')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'table' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'table' ? '#06140b' : 'var(--accent)' }}><Rows3 className="h-4 w-4" /></button>
               <button onClick={() => setViewMode('board')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'board' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'board' ? '#06140b' : 'var(--accent)' }}><Grid2X2 className="h-4 w-4" /></button>
             </div>
-            <button onClick={() => setShowAdd(true)} className="h-9 px-5 flex items-center gap-2 rounded-lg text-xs font-black fo-green-btn">
-              <Plus className="h-4 w-4" /> Add Lead
+            <button onClick={() => setShowAdd(true)} className="h-9 px-4 flex items-center gap-2 rounded-lg text-xs font-black fo-green-btn">
+              <Plus className="h-4 w-4" /><span className="hidden sm:inline">Add Lead</span><span className="sm:hidden">Add</span>
             </button>
           </div>
         </div>
@@ -539,7 +539,7 @@ export default function PipelinePage() {
           </div>
         )}
 
-        <div className="grid grid-cols-5 gap-3 mb-5">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
           {stats.map((s, idx) => (
             <div key={s.label} className="app-card" style={{ minHeight: 108 }}>
               <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
@@ -558,7 +558,8 @@ export default function PipelinePage() {
           ))}
         </div>
 
-        <div className="grid grid-cols-5 gap-2 mb-5" style={{ display: viewMode === 'board' ? 'grid' : 'none' }}>
+        <div className="overflow-x-auto -mx-4 md:-mx-6 mb-5" style={{ display: viewMode === 'board' ? 'block' : 'none' }}>
+        <div className="grid grid-cols-5 gap-2 px-4 md:px-6" style={{ minWidth: 900 }}>
           {KANBAN_STAGES.map(stage => {
             const cfg = STAGE_CFG[stage]
             const stageLeads = boardLeads.filter(l => l.stage === stage)
@@ -602,8 +603,10 @@ export default function PipelinePage() {
             )
           })}
         </div>
+        </div>
 
-        <div className="fo-card overflow-hidden" style={{ display: viewMode === 'table' ? 'block' : 'none' }}>
+        <div className="fo-card" style={{ display: viewMode === 'table' ? 'block' : 'none', overflowX: 'auto', borderRadius: 13 }}>
+          <div style={{ minWidth: 640 }}>
           <div className="flex items-center gap-6 px-4 h-12 border-b" style={{ borderColor: 'var(--border)' }}>
             {(['all','my','archived'] as const).map(t => (
               <button key={t} onClick={() => setTableTab(t)} className="h-full text-sm font-bold relative" style={{ color: tableTab === t ? 'var(--accent)' : 'var(--text-muted)' }}>
@@ -642,6 +645,7 @@ export default function PipelinePage() {
           <div className="flex items-center justify-between px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>
             <span>Showing 1 to {Math.min(tableLeads.length, 7)} of {tableLeads.length} leads</span>
             <div className="flex items-center gap-3"><ChevronRight className="h-4 w-4 rotate-180"/><span className="px-2 py-1 rounded-md" style={{ background: 'var(--accent-muted)', color: 'var(--accent)' }}>1</span><span>2</span><ChevronRight className="h-4 w-4"/></div>
+          </div>
           </div>
         </div>
       </div>

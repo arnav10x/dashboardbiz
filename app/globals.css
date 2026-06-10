@@ -387,3 +387,33 @@ html.theme-light .app-card-inner {
 html.theme-light .app-card {
   box-shadow: 0 18px 45px rgba(0,0,0,0.10);
 }
+
+/* ── Mobile-responsive dashboard utilities ── */
+.ov-page-padding { padding: 14px 14px 22px; }
+@media (min-width: 768px) { .ov-page-padding { padding: 20px 28px 22px; } }
+
+.ov-kpi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 768px) { .ov-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; } }
+
+.ov-chart-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 768px) { .ov-chart-grid { grid-template-columns: 1.25fr 1.1fr 0.8fr; gap: 14px; } }
+
+.ov-bottom-grid { display: grid; grid-template-columns: 1fr; gap: 12px; align-items: stretch; }
+@media (min-width: 768px) { .ov-bottom-grid { grid-template-columns: 1.05fr 1.45fr; gap: 14px; } }
+
+.ov-health-scores { flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; min-width: 0; }
+@media (min-width: 640px) { .ov-health-scores { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; } }
+
+.topbar-greeting {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.03em;
+  min-width: 0;
+}
+@media (min-width: 768px) {
+  .topbar-greeting { font-size: 21px; }
+}

@@ -136,17 +136,19 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
 
   return (
     <div
-      className="flex-shrink-0 flex items-center gap-4 px-6"
+      className="flex-shrink-0 flex items-center gap-2 md:gap-4 px-3 md:px-6"
       style={{ height: 64, borderBottom: '1px solid var(--topbar-border-color)', background: 'var(--topbar-bg)' }}
     >
       {/* Left */}
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 12, minWidth: 0, overflow: 'hidden' }}>
         {showGreetingText ? (
           <>
-            <span style={{ fontSize: 21, fontWeight: 800, color: 'var(--text-primary)', whiteSpace: 'nowrap', letterSpacing: '-0.03em' }}>
+            <span className="topbar-greeting">
               {getGreeting(displayName)}
             </span>
-            <ClockPills />
+            <div className="hidden md:flex items-center">
+              <ClockPills />
+            </div>
           </>
         ) : (
           <h1 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>{title}</h1>
@@ -154,31 +156,31 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
       </div>
 
       {/* Right */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
         <NotificationBell />
 
         {(actionLabel || actionHref) && (
           actionHref ? (
             <Link
               href={actionHref}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 18px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)', whiteSpace: 'nowrap' }}
             >
-              <Plus style={{ width: 13, height: 13 }} />
-              {actionLabel}
+              <Plus style={{ width: 13, height: 13, flexShrink: 0 }} />
+              <span className="hidden sm:inline">{actionLabel}</span>
             </Link>
           ) : (
             <button
               onClick={onAction}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 18px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)', whiteSpace: 'nowrap' }}
             >
-              <Plus style={{ width: 13, height: 13 }} />
-              {actionLabel}
+              <Plus style={{ width: 13, height: 13, flexShrink: 0 }} />
+              <span className="hidden sm:inline">{actionLabel}</span>
             </button>
           )
         )}
 
-        <div className="relative" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave}>
-          <button onClick={() => setProfileOpen(o => !o)} style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--bg-card)', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
+        <div className="relative" onMouseEnter={handleProfileEnter} onMouseLeave={handleProfileLeave} style={{ flexShrink: 0 }}>
+          <button onClick={() => setProfileOpen(o => !o)} style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--bg-card)', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', flexShrink: 0 }}>
             {avatarUrl ? <img src={avatarUrl} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <User style={{ width: 16, height: 16, color: 'var(--text-muted)' }} />}
           </button>
           {profileOpen && (

@@ -249,7 +249,7 @@ export default function FinancePage() {
     <div className="flex min-h-full flex-col">
       <TopBar title="Finance" workspaceName={wsName} showGreeting hasData={periods.length > 0} actionLabel="Log period" actionHref="/dashboard/period-entry" />
 
-      <div className="fo-page" style={{ flex: 1, overflowY: 'auto', padding: '20px 28px 48px', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+      <div className="fo-page ov-page-padding" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
 
         {/* ── Migration notice ── */}
         {!expTableReady && (
@@ -298,7 +298,7 @@ export default function FinancePage() {
             )}
 
             {/* ══ 2. KPI ROW (5 cards) ══════════════════════════════════ */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0,1fr))', gap: 12 }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5" style={{ gap: 12 }}>
               {/* This Month Revenue */}
               <Card>
                 <div style={{ padding: '16px' }}>
@@ -383,7 +383,7 @@ export default function FinancePage() {
             </div>
 
             {/* ══ 3. EXPENSE BREAKDOWN + P&L SUMMARY ═══════════════════ */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
 
               {/* Expense Breakdown */}
               <Card>
@@ -672,7 +672,7 @@ export default function FinancePage() {
             </Card>
 
             {/* ══ 5. CHARTS ════════════════════════════════════════════ */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 14 }}>
+            <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr]" style={{ gap: 14 }}>
               {/* Revenue vs Expenses bar */}
               <Card>
                 <div style={{ padding: '20px' }}>

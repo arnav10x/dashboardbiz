@@ -345,130 +345,134 @@ export default function TasksPage() {
   const todayLabel = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-col lg:h-full">
       <TopBar title="Tasks" workspaceName={workspaceName} showGreeting />
-      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-7 py-5 md:py-7 animate-in">
 
-        {/* ── Productivity Streak Banner ─────────────────────────── */}
-        <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl px-4 md:px-6 py-4"
+      {/* Outer area: fills remaining viewport height on desktop, flows naturally on mobile */}
+      <div className="flex-1 min-h-0 flex flex-col px-4 md:px-6 py-3 md:py-4 gap-3 animate-in">
+
+        {/* ── Streak Banner (compact) ─────────────────────────────── */}
+        <div className="flex-shrink-0 flex flex-wrap items-center gap-3 rounded-2xl px-4 md:px-5 py-2.5"
           style={{
             background: 'linear-gradient(135deg, rgba(245,166,35,.11) 0%, rgba(255,107,53,.07) 100%)',
             border: '1px solid rgba(245,166,35,.22)',
           }}>
-          <div className="flex items-center gap-3">
-            <Flame className="h-8 w-8" style={{ color: '#f5a623', filter: 'drop-shadow(0 0 8px rgba(245,166,35,.6))' }} />
+          <div className="flex items-center gap-2.5">
+            <Flame className="h-6 w-6 flex-shrink-0" style={{ color: '#f5a623', filter: 'drop-shadow(0 0 6px rgba(245,166,35,.6))' }} />
             <div>
-              <p className="text-2xl font-black leading-none" style={{ color: '#f5a623' }}>
+              <p className="text-base font-black leading-none" style={{ color: '#f5a623' }}>
                 {streak} day{streak !== 1 ? 's' : ''}
               </p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+              <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>
                 {streak > 0 ? 'Streak active — keep it up!' : 'Complete a task to start your streak'}
               </p>
             </div>
           </div>
 
-          <div className="flex items-end gap-2">
+          <div className="flex items-end gap-1.5">
             {DAYS.map((d, i) => {
               const active = i === 0 && done > 0
               return (
-                <div key={d} className="flex flex-col items-center gap-1">
-                  <div className="grid h-8 w-8 place-items-center rounded-full text-xs font-bold transition-all"
+                <div key={d} className="flex flex-col items-center gap-0.5">
+                  <div className="grid h-7 w-7 place-items-center rounded-full text-[10px] font-bold transition-all"
                     style={{
                       background: active ? '#f5a623' : 'rgba(255,255,255,.06)',
                       color: active ? '#031008' : 'var(--text-muted)',
                       border: `1px solid ${active ? '#f5a623' : 'rgba(255,255,255,.08)'}`,
-                      boxShadow: active ? '0 0 12px rgba(245,166,35,.5)' : 'none',
+                      boxShadow: active ? '0 0 10px rgba(245,166,35,.5)' : 'none',
                     }}>
-                    {active ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : d.charAt(0)}
+                    {active ? <Check className="h-3 w-3" strokeWidth={3} /> : d.charAt(0)}
                   </div>
-                  <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>{d}</span>
+                  <span className="text-[9px]" style={{ color: 'var(--text-muted)' }}>{d}</span>
                 </div>
               )
             })}
           </div>
 
-          <div className="ml-auto flex items-center gap-6">
+          <div className="ml-auto flex items-center gap-5">
             <div className="text-center">
-              <p className="text-2xl font-black leading-none" style={{ color: pct >= 80 ? 'var(--accent)' : pct >= 50 ? '#f5a623' : 'var(--text-primary)' }}>{pct}%</p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>today</p>
+              <p className="text-lg font-black leading-none" style={{ color: pct >= 80 ? 'var(--accent)' : pct >= 50 ? '#f5a623' : 'var(--text-primary)' }}>{pct}%</p>
+              <p className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>today</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-black leading-none" style={{ color: 'var(--text-primary)' }}>{done}/{total}</p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>tasks done</p>
+              <p className="text-lg font-black leading-none" style={{ color: 'var(--text-primary)' }}>{done}/{total}</p>
+              <p className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>done</p>
             </div>
           </div>
         </div>
 
-        {/* ── Header ─────────────────────────────────────────────── */}
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div>
-            <h1 className="text-xl md:text-[26px] font-black tracking-tight">Today&rsquo;s Tasks</h1>
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{todayLabel}</p>
+        {/* ── Header + Progress ──────────────────────────────────── */}
+        <div className="flex-shrink-0">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div>
+              <h1 className="text-lg md:text-xl font-black tracking-tight">Today&rsquo;s Tasks</h1>
+              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{todayLabel}</p>
+            </div>
+            <button onClick={() => setModalOpen(true)}
+              className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-black flex-shrink-0"
+              style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg, #031008)' }}>
+              <Plus className="h-4 w-4" /><span className="hidden sm:inline">New Task</span><span className="sm:hidden">New</span>
+            </button>
           </div>
-          <button onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-black flex-shrink-0"
-            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg, #031008)' }}>
-            <Plus className="h-4 w-4" /><span className="hidden sm:inline">New Task</span><span className="sm:hidden">New</span>
-          </button>
+          <div className="h-1.5 overflow-hidden rounded-full" style={{ background: 'var(--fo-soft-line-bg)' }}>
+            <div className="h-full rounded-full transition-all duration-700"
+              style={{ width: `${pct}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', boxShadow: '0 0 14px color-mix(in srgb, var(--accent) 45%, transparent)' }} />
+          </div>
         </div>
 
-        {/* ── Progress bar ────────────────────────────────────────── */}
-        <div className="mb-7 h-1.5 overflow-hidden rounded-full" style={{ background: 'var(--fo-soft-line-bg)' }}>
-          <div className="h-full rounded-full transition-all duration-700"
-            style={{ width: `${pct}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', boxShadow: '0 0 14px color-mix(in srgb, var(--accent) 45%, transparent)' }} />
-        </div>
+        {/* ── Two-column layout — fills remaining height ────────── */}
+        <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_290px]">
 
-        {/* ── Two-column layout ────────────────────────────────────── */}
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_340px]">
+          {/* Left — task list scrolls within its column ─────────── */}
+          <div className="flex flex-col min-h-0 min-w-0">
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-2.5 pr-1">
+              <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
+              <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
+              <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
 
-          {/* Left — task list ────────────────────────────────────── */}
-          <div className="space-y-3">
-            <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
-            <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
-            <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
+              {openTasks.length === 0 && !loading && (
+                <div className="rounded-2xl px-6 py-10 text-center"
+                  style={{ border: '1px dashed rgba(255,255,255,.09)' }}>
+                  <p className="text-lg font-black mb-2">
+                    {total > 0 ? 'All tasks complete!' : 'No tasks yet'}
+                  </p>
+                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+                    {total > 0 ? 'Excellent work today.' : 'Add a task or grab one from AI Tailored Tasks →'}
+                  </p>
+                </div>
+              )}
+              {loading && openTasks.length === 0 && (
+                <div className="rounded-2xl px-6 py-8 text-center" style={{ border: '1px dashed rgba(255,255,255,.09)' }}>
+                  <p className="text-sm font-bold" style={{ color: 'var(--text-muted)' }}>Loading tasks…</p>
+                </div>
+              )}
 
-            {openTasks.length === 0 && !loading && (
-              <div className="rounded-2xl px-6 py-14 text-center"
-                style={{ border: '1px dashed rgba(255,255,255,.09)' }}>
-                <p className="text-xl font-black mb-2">
-                  {total > 0 ? 'All tasks complete!' : 'No tasks yet'}
-                </p>
-                <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-                  {total > 0 ? 'Excellent work today.' : 'Add a task or grab one from AI Tailored Tasks →'}
-                </p>
-              </div>
-            )}
-            {loading && openTasks.length === 0 && (
-              <div className="rounded-2xl px-6 py-10 text-center" style={{ border: '1px dashed rgba(255,255,255,.09)' }}>
-                <p className="text-sm font-bold" style={{ color: 'var(--text-muted)' }}>Loading tasks…</p>
-              </div>
-            )}
+              {/* Completed section — collapsible */}
+              {completed.length > 0 && (
+                <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid rgba(255,255,255,.06)' }}>
+                  <button
+                    onClick={() => setCompletedOpen(o => !o)}
+                    className="w-full flex items-center gap-2 px-5 py-3 transition-colors hover:bg-white/5"
+                    style={{ background: 'rgba(255,255,255,.02)' }}>
+                    <ChevronRight className="h-4 w-4 transition-transform flex-shrink-0"
+                      style={{ transform: completedOpen ? 'rotate(90deg)' : 'none', color: 'var(--text-muted)' }} />
+                    <span className="text-[11px] font-black uppercase tracking-[.14em]" style={{ color: 'var(--text-muted)' }}>
+                      Completed
+                    </span>
+                    <span className="ml-auto rounded-md px-2 py-0.5 text-[11px] font-bold"
+                      style={{ background: 'rgba(255,255,255,.06)', color: 'var(--text-muted)' }}>{done}</span>
+                  </button>
+                  {completedOpen && (
+                    <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
+                      {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />)}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
-            {/* Completed section — collapsible */}
-            {completed.length > 0 && (
-              <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid rgba(255,255,255,.06)' }}>
-                <button
-                  onClick={() => setCompletedOpen(o => !o)}
-                  className="w-full flex items-center gap-2 px-5 py-3 transition-colors hover:bg-white/5"
-                  style={{ background: 'rgba(255,255,255,.02)' }}>
-                  <ChevronRight className="h-4 w-4 transition-transform flex-shrink-0"
-                    style={{ transform: completedOpen ? 'rotate(90deg)' : 'none', color: 'var(--text-muted)' }} />
-                  <span className="text-[11px] font-black uppercase tracking-[.14em]" style={{ color: 'var(--text-muted)' }}>
-                    Completed
-                  </span>
-                  <span className="ml-auto rounded-md px-2 py-0.5 text-[11px] font-bold"
-                    style={{ background: 'rgba(255,255,255,.06)', color: 'var(--text-muted)' }}>{done}</span>
-                </button>
-                {completedOpen && (
-                  <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
-                    {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />)}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Quick stats row */}
-            <div className="grid grid-cols-3 gap-3 pt-1">
+            {/* Stats — always visible at bottom of left column */}
+            <div className="flex-shrink-0 grid grid-cols-3 gap-3 pt-3">
               <StatPill label="Completed" value={String(done)} color="var(--accent)" />
               <StatPill label="Remaining" value={String(openTasks.length)} color="var(--text-primary)" />
               <StatPill label="Rate" value={`${pct}%`}
@@ -476,10 +480,10 @@ export default function TasksPage() {
             </div>
           </div>
 
-          {/* Right — AI Tailored (always shows suggestions, never user tasks) ── */}
-          <div className="space-y-4">
-            <div className="p-5" style={card()}>
-              <div className="mb-4 flex items-center justify-between gap-2">
+          {/* Right — AI Tailored + Breakdown ────────────────────── */}
+          <div className="flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto">
+            <div className="flex-shrink-0 p-4" style={card()}>
+              <div className="mb-3 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4" style={{ color: 'var(--accent)' }} />
                   <span className="text-xs font-black uppercase tracking-[.15em]" style={{ color: 'var(--accent)' }}>
@@ -488,26 +492,26 @@ export default function TasksPage() {
                 </div>
                 <button
                   onClick={() => setSuggestionIndex(i => i + 1)}
-                  className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-opacity hover:opacity-80"
+                  className="flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition-opacity hover:opacity-80"
                   style={{ background: 'var(--overlay-micro)', border: '1px solid var(--glass-border)' }}>
                   <RefreshCw className="h-3 w-3" /> Reroll
                 </button>
               </div>
 
-              <div className="space-y-2.5">
+              <div className="space-y-2">
                 {suggestions.map(s => {
                   const m = priorityMeta[s.priority]
                   return (
-                    <div key={s.title} className="flex items-start gap-3 rounded-xl px-4 py-3.5"
+                    <div key={s.title} className="flex items-start gap-2.5 rounded-xl px-3 py-2.5"
                       style={{ background: 'rgba(255,255,255,.026)', border: '1px solid rgba(255,255,255,.06)' }}>
-                      <div className="mt-[5px] h-2 w-2 rounded-full flex-shrink-0" style={{ background: m.color }} />
+                      <div className="mt-[5px] h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: m.color }} />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold leading-snug">{s.title}</p>
-                        <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{s.notes}</p>
+                        <p className="text-xs font-semibold leading-snug">{s.title}</p>
+                        <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{s.notes}</p>
                       </div>
                       <button
                         onClick={() => addTask(s.title, s.notes, s.priority)}
-                        className="flex-shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-black transition-opacity hover:opacity-80"
+                        className="flex-shrink-0 rounded-lg px-2 py-1 text-[11px] font-black transition-opacity hover:opacity-80"
                         style={{ background: m.bg, color: m.color, border: `1px solid ${m.border}` }}>
                         + Add
                       </button>
@@ -516,17 +520,16 @@ export default function TasksPage() {
                 })}
               </div>
 
-              <p className="mt-4 text-center text-[11px]" style={{ color: 'var(--text-muted)' }}>
+              <p className="mt-3 text-center text-[10px]" style={{ color: 'var(--text-muted)' }}>
                 Curated for founders · Reroll for fresh ideas
               </p>
             </div>
 
-            {/* Task breakdown mini card */}
-            <div className="p-5" style={card()}>
-              <h3 className="mb-4 text-sm font-black uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
+            <div className="flex-shrink-0 p-4" style={card()}>
+              <h3 className="mb-3 text-xs font-black uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
                 Breakdown
               </h3>
-              <div className="space-y-3 text-sm">
+              <div className="space-y-2.5">
                 {([['High', highTasks.length], ['Medium', medTasks.length], ['Low', lowTasks.length]] as [Priority, number][]).map(([pr, count]) => {
                   const m = priorityMeta[pr]
                   const barPct = openTasks.length ? Math.round((count / openTasks.length) * 100) : 0

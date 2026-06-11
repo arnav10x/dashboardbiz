@@ -17,7 +17,7 @@ function SidebarLogo() {
 }
 import {
   LayoutDashboard, CheckSquare, TrendingUp, CalendarDays,
-  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X, DollarSign, MessageSquare,
+  BarChart2, Trophy, Sparkles, Users, Plug, Settings, Link2, Plus, X, DollarSign, MessageSquare, Store,
 } from 'lucide-react'
 
 type NavItem = { href: string; icon: any; label: string; exact?: boolean }
@@ -36,7 +36,8 @@ const TOP_NAV: NavSection[] = [
   {
     label: 'Tools',
     items: [
-      { href: '/dashboard/ai-copilot', icon: Sparkles, label: 'AI Coach' },
+      { href: '/dashboard/ai-copilot',     icon: Sparkles, label: 'AI Coach' },
+      { href: '/dashboard/stripe-connect', icon: Store,    label: 'Payments' },
     ],
   },
 ]

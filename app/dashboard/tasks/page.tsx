@@ -345,9 +345,9 @@ export default function TasksPage() {
   const todayLabel = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex h-full flex-col">
       <TopBar title="Tasks" workspaceName={workspaceName} showGreeting />
-      <div className="flex-1 overflow-y-auto px-4 md:px-7 py-5 md:py-7 animate-in">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 md:px-7 py-5 md:py-7 animate-in">
 
         {/* ── Productivity Streak Banner ─────────────────────────── */}
         <div className="mb-6 flex flex-wrap items-center gap-4 rounded-2xl px-4 md:px-6 py-4"

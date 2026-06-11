@@ -419,7 +419,7 @@ export default function TasksPage() {
         </div>
 
         {/* ── Two-column layout ────────────────────────────────────── */}
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_340px]">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1fr_300px]">
 
           {/* Left — task list ────────────────────────────────────── */}
           <div className="space-y-3">

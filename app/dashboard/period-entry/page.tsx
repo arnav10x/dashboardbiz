@@ -25,7 +25,7 @@ function StepIndicator({ current }: { current: number }) {
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all"
               style={{
                 background: active ? 'var(--accent)' : done ? 'var(--accent-muted)' : 'var(--bg-card)',
-                color: active ? 'white' : done ? 'var(--accent)' : 'var(--text-muted)',
+                color: active ? 'var(--accent-fg)' : done ? 'var(--accent)' : 'var(--text-muted)',
                 border: `1px solid ${active || done ? 'transparent' : 'var(--border)'}`,
               }}
             >
@@ -201,7 +201,7 @@ export default function PeriodEntryPage() {
               </p>
               <div
                 className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg mb-5"
-                style={{ background: 'var(--accent-muted)', color: 'var(--accent)', border: '1px solid rgba(244,63,94,0.2)' }}
+                style={{ background: 'var(--accent-muted)', color: 'var(--accent)', border: '1px solid var(--accent-ring)' }}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
                 Logging: {prevMonth}
@@ -419,7 +419,7 @@ export default function PeriodEntryPage() {
         {/* Nav buttons */}
         <div className="mt-8 pt-6" style={{ borderTop: '1px solid var(--border)' }}>
           {saveError && (
-            <div className="mb-4 px-4 py-3 rounded-lg text-xs" style={{ background: 'rgba(244,63,94,0.1)', color: 'var(--accent)', border: '1px solid rgba(244,63,94,0.2)' }}>
+            <div className="mb-4 px-4 py-3 rounded-lg text-xs" style={{ background: 'rgba(244,63,94,0.1)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.2)' }}>
               Save failed: {saveError}
             </div>
           )}
@@ -445,7 +445,7 @@ export default function PeriodEntryPage() {
                 <button
                   onClick={() => setStep(s => s + 1)}
                   className="text-xs font-bold px-5 py-2 rounded-lg transition-colors"
-                  style={{ background: 'var(--accent)', color: 'white' }}
+                  style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}
                 >
                   Next: {STEPS[step + 1]} →
                 </button>
@@ -454,7 +454,7 @@ export default function PeriodEntryPage() {
                   onClick={handleSave}
                   disabled={saving}
                   className="text-xs font-bold px-5 py-2 rounded-lg transition-colors disabled:opacity-60"
-                  style={{ background: 'var(--accent)', color: 'white' }}
+                  style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}
                 >
                   {saving ? 'Saving…' : '✓ Save & go to dashboard'}
                 </button>

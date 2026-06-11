@@ -153,7 +153,7 @@ export default function IntegrationsPage(){
           <div className="p-5 border-t" style={{ borderColor:'var(--border)' }}>
             <div className="grid gap-3 md:grid-cols-[1fr_auto] items-center">
               <div><p className="font-black">Request something not listed</p><p className="text-xs" style={{color:'var(--text-muted)'}}>Tell us what tool you want prspectve to support next.</p></div>
-              <div className="flex gap-2"><input className="input-base w-56" value={customRequest} onChange={e=>setCustomRequest(e.target.value)} placeholder="Airtable, QuickBooks, Discord..."/><button onClick={requestCustom} className="px-4 rounded-lg font-bold text-xs" style={{background:'var(--accent)',color:'#041008'}}>Request</button></div>
+              <div className="flex gap-2"><input className="input-base w-56" value={customRequest} onChange={e=>setCustomRequest(e.target.value)} placeholder="Airtable, QuickBooks, Discord..."/><button onClick={requestCustom} className="px-4 rounded-lg font-bold text-xs" style={{background:'var(--accent)',color:'var(--accent-fg)'}}>Request</button></div>
             </div>
             <p className="text-accent font-bold text-sm mt-4">No fake connection statuses. Connect Google Calendar or request future integrations. <ArrowRight className="inline w-4 h-4" /></p>
           </div>

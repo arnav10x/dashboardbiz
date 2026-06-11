@@ -267,7 +267,7 @@ export default function FinancePage() {
             <DollarSign style={{ width: 36, height: 36, color: 'var(--text-muted)', opacity: 0.3, marginBottom: 12 }} />
             <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 6 }}>No financial data yet</p>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 20 }}>Log your first period to unlock the full finance dashboard.</p>
-            <a href="/dashboard/period-entry" style={{ fontSize: 13, fontWeight: 700, padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none' }}>
+            <a href="/dashboard/period-entry" style={{ fontSize: 13, fontWeight: 700, padding: '8px 20px', borderRadius: 8, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', textDecoration: 'none' }}>
               Log first period →
             </a>
           </div>
@@ -306,7 +306,7 @@ export default function FinancePage() {
                     <span style={S.label}>Revenue</span>
                     <TrendingUp style={{ width: 13, height: 13, color: 'var(--accent)', opacity: 0.7 }} />
                   </div>
-                  <p style={{ ...S.big, color: 'var(--accent)', marginBottom: 4 }}>{money(thisRev)}</p>
+                  <p style={{ ...S.big, color: 'var(--text-primary)', marginBottom: 4 }}>{money(thisRev)}</p>
                   {revGrowth !== null ? (
                     <p style={{ fontSize: 10, fontWeight: 700, color: revGrowth >= 0 ? '#22c55e' : '#f43f5e', display: 'flex', alignItems: 'center', gap: 3 }}>
                       {revGrowth >= 0
@@ -327,7 +327,7 @@ export default function FinancePage() {
                     <span style={S.label}>Expenses</span>
                     <CreditCard style={{ width: 13, height: 13, color: 'var(--accent)', opacity: 0.7 }} />
                   </div>
-                  <p style={{ ...S.big, color: 'var(--accent)', marginBottom: 4 }}>{money(thisExp)}</p>
+                  <p style={{ ...S.big, color: 'var(--text-primary)', marginBottom: 4 }}>{money(thisExp)}</p>
                   <p style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600 }}>
                     {thisRev > 0 ? `${pct(thisExp, thisRev)}% of revenue` : 'This month'}
                   </p>
@@ -341,7 +341,7 @@ export default function FinancePage() {
                     <span style={S.label}>Net Profit</span>
                     <Wallet style={{ width: 13, height: 13, color: 'var(--accent)', opacity: 0.7 }} />
                   </div>
-                  <p style={{ ...S.big, color: thisProfit >= 0 ? 'var(--accent)' : '#f43f5e', marginBottom: 4 }}>{money(thisProfit)}</p>
+                  <p style={{ ...S.big, color: thisProfit >= 0 ? 'var(--text-primary)' : '#f43f5e', marginBottom: 4 }}>{money(thisProfit)}</p>
                   <p style={{ fontSize: 10, fontWeight: 700, color: thisMargin >= 40 ? '#22c55e' : thisMargin >= 20 ? '#f59e0b' : '#f43f5e' }}>
                     {thisMargin}% margin
                   </p>
@@ -367,7 +367,7 @@ export default function FinancePage() {
                     <span style={S.label}>vs Target</span>
                     <Target style={{ width: 13, height: 13, color: 'var(--accent)', opacity: 0.7 }} />
                   </div>
-                  <p style={{ ...S.big, color: latest?.revenue_target && thisRev >= latest.revenue_target ? '#22c55e' : 'var(--accent)', marginBottom: 6 }}>
+                  <p style={{ ...S.big, color: latest?.revenue_target && thisRev >= latest.revenue_target ? '#22c55e' : 'var(--text-primary)', marginBottom: 6 }}>
                     {latest?.revenue_target ? `${pct(thisRev, latest.revenue_target)}%` : '—'}
                   </p>
                   {latest?.revenue_target ? (
@@ -454,7 +454,7 @@ export default function FinancePage() {
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                         <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>Revenue</span>
-                        <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent)', fontVariantNumeric: 'tabular-nums' }}>{money(thisRev)}</span>
+                        <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>{money(thisRev)}</span>
                       </div>
                       <div style={{ height: 6, borderRadius: 999, background: 'var(--fo-soft-line-bg)' }}>
                         <div style={{ height: '100%', width: '100%', background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', borderRadius: 999 }} />
@@ -465,7 +465,7 @@ export default function FinancePage() {
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                         <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>Expenses</span>
-                        <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--accent)', fontVariantNumeric: 'tabular-nums' }}>{money(thisExp)}</span>
+                        <span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-primary)', fontVariantNumeric: 'tabular-nums' }}>{money(thisExp)}</span>
                       </div>
                       <div style={{ height: 6, borderRadius: 999, background: 'var(--fo-soft-line-bg)' }}>
                         <div style={{ height: '100%', width: `${Math.min(100, thisRev > 0 ? pct(thisExp, thisRev) : 100)}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-hover))', opacity: 0.65, borderRadius: 999 }} />
@@ -476,7 +476,7 @@ export default function FinancePage() {
                     <div style={{ borderTop: '1px solid var(--border)', paddingTop: 14 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
                         <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)' }}>Net Profit</span>
-                        <span style={{ fontSize: 14, fontWeight: 800, fontVariantNumeric: 'tabular-nums', color: thisProfit >= 0 ? '#22c55e' : '#f43f5e' }}>{money(thisProfit)}</span>
+                        <span style={{ fontSize: 14, fontWeight: 800, fontVariantNumeric: 'tabular-nums', color: thisProfit >= 0 ? 'var(--text-primary)' : '#f43f5e' }}>{money(thisProfit)}</span>
                       </div>
                       <div style={{ height: 6, borderRadius: 999, background: 'var(--fo-soft-line-bg)' }}>
                         <div style={{ height: '100%', width: `${Math.max(0, Math.min(100, thisMargin))}%`, borderRadius: 999, background: thisProfit >= 0 ? 'linear-gradient(90deg, #22c55e, #4ade80)' : 'linear-gradient(90deg, #f43f5e, #fb7185)' }} />
@@ -489,9 +489,9 @@ export default function FinancePage() {
                     {/* All-time row */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
                       {[
-                        { k: 'Total Revenue',  v: money(totalRev),    c: 'var(--accent)'  },
-                        { k: 'Total Expenses', v: money(totalExp),    c: '#f97316'        },
-                        { k: 'All-Time Profit',v: money(totalProfit), c: totalProfit >= 0 ? '#22c55e' : '#f43f5e' },
+                        { k: 'Total Revenue',  v: money(totalRev),    c: 'var(--text-primary)' },
+                        { k: 'Total Expenses', v: money(totalExp),    c: 'var(--text-primary)' },
+                        { k: 'All-Time Profit',v: money(totalProfit), c: totalProfit >= 0 ? 'var(--text-primary)' : '#f43f5e' },
                       ].map(({ k, v, c }) => (
                         <div key={k}>
                           <p style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-muted)', marginBottom: 3 }}>{k}</p>
@@ -524,7 +524,7 @@ export default function FinancePage() {
                         display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700,
                         padding: '6px 14px', borderRadius: 7, border: 'none', cursor: 'pointer',
                         background: showForm ? 'var(--bg-hover)' : 'linear-gradient(180deg, var(--accent-hover), var(--accent))',
-                        color: showForm ? 'var(--text-muted)' : '#031008',
+                        color: showForm ? 'var(--text-muted)' : 'var(--accent-fg)',
                       }}
                     >
                       {showForm ? <X style={{ width: 12, height: 12 }} /> : <Plus style={{ width: 12, height: 12 }} />}
@@ -580,7 +580,7 @@ export default function FinancePage() {
                         Cancel
                       </button>
                       <button type="submit" disabled={saving}
-                        style={{ fontSize: 12, fontWeight: 700, padding: '7px 20px', borderRadius: 7, border: 'none', background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}>
+                        style={{ fontSize: 12, fontWeight: 700, padding: '7px 20px', borderRadius: 7, border: 'none', background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}>
                         {saving ? 'Saving…' : 'Save Expense'}
                       </button>
                     </div>

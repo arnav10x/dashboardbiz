@@ -315,7 +315,7 @@ export function NotificationBell() {
                           <p className="text-xs font-bold leading-tight" style={{ color: 'var(--text-primary)' }}>{note.title}</p>
                           <span className="text-[9px] font-semibold flex-shrink-0" style={{ color: 'var(--text-muted)' }}>{note.time}</span>
                         </div>
-                        <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{note.body}</p>{note.metadata?.notification_type === 'team_invite' && (<div className="mt-2 flex gap-2"><button onClick={() => respondToInvite(note, true)} className="rounded-md px-2 py-1 text-[10px] font-bold" style={{background:'var(--accent)',color:'#031008'}}>Accept</button><button onClick={() => respondToInvite(note, false)} className="rounded-md px-2 py-1 text-[10px] font-bold" style={{border:'1px solid var(--border)',color:'var(--text-muted)'}}>Decline</button></div>)}
+                        <p className="text-[11px] leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{note.body}</p>{note.metadata?.notification_type === 'team_invite' && (<div className="mt-2 flex gap-2"><button onClick={() => respondToInvite(note, true)} className="rounded-md px-2 py-1 text-[10px] font-bold" style={{background:'var(--accent)',color:'var(--accent-fg)'}}>Accept</button><button onClick={() => respondToInvite(note, false)} className="rounded-md px-2 py-1 text-[10px] font-bold" style={{border:'1px solid var(--border)',color:'var(--text-muted)'}}>Decline</button></div>)}
                       </div>
                       <button onClick={() => dismiss(note.id)}
                         className="flex-shrink-0 h-4 w-4 flex items-center justify-center rounded hover:bg-white/[0.1]"

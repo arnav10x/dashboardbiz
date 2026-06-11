@@ -131,7 +131,7 @@ export function FeedbackModal({ onClose }: { onClose: () => void }) {
                 Cancel
               </button>
               <button onClick={handleSubmit} disabled={!message.trim() || sending}
-                style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '9px', borderRadius: 8, fontSize: 12, fontWeight: 700, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: !message.trim() || sending ? 'not-allowed' : 'pointer', opacity: !message.trim() ? 0.5 : 1 }}>
+                style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, padding: '9px', borderRadius: 8, fontSize: 12, fontWeight: 700, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', border: 'none', cursor: !message.trim() || sending ? 'not-allowed' : 'pointer', opacity: !message.trim() ? 0.5 : 1 }}>
                 <Send style={{ width: 12, height: 12 }} />
                 {sending ? 'Sending…' : 'Send feedback'}
               </button>

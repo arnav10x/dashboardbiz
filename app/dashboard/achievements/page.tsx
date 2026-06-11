@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Lock, Trophy, DollarSign, BarChart2, Zap, Flame, Medal, Star, Crown, CircleDollarSign, Send, Users, Target, Flag, CheckCircle2, Bell } from 'lucide-react'
+import { Lock, Trophy, DollarSign, BarChart2, Zap, Flame, Medal, Star, Crown, CircleDollarSign, Send, Users, Target, Flag, CheckCircle2 } from 'lucide-react'
 import { FOUNDER_RANKS, XP_LEVELS, rankName, rankInfo } from '@/lib/founderos/engine'
 import { BadgeCategoryDialog } from '@/components/strata/BadgeCategoryDialog'
+import { TopBar } from '@/components/strata/TopBar'
 
 interface Achievement {
   id: string
@@ -213,7 +214,7 @@ function SmallBadge({ color, earned, icon }: { color: string; earned: boolean; i
   return (
     <div style={{ width: 32, height: 32, position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, opacity: earned ? 1 : .45 }}>
       <svg width="32" height="32" viewBox="0 0 100 110" style={{ position: 'absolute', inset: 0, filter: earned ? `drop-shadow(0 0 8px ${color}55)` : 'none' }}>
-        <path d="M50 5 L84 19 L77 68 Q70 91 50 104 Q30 91 23 68 L16 19 Z" fill={earned ? `${color}28` : 'rgba(255,255,255,.04)'} stroke={earned ? color : 'rgba(255,255,255,.22)'} strokeWidth="6" />
+        <path d="M50 5 L84 19 L77 68 Q70 91 50 104 Q30 91 23 68 L16 19 Z" fill={earned ? `${color}28` : 'var(--overlay-faint)'} stroke={earned ? color : 'var(--border-strong)'} strokeWidth="6" />
       </svg>
       <span style={{ position: 'relative', fontSize: 13, lineHeight: 1, userSelect: 'none', filter: earned ? 'none' : 'grayscale(1)' }}>{icon || '🏆'}</span>
     </div>
@@ -503,45 +504,17 @@ export default async function AchievementsPage() {
     workspace_created: 'Common · +50 XP', workspace_second: 'Uncommon', calendar_entry: 'Common · +50 XP', calendar_10: 'Uncommon', calendar_30: 'Rare', ai_copilot: 'Common · +50 XP', team_first: 'Uncommon', team_5: 'Rare', integration_first: 'Uncommon', integration_3: 'Rare', username_set: 'Common · +50 XP', profile_photo: 'Common · +50 XP', first_report: 'Common', notification_action: 'Common', founder_os_ready: 'Epic',
   }
 
-  const displayName = (user.user_metadata?.full_name as string) || user.email?.split('@')[0] || 'Akhil'
-  const prettyDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase()
-  const prettyTime = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
-  const prettyDay = new Date().toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase()
-
   return (
-    <div className="min-h-full" style={{ background: '#050607', color: '#f7f7f7' }}>
+    <div className="min-h-full flex flex-col" style={{ background: 'var(--bg-base)', color: 'var(--text-primary)' }}>
       <style>{`
         .rank-preview-card, .achievement-hover-row { transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease, opacity .18s ease; }
         .rank-preview-card:hover { transform: translateY(-4px) scale(1.015); opacity: 1 !important; box-shadow: 0 18px 55px rgba(0,0,0,.35), inset 0 0 32px var(--accent-faint) !important; }
         .achievement-hover-row:hover { transform: translateX(4px); background: var(--accent-faint) !important; border-color: var(--accent-muted) !important; }
         .rank-preview-card:hover .rank-hover-note { opacity: 1 !important; }
       `}</style>
-      <div className="px-6 pt-4 pb-3" style={{ borderBottom: '1px solid var(--border)' }}>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 style={{ fontSize: 22, lineHeight: 1.05, fontWeight: 800, letterSpacing: '-0.045em', color: 'var(--text-primary)' }}>Good afternoon, {displayName}</h1>
-            <div className="mt-3 flex items-center gap-2">
-              {[prettyDate, prettyTime, prettyDay].map((pill) => (
-                <div key={pill} style={{ height: 28, minWidth: 78, padding: '0 15px', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(180deg, var(--glass-bg-a), var(--glass-bg-b))', border: '1px solid var(--glass-border)', boxShadow: 'inset 0 1px 0 var(--glass-inset)' }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-secondary)' }}>{pill}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="hidden md:flex items-center gap-6 pr-1" style={{ color: 'var(--text-muted)' }}>
-            <div className="relative">
-              <Bell style={{ width: 18, height: 18, color: 'var(--text-muted)' }} />
-              <span style={{ position: 'absolute', right: -7, top: -7, width: 15, height: 15, borderRadius: 99, background: 'var(--accent)', color: '#fff', fontSize: 9, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>1</span>
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 600 }}>Log out</span>
-            <div style={{ width: 28, height: 28, borderRadius: 99, border: '1px solid var(--glass-border)', background: 'var(--overlay-faint)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Users style={{ width: 14, height: 14, color: 'var(--text-muted)' }} />
-            </div>
-          </div>
-        </div>
-      </div>
+      <TopBar title="Achievements" workspaceName={workspace?.name || 'prspectve'} showGreeting />
 
-      <div className="px-5 pb-4" style={{ width: '100%', maxWidth: 'none' }}>
+      <div className="px-5 pb-4 pt-4" style={{ width: '100%', maxWidth: 'none' }}>
         <div className="grid gap-3" style={{ gridTemplateColumns: '286px 1fr' }}>
           <div className="app-card" style={{ minHeight: 226 }}><div className="app-card-inner" style={{ padding: '24px' }}>
             <p className="kicker">Current Rank</p>
@@ -647,12 +620,12 @@ export default async function AchievementsPage() {
         <div className="panel-card mt-3 p-4">
           <div className="mb-3 flex items-start justify-between">
             <div>
-              <h2 style={{ fontSize: 18, lineHeight: 1.1, fontWeight: 850, letterSpacing: '-.035em', color: '#fff' }}>Trophy Room</h2>
+              <h2 style={{ fontSize: 18, lineHeight: 1.1, fontWeight: 850, letterSpacing: '-.035em', color: 'var(--text-primary)' }}>Trophy Room</h2>
               <p style={{ marginTop: 4, fontSize: 11, color: 'var(--text-muted)' }}>We do not reward participation. We reward output.</p>
             </div>
             <div className="text-right">
               <p className="kicker">Completion</p>
-              <p style={{ fontSize: 22, lineHeight: 1, fontWeight: 900, color: 'var(--accent)' }}>{totalEarned}<span style={{ fontSize: 16, fontWeight: 500, color: 'rgba(255,255,255,.65)' }}>/{ACHIEVEMENTS.length}</span></p>
+              <p style={{ fontSize: 22, lineHeight: 1, fontWeight: 900, color: 'var(--accent)' }}>{totalEarned}<span style={{ fontSize: 16, fontWeight: 500, color: 'var(--text-muted)' }}>/{ACHIEVEMENTS.length}</span></p>
             </div>
           </div>
           <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(5, minmax(0, 1fr))' }}>
@@ -662,15 +635,15 @@ export default async function AchievementsPage() {
               const color = badgeColors[cat]
               const HeaderIcon = cat === 'Revenue' ? CircleDollarSign : cat === 'Outreach' ? Send : cat === 'Pipeline' ? Users : cat === 'Consistency' ? Target : Flag
               return (
-                <div key={cat} style={{ borderRadius: 10, border: '1px solid rgba(255,255,255,.08)', background: 'linear-gradient(180deg, rgba(255,255,255,.035), rgba(8,8,8,.70))', overflow: 'hidden', minHeight: 0 }}>
-                  <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: '1px solid rgba(255,255,255,.055)' }}>
+                <div key={cat} style={{ borderRadius: 10, border: '1px solid var(--glass-border)', background: 'linear-gradient(180deg, var(--glass-bg-a), var(--glass-bg-b))', overflow: 'hidden', minHeight: 0 }}>
+                  <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: '1px solid var(--divider-subtle)' }}>
                     <div className="flex items-center gap-2 min-w-0">
-                      <div style={{ width: 24, height: 24, borderRadius: 99, border: '1px solid rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <HeaderIcon style={{ width: 13, height: 13, color: 'rgba(255,255,255,.75)' }} />
+                      <div style={{ width: 24, height: 24, borderRadius: 99, border: '1px solid var(--border-strong)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <HeaderIcon style={{ width: 13, height: 13, color: 'var(--text-secondary)' }} />
                       </div>
-                      <p className="truncate" style={{ fontSize: 13, fontWeight: 800, color: '#fff' }}>{cat}</p>
+                      <p className="truncate" style={{ fontSize: 13, fontWeight: 800, color: 'var(--text-primary)' }}>{cat}</p>
                     </div>
-                    <div className="flex items-center gap-2"><span style={{ fontSize: 11, fontWeight: 800, color, whiteSpace: 'nowrap' }}>{catEarned} <span style={{ color: 'rgba(255,255,255,.52)' }}>/ {items.length} earned</span></span><BadgeCategoryDialog category={cat} items={items} earnedIds={[...earned]} badgeSub={badgeSub} accent={color} /></div>
+                    <div className="flex items-center gap-2"><span style={{ fontSize: 11, fontWeight: 800, color, whiteSpace: 'nowrap' }}>{catEarned} <span style={{ color: 'var(--text-muted)' }}>/ {items.length} earned</span></span><BadgeCategoryDialog category={cat} items={items} earnedIds={[...earned]} badgeSub={badgeSub} accent={color} /></div>
                   </div>
                   <div style={{ maxHeight: 182, overflowY: 'auto' }}>
                     {items.map(a => {
@@ -678,15 +651,15 @@ export default async function AchievementsPage() {
                       const sub = badgeSub[a.id] || 'Common'
                       const rarityColor = sub.includes('Legendary') ? '#f6c343' : sub.includes('Epic') ? '#bf5af2' : sub.includes('Rare') ? '#3b82f6' : 'var(--accent)'
                       return (
-                        <div key={a.id} className="achievement-hover-row flex items-center gap-2 px-3 py-1.5" style={{ borderTop: '1px solid rgba(255,255,255,.04)', borderLeft: '1px solid transparent', cursor: 'default' }} title={`${a.title}: ${sub}` }>
+                        <div key={a.id} className="achievement-hover-row flex items-center gap-2 px-3 py-1.5" style={{ borderTop: '1px solid var(--divider-subtle)', borderLeft: '1px solid transparent', cursor: 'default' }} title={`${a.title}: ${sub}` }>
                           <SmallBadge color={rarityColor} earned={isEarned} icon={a.icon} />
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2 min-w-0">
-                              <p className="truncate" style={{ fontSize: 11, fontWeight: 700, color: isEarned ? '#fff' : 'rgba(255,255,255,.62)' }}>{a.title}</p>
+                              <p className="truncate" style={{ fontSize: 11, fontWeight: 700, color: isEarned ? 'var(--text-primary)' : 'var(--text-muted)' }}>{a.title}</p>
                               <span style={{ fontSize: 9, color: rarityColor, whiteSpace: 'nowrap' }}>{sub}</span>
                             </div>
                           </div>
-                          {isEarned ? <CheckCircle2 style={{ width: 15, height: 15, color: 'var(--accent)', flexShrink: 0 }} /> : <Lock style={{ width: 14, height: 14, color: 'rgba(255,255,255,.42)', flexShrink: 0 }} />}
+                          {isEarned ? <CheckCircle2 style={{ width: 15, height: 15, color: 'var(--accent)', flexShrink: 0 }} /> : <Lock style={{ width: 14, height: 14, color: 'var(--text-muted)', flexShrink: 0 }} />}
                         </div>
                       )
                     })}

@@ -241,7 +241,7 @@ export function Sidebar({ workspaceName }: SidebarProps) {
             />
             <button
               onClick={addLink}
-              style={{ fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 5, background: 'var(--accent)', color: '#031008', border: 'none', cursor: 'pointer' }}
+              style={{ fontSize: 11, fontWeight: 700, padding: '4px 8px', borderRadius: 5, background: 'var(--accent)', color: 'var(--accent-fg)', border: 'none', cursor: 'pointer' }}
             >
               Add
             </button>

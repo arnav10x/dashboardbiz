@@ -225,7 +225,7 @@ function LeadPanel({ lead, onClose, onMove, onDelete, onSave }: {
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest mb-2.5" style={{ color: 'var(--text-muted)' }}>Follow-up Date</p>
             <input type="date" value={followUp} onChange={e => setFollowUp(e.target.value)}
-              className="w-full text-sm px-3.5 py-2.5 outline-none" style={{borderRadius: 7, background: 'var(--bg-raised)', border: '1px solid var(--border)', color: 'var(--text-primary)', colorScheme: 'dark'}} />
+              className="w-full text-sm px-3.5 py-2.5 outline-none" style={{borderRadius: 7, background: 'var(--bg-raised)', border: '1px solid var(--border)', color: 'var(--text-primary)'}} />
           </div>
 
           {/* Notes */}
@@ -239,7 +239,7 @@ function LeadPanel({ lead, onClose, onMove, onDelete, onSave }: {
           {dirty && (
             <button onClick={save}
               className="w-full py-2 text-xs font-bold transition-all"
-              style={{ borderRadius: 7, background: status === 'saved' ? 'var(--accent-muted)' : 'var(--accent)', color: status === 'saved' ? 'var(--accent)' : 'white' }}>
+              style={{ borderRadius: 7, background: status === 'saved' ? 'var(--accent-muted)' : 'var(--accent)', color: status === 'saved' ? 'var(--accent)' : 'var(--accent-fg)' }}>
               {status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved' : 'Save changes'}
             </button>
           )}
@@ -330,7 +330,7 @@ function AddLeadModal({ onClose, onAdd }: { onClose: () => void; onAdd: (data: P
             Cancel
           </button>
           <button onClick={submit} disabled={!name.trim()} className="flex-1 py-2 text-sm font-bold disabled:opacity-40 transition-opacity"
-            style={{ borderRadius: 7, background: 'var(--accent)', color: 'white' }}>
+            style={{ borderRadius: 7, background: 'var(--accent)', color: 'var(--accent-fg)' }}>
             Add lead
           </button>
         </div>
@@ -348,7 +348,7 @@ export default function PipelinePage() {
   const [workspaceId, setWorkspaceId] = useState<string | null>(null)
   const [workspaceName, setWorkspaceName] = useState('My Workspace')
   const [tableTab, setTableTab]       = useState<'all' | 'my' | 'archived'>('all')
-  const [viewMode, setViewMode]       = useState<'board' | 'table'>('board')
+  const [viewMode, setViewMode]       = useState<'board' | 'table'>('table')
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
   const [stageFilter, setStageFilter] = useState<Stage | 'all'>('all')
@@ -403,12 +403,15 @@ export default function PipelinePage() {
       return
     }
     const cfg = STAGE_CFG[lead.stage]
+    // Events store a concrete hex — CSS variables can't be composed into the
+    // alpha-suffixed colors the calendar renders with.
+    const eventColor = cfg.color.startsWith('var(') ? '#23c767' : cfg.color
     const title = `Follow up: ${lead.name}${lead.company ? ` (${lead.company})` : ''}`
     const description = `Stage: ${cfg.label}${lead.notes ? `\n\n${lead.notes}` : ''}`
     if (existing) {
-      await supabase.from('calendar_events').update({ title, description, event_date: followUpDate, color: cfg.color }).eq('id', existing.id)
+      await supabase.from('calendar_events').update({ title, description, event_date: followUpDate, color: eventColor }).eq('id', existing.id)
     } else {
-      await supabase.from('calendar_events').insert({ user_id: user.id, lead_id: lead.id, title, description, event_date: followUpDate, all_day: true, color: cfg.color, source: 'pipeline' })
+      await supabase.from('calendar_events').insert({ user_id: user.id, lead_id: lead.id, title, description, event_date: followUpDate, all_day: true, color: eventColor, source: 'pipeline' })
     }
   }
 
@@ -515,8 +518,8 @@ export default function PipelinePage() {
               <Filter className="h-4 w-4" /><span className="hidden sm:inline">Filters</span>
             </button>
             <div className="flex overflow-hidden fo-card-2">
-              <button onClick={() => setViewMode('table')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'table' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'table' ? '#06140b' : 'var(--accent)' }}><Rows3 className="h-4 w-4" /></button>
-              <button onClick={() => setViewMode('board')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'board' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'board' ? '#06140b' : 'var(--accent)' }}><Grid2X2 className="h-4 w-4" /></button>
+              <button onClick={() => setViewMode('table')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'table' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'table' ? 'var(--accent-fg)' : 'var(--accent)' }}><Rows3 className="h-4 w-4" /></button>
+              <button onClick={() => setViewMode('board')} className="h-9 w-9 flex items-center justify-center" style={{ background: viewMode === 'board' ? 'var(--accent)' : 'var(--accent-faint)', color: viewMode === 'board' ? 'var(--accent-fg)' : 'var(--accent)' }}><Grid2X2 className="h-4 w-4" /></button>
             </div>
             <button onClick={() => setShowAdd(true)} className="h-9 px-4 flex items-center gap-2 rounded-lg text-xs font-black fo-green-btn">
               <Plus className="h-4 w-4" /><span className="hidden sm:inline">Add Lead</span><span className="sm:hidden">Add</span>
@@ -549,7 +552,7 @@ export default function PipelinePage() {
                     <s.icon className="w-4 h-4" style={{ color: s.color }} />
                   </div>
                 </div>
-                <p className="text-2xl font-black fo-num" style={{ color: idx === 1 ? 'var(--accent)' : 'var(--text-primary)' }}>{s.value}</p>
+                <p className="text-2xl font-black fo-num" style={{ color: 'var(--text-primary)' }}>{s.value}</p>
                 <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{s.sub}</p>
                 {idx === 0 && <div className="mt-3 fo-soft-line"><span style={{ width: '55%' }} /></div>}
               </div>

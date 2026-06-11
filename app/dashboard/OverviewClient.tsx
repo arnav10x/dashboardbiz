@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { createClient } from '@/lib/supabase/client'
 import {
@@ -155,7 +156,7 @@ function QuickLogModal({ onClose, onSaved }: { onClose: () => void; onSaved: () 
             Cancel
           </button>
           <button onClick={handleSave} disabled={saving} className="flex-1 py-2 rounded-lg text-xs font-bold disabled:opacity-50"
-            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008' }}>
+            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)' }}>
             {saving ? 'Saving…' : 'Save entry'}
           </button>
         </div>
@@ -181,6 +182,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 export function OverviewClient({ userName, workspaceName, businessType, businessSummary, entries, todayTasks }: Props) {
+  const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [tasks, setTasks] = useState<Task[]>(todayTasks)
   const [togglingId, setTogglingId] = useState<string | null>(null)
@@ -345,15 +347,15 @@ export function OverviewClient({ userName, workspaceName, businessType, business
         </div>
       )}
 
-      {/* KPI row */}
+      {/* KPI row — each card links to the tab its number comes from */}
       <div className="ov-kpi-grid">
         {[
-          { label: 'Revenue', value: `$${animRevenue.toLocaleString()}`, sub: revenueTarget > 0 ? `$${Math.max(0, revenueTarget - revenue).toLocaleString()} to goal` : 'No target set', icon: Target, color: 'var(--text-primary)', bar: revenueTarget > 0, barPct: goalPct },
-          { label: 'Net Profit', value: `$${animProfit.toLocaleString()}`, sub: `${margin}% margin`, icon: TrendingUp, color: profit < 0 ? '#f43f5e' : 'var(--text-primary)', bar: false },
-          { label: 'Pipeline Leads', value: animLeads.toString(), sub: `${conversionRate}% conv. rate`, icon: Users, color: 'var(--text-primary)', bar: false },
-          { label: 'Tasks Done', value: `${completedCount}/${tasks.length}`, sub: 'today', icon: CheckSquare, color: tasks.length > 0 && completedCount === tasks.length ? 'var(--accent)' : 'var(--text-primary)', bar: false },
+          { label: 'Revenue', value: `$${animRevenue.toLocaleString()}`, sub: revenueTarget > 0 ? `$${Math.max(0, revenueTarget - revenue).toLocaleString()} to goal` : 'No target set', icon: Target, color: 'var(--text-primary)', bar: revenueTarget > 0, barPct: goalPct, href: '/dashboard/finance' },
+          { label: 'Net Profit', value: `$${animProfit.toLocaleString()}`, sub: `${margin}% margin`, icon: TrendingUp, color: profit < 0 ? '#f43f5e' : 'var(--text-primary)', bar: false, href: '/dashboard/finance' },
+          { label: 'Pipeline Leads', value: animLeads.toString(), sub: `${conversionRate}% conv. rate`, icon: Users, color: 'var(--text-primary)', bar: false, href: '/dashboard/pipeline' },
+          { label: 'Tasks Done', value: `${completedCount}/${tasks.length}`, sub: 'today', icon: CheckSquare, color: tasks.length > 0 && completedCount === tasks.length ? 'var(--accent)' : 'var(--text-primary)', bar: false, href: '/dashboard/tasks' },
         ].map(card => (
-          <div key={card.label} className="app-card" style={{ minHeight: 126 }}>
+          <Link key={card.label} href={card.href} className="app-card" style={{ minHeight: 126, textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
             <div className="app-card-inner" style={{ padding: '18px 18px 16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                 <span style={S.label}>{card.label}</span>
@@ -368,7 +370,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
               )}
             </div>
             <div className="app-card-glow" />
-          </div>
+          </Link>
         ))}
       </div>
 
@@ -376,7 +378,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       <div className="ov-chart-grid">
 
         {/* Revenue History */}
-        <div className="app-card">
+        <div className="app-card" onClick={() => router.push('/dashboard/finance')} style={{ cursor: 'pointer' }}>
           <div className="app-card-inner" style={{ padding: '20px 20px 18px', minHeight: 226 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
               <span style={S.label}>Revenue History</span>
@@ -390,7 +392,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                 {hasData && (
                   <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 5, overflow: 'hidden' }}>
                     {(['monthly', 'yearly'] as const).map((v, i) => (
-                      <button key={v} onClick={() => setChartView(v)} style={{ padding: '2px 7px', fontSize: 9, fontWeight: 700, cursor: 'pointer', background: chartView === v ? 'var(--accent-faint)' : 'transparent', color: chartView === v ? 'var(--accent)' : 'var(--text-muted)', border: 'none', borderLeft: i > 0 ? '1px solid var(--border)' : 'none' }}>
+                      <button key={v} onClick={e => { e.stopPropagation(); setChartView(v) }} style={{ padding: '2px 7px', fontSize: 9, fontWeight: 700, cursor: 'pointer', background: chartView === v ? 'var(--accent-faint)' : 'transparent', color: chartView === v ? 'var(--accent)' : 'var(--text-muted)', border: 'none', borderLeft: i > 0 ? '1px solid var(--border)' : 'none' }}>
                         {v === 'monthly' ? 'MO' : 'YR'}
                       </button>
                     ))}
@@ -419,7 +421,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
             ) : (
               <div style={{ height: 128, borderRadius: 8, background: 'var(--bg-raised)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
                 <p style={S.sub}>Log first entry to unlock chart</p>
-                <button onClick={() => setShowModal(true)} style={{ fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 5, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer' }}>
+                <button onClick={e => { e.stopPropagation(); setShowModal(true) }} style={{ fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 5, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', border: 'none', cursor: 'pointer' }}>
                   + Quick log
                 </button>
               </div>
@@ -429,7 +431,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
         </div>
 
         {/* Monthly Target */}
-        <div className="app-card">
+        <div className="app-card" onClick={() => router.push('/dashboard/finance')} style={{ cursor: 'pointer' }}>
           <div className="app-card-inner" style={{ padding: '20px 20px 18px', minHeight: 226, display: 'flex', flexDirection: 'column' }}>
             <p style={{ ...S.label, marginBottom: 14 }}>Monthly Target</p>
             {revenueTarget > 0 ? (
@@ -457,7 +459,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
                 <Target style={{ width: 22, height: 22, color: 'var(--text-muted)', opacity: 0.35 }} />
                 <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', marginBottom: 0 }}>No revenue target</p>
                 <p style={{ ...S.sub, marginBottom: 8 }}>Set a monthly goal to track pacing.</p>
-                <Link href="/dashboard/settings" style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none' }}>
+                <Link href="/dashboard/settings" onClick={e => e.stopPropagation()} style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', textDecoration: 'none' }}>
                   Set target →
                 </Link>
               </div>
@@ -467,11 +469,11 @@ export function OverviewClient({ userName, workspaceName, businessType, business
         </div>
 
         {/* Lead Pipeline */}
-        <div className="app-card">
+        <div className="app-card" onClick={() => router.push('/dashboard/pipeline')} style={{ cursor: 'pointer' }}>
           <div className="app-card-inner" style={{ padding: '20px 20px 18px', minHeight: 226, display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
               <span style={S.label}>Lead Pipeline</span>
-              <Link href="/dashboard/pipeline" style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'none' }}>View all →</Link>
+              <Link href="/dashboard/pipeline" onClick={e => e.stopPropagation()} style={{ fontSize: 10, color: 'var(--text-muted)', textDecoration: 'none' }}>View all →</Link>
             </div>
             {leads > 0 ? (
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9 }}>
@@ -489,7 +491,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 7, textAlign: 'center' }}>
                 <Users style={{ width: 20, height: 20, color: 'var(--text-muted)', opacity: 0.35 }} />
                 <p style={S.sub}>Pipeline empty</p>
-                <Link href="/dashboard/pipeline" style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none' }}>
+                <Link href="/dashboard/pipeline" onClick={e => e.stopPropagation()} style={{ fontSize: 11, fontWeight: 600, padding: '5px 12px', borderRadius: 6, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', textDecoration: 'none' }}>
                   Add first lead →
                 </Link>
               </div>
@@ -503,7 +505,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       <div className="ov-bottom-grid">
 
         {/* Tasks */}
-        <div className="app-card">
+        <div className="app-card" onClick={() => router.push('/dashboard/tasks')} style={{ cursor: 'pointer' }}>
         <div className="app-card-inner" style={{ padding: '18px 18px 16px', display: 'flex', flexDirection: 'column', minHeight: 318 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
@@ -514,7 +516,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{completedCount}/{tasks.length}</span>
-              <Link href="/dashboard/tasks" style={{ fontSize: 10, fontWeight: 500, padding: '3px 8px', borderRadius: 5, background: 'var(--bg-raised)', color: 'var(--text-muted)', border: '1px solid var(--border)', textDecoration: 'none' }}>
+              <Link href="/dashboard/tasks" onClick={e => e.stopPropagation()} style={{ fontSize: 10, fontWeight: 500, padding: '3px 8px', borderRadius: 5, background: 'var(--bg-raised)', color: 'var(--text-muted)', border: '1px solid var(--border)', textDecoration: 'none' }}>
                 Manage →
               </Link>
             </div>
@@ -523,7 +525,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
           {tasks.length > 0 ? (
             <div style={{ marginBottom: 14 }}>
               {tasks.slice(0, 4).map((task, i) => (
-                <div key={task.id} onClick={() => toggleTask(task)}
+                <div key={task.id} onClick={e => { e.stopPropagation(); toggleTask(task) }}
                   style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0', borderBottom: i < Math.min(tasks.length, 4) - 1 ? '1px solid var(--border)' : 'none', cursor: 'pointer' }}>
                   <div style={{ width: 17, height: 17, borderRadius: 4, border: `1.5px solid ${task.is_completed ? 'var(--accent)' : 'var(--border-strong)'}`, background: task.is_completed ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
                     {togglingId === task.id
@@ -569,7 +571,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
               )
             })}
           </div>
-          <Link href="/dashboard/tasks" style={{ marginTop: 10, fontSize: 10, fontWeight: 500, padding: '6px', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', border: '1px solid var(--accent-muted)', background: 'var(--accent-faint)', textDecoration: 'none' }}>
+          <Link href="/dashboard/tasks" onClick={e => e.stopPropagation()} style={{ marginTop: 10, fontSize: 10, fontWeight: 500, padding: '6px', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent)', border: '1px solid var(--accent-muted)', background: 'var(--accent-faint)', textDecoration: 'none' }}>
             View all tasks
           </Link>
         </div>
@@ -593,7 +595,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
 
       </div>
 
-      <div className="app-card"><div className="app-card-inner" style={{ padding: '13px 16px', display: 'flex', alignItems: 'center', gap: 14 }}>
+      <div className="app-card" onClick={() => router.push('/dashboard/ai-copilot')} style={{ cursor: 'pointer' }}><div className="app-card-inner" style={{ padding: '13px 16px', display: 'flex', alignItems: 'center', gap: 14 }}>
         <Bell style={{ width: 16, height: 16, color: '#fbbf24' }} />
         <span style={{ ...S.label, color: 'var(--text-primary)' }}>AI Alerts</span>
         <span style={{ fontSize: 10, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)', background: conversionRate === 0 && leads > 0 ? 'rgba(251,191,36,.08)' : 'var(--accent-faint)', border: conversionRate === 0 && leads > 0 ? '1px solid rgba(251,191,36,.2)' : '1px solid var(--accent-ring)', borderRadius: 999, padding: '3px 8px' }}>{conversionRate === 0 && leads > 0 ? 'warning' : 'live'}</span>
@@ -603,7 +605,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
 
       {/* Business Health — bottom of dashboard */}
       {hasData && (
-        <div className="app-card">
+        <div className="app-card" onClick={() => router.push('/dashboard/reports')} style={{ cursor: 'pointer' }}>
         <div className="app-card-inner" style={{ padding: '18px 20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
@@ -674,7 +676,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
             <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 4 }}>Log your first period</p>
             <p style={{ ...S.sub, marginBottom: 16, lineHeight: 1.5 }}>Enter revenue, expenses, leads, and customers to unlock your full dashboard.</p>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={() => setShowModal(true)} style={{ flex: 1, padding: '9px', borderRadius: 7, fontSize: 12, fontWeight: 600, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer' }}>
+              <button onClick={() => setShowModal(true)} style={{ flex: 1, padding: '9px', borderRadius: 7, fontSize: 12, fontWeight: 600, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', border: 'none', cursor: 'pointer' }}>
                 Quick log
               </button>
               <Link href="/dashboard/period-entry" style={{ flex: 1, padding: '9px', borderRadius: 7, fontSize: 12, fontWeight: 600, background: 'var(--bg-raised)', color: 'var(--text-secondary)', border: '1px solid var(--border)', textDecoration: 'none', textAlign: 'center' }}>

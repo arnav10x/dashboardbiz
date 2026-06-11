@@ -72,7 +72,7 @@ function TaskRow({ task, onToggle, onRemove, onEdit }: { task: Task; onToggle: (
         style={{
           background: task.is_completed ? priorityMeta[pr].color : 'transparent',
           border: task.is_completed ? 'none' : `2px solid ${priorityMeta[pr].color}`,
-          color: '#031008',
+          color: 'var(--accent-fg)',
         }}
       >
         {task.is_completed && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
@@ -189,7 +189,7 @@ function AddTaskModal({ onClose, onAdd }: {
             style={{ background: 'var(--overlay-faint)', border: '1px solid var(--glass-border)' }}>Cancel</button>
           <button onClick={save} disabled={saving || !title.trim()}
             className="flex-1 rounded-xl py-2 text-xs font-black disabled:opacity-50"
-            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008' }}>
+            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)' }}>
             {saving ? 'Saving…' : 'Add Task'}
           </button>
         </div>
@@ -250,7 +250,7 @@ function EditTaskModal({ task, onClose, onSave }: {
             style={{ background: 'var(--overlay-faint)', border: '1px solid var(--glass-border)' }}>Cancel</button>
           <button onClick={save} disabled={saving || !title.trim()}
             className="flex-1 rounded-xl py-2 text-xs font-black disabled:opacity-50"
-            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008' }}>
+            style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)' }}>
             {saving ? 'Saving…' : 'Save Changes'}
           </button>
         </div>
@@ -376,9 +376,9 @@ export default function TasksPage() {
                 <div key={d} className="flex flex-col items-center gap-0.5">
                   <div className="grid h-7 w-7 place-items-center rounded-full text-[10px] font-bold transition-all"
                     style={{
-                      background: active ? '#f5a623' : 'rgba(255,255,255,.06)',
-                      color: active ? '#031008' : 'var(--text-muted)',
-                      border: `1px solid ${active ? '#f5a623' : 'rgba(255,255,255,.08)'}`,
+                      background: active ? '#f5a623' : 'var(--overlay-faint)',
+                      color: active ? 'var(--accent-fg)' : 'var(--text-muted)',
+                      border: `1px solid ${active ? '#f5a623' : 'var(--border)'}`,
                       boxShadow: active ? '0 0 10px rgba(245,166,35,.5)' : 'none',
                     }}>
                     {active ? <Check className="h-3 w-3" strokeWidth={3} /> : d.charAt(0)}
@@ -410,7 +410,7 @@ export default function TasksPage() {
             </div>
             <button onClick={() => setModalOpen(true)}
               className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-black flex-shrink-0"
-              style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg, #031008)' }}>
+              style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)' }}>
               <Plus className="h-4 w-4" /><span className="hidden sm:inline">New Task</span><span className="sm:hidden">New</span>
             </button>
           </div>

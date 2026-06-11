@@ -163,7 +163,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
           actionHref ? (
             <Link
               href={actionHref}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)', whiteSpace: 'nowrap' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', textDecoration: 'none', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)', whiteSpace: 'nowrap' }}
             >
               <Plus style={{ width: 13, height: 13, flexShrink: 0 }} />
               <span className="hidden sm:inline">{actionLabel}</span>
@@ -171,7 +171,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
           ) : (
             <button
               onClick={onAction}
-              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', border: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)', whiteSpace: 'nowrap' }}
+              style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 800, padding: '10px 14px', borderRadius: 10, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)', border: 'none', cursor: 'pointer', boxShadow: 'inset 0 1px 0 rgba(255,255,255,.25), 0 10px 24px var(--accent-muted)', whiteSpace: 'nowrap' }}
             >
               <Plus style={{ width: 13, height: 13, flexShrink: 0 }} />
               <span className="hidden sm:inline">{actionLabel}</span>
@@ -192,7 +192,7 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
             >
               <div className="rounded-2xl p-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-strong)', boxShadow: '0 22px 60px rgba(0,0,0,.5)' }}>
                 <div className="flex items-center gap-3">
-                  <div className="h-12 w-12 rounded-full overflow-hidden grid place-items-center flex-shrink-0" style={{ background: 'var(--accent)', color: '#041008' }}>
+                  <div className="h-12 w-12 rounded-full overflow-hidden grid place-items-center flex-shrink-0" style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}>
                     {avatarUrl ? <img src={avatarUrl} alt="profile" className="h-full w-full object-cover" /> : <span className="font-black">{(displayName || 'F').slice(0,1).toUpperCase()}</span>}
                   </div>
                   <div className="min-w-0">

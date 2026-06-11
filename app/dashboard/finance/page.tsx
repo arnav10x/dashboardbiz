@@ -11,7 +11,7 @@ import {
   TrendingUp, DollarSign, CreditCard, Wallet, Target, Flame,
   ArrowUpRight, ArrowDownRight, Plus, ChevronDown, ChevronUp,
   Monitor, Users, Megaphone, Building2, Wrench, MoreHorizontal,
-  ShieldCheck, AlertTriangle, X, Receipt,
+  ShieldCheck, AlertTriangle, X, Receipt, Zap, RefreshCw, Unlink,
 } from 'lucide-react'
 
 /* ─── Types ─────────────────────────────────────────────────── */
@@ -95,6 +95,13 @@ export default function FinancePage() {
   const [loading, setLoading]     = useState(true)
   const [expTableReady, setExpTableReady] = useState(true)
 
+  // Stripe Connect state
+  const [stripeConnected, setStripeConnected]   = useState(false)
+  const [stripeAccountId, setStripeAccountId]   = useState<string | null>(null)
+  const [stripeLastSynced, setStripeLastSynced] = useState<string | null>(null)
+  const [stripeSyncing, setStripeSyncing]       = useState(false)
+  const [stripeMsg, setStripeMsg]               = useState<string | null>(null)
+
   // Add expense form
   const [showForm, setShowForm]   = useState(false)
   const [form, setForm]           = useState({ amount: '', category: 'software', vendor: '', description: '', expense_date: new Date().toISOString().split('T')[0] })
@@ -113,7 +120,7 @@ export default function FinancePage() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { setLoading(false); return }
 
-    const [{ data: ws }, { data: pe }, { data: rl }, expResult] = await Promise.all([
+    const [{ data: ws }, { data: pe }, { data: rl }, expResult, { data: stripeSettings }] = await Promise.all([
       supabase.from('workspaces').select('name').eq('owner_id', user.id).maybeSingle(),
       supabase.from('period_entries')
         .select('period_date,revenue,expenses,new_leads,new_customers,revenue_target')
@@ -124,9 +131,15 @@ export default function FinancePage() {
       supabase.from('expense_logs')
         .select('id,amount,category,vendor,description,expense_date')
         .eq('user_id', user.id).order('expense_date', { ascending: false }).limit(300),
+      supabase.from('user_settings')
+        .select('stripe_account_id,stripe_last_synced_at')
+        .eq('user_id', user.id).maybeSingle(),
     ])
 
     if (ws?.name) setWsName(ws.name)
+    setStripeConnected(!!stripeSettings?.stripe_account_id)
+    setStripeAccountId(stripeSettings?.stripe_account_id ?? null)
+    setStripeLastSynced(stripeSettings?.stripe_last_synced_at ?? null)
     setPeriods((pe || []).map(e => ({
       period_date: e.period_date as string,
       revenue:         Number(e.revenue)         || 0,
@@ -148,6 +161,16 @@ export default function FinancePage() {
   }, [])
 
   useEffect(() => { load() }, [load])
+
+  // Show toast if redirected back from Stripe OAuth
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search)
+    const s = p.get('stripe')
+    if (s === 'connected') setStripeMsg('Stripe connected! Click Sync to import your charges.')
+    if (s === 'denied')    setStripeMsg('Stripe connection was cancelled.')
+    if (s === 'error')     setStripeMsg('Stripe connection failed. Please try again.')
+    if (s) window.history.replaceState({}, '', window.location.pathname)
+  }, [])
 
   /* ─── Save expense ─── */
   async function handleSave(e: React.FormEvent) {
@@ -171,6 +194,31 @@ export default function FinancePage() {
       await load()
     }
     setSaving(false)
+  }
+
+  async function stripeSync() {
+    setStripeSyncing(true)
+    setStripeMsg(null)
+    const res = await fetch('/api/stripe/sync', { method: 'POST' })
+    const json = await res.json()
+    if (res.ok) {
+      setStripeMsg(`Synced ${json.synced} charge${json.synced !== 1 ? 's' : ''} from Stripe.`)
+      setStripeLastSynced(new Date().toISOString())
+      await load()
+    } else {
+      setStripeMsg('Sync failed. Please try again.')
+    }
+    setStripeSyncing(false)
+  }
+
+  async function stripeDisconnect() {
+    if (!confirm('Disconnect Stripe? This will remove all Stripe-synced revenue entries.')) return
+    await fetch('/api/stripe/disconnect', { method: 'DELETE' })
+    setStripeConnected(false)
+    setStripeAccountId(null)
+    setStripeLastSynced(null)
+    setStripeMsg('Stripe disconnected.')
+    await load()
   }
 
   async function deleteExp(id: string) {
@@ -258,6 +306,47 @@ export default function FinancePage() {
             <span style={{ color: 'var(--text-muted)' }}>Run the migration in </span>
             <code style={{ color: 'var(--text-primary)', background: 'rgba(255,255,255,0.06)', padding: '1px 5px', borderRadius: 4 }}>supabase/migrations/20240604_expense_logs.sql</code>
             <span style={{ color: 'var(--text-muted)' }}> to enable expense tracking.</span>
+          </div>
+        )}
+
+        {/* ── Stripe message toast ── */}
+        {stripeMsg && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 10, background: 'rgba(99,102,241,.09)', border: '1px solid rgba(99,102,241,.22)', fontSize: 12 }}>
+            <span style={{ color: 'var(--text-primary)' }}>{stripeMsg}</span>
+            <button onClick={() => setStripeMsg(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, color: 'var(--text-muted)' }}><X style={{ width: 12, height: 12 }} /></button>
+          </div>
+        )}
+
+        {/* ── Stripe Connect banner ── */}
+        {stripeConnected ? (
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 10, background: 'rgba(34,197,94,.07)', border: '1px solid rgba(34,197,94,.2)', fontSize: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, flex: 1, minWidth: 0 }}>
+              <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e', flexShrink: 0 }} />
+              <span style={{ fontWeight: 700, color: '#22c55e' }}>Stripe Connected</span>
+              {stripeAccountId && <span style={{ color: 'var(--text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>· {stripeAccountId}</span>}
+              {stripeLastSynced && <span style={{ color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>· Last synced {new Date(stripeLastSynced).toLocaleDateString()}</span>}
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+              <button onClick={stripeSync} disabled={stripeSyncing}
+                style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 7, border: '1px solid rgba(34,197,94,.3)', background: 'rgba(34,197,94,.1)', color: '#22c55e', cursor: stripeSyncing ? 'not-allowed' : 'pointer', opacity: stripeSyncing ? 0.6 : 1 }}>
+                <RefreshCw style={{ width: 11, height: 11 }} />{stripeSyncing ? 'Syncing…' : 'Sync Now'}
+              </button>
+              <button onClick={stripeDisconnect}
+                style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <Unlink style={{ width: 11, height: 11 }} />Disconnect
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 16px', borderRadius: 10, background: 'rgba(99,102,241,.06)', border: '1px solid rgba(99,102,241,.18)' }}>
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 2 }}>Connect Stripe to auto-import revenue</p>
+              <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>Sync your last 90 days of charges directly into your revenue logs — no manual entry needed.</p>
+            </div>
+            <a href="/api/stripe/connect"
+              style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700, padding: '8px 16px', borderRadius: 8, background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: '#031008', textDecoration: 'none', flexShrink: 0 }}>
+              <Zap style={{ width: 13, height: 13 }} />Connect Stripe
+            </a>
           </div>
         )}
 

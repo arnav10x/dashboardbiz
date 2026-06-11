@@ -424,8 +424,8 @@ export default function TasksPage() {
         <div className="flex-1 min-h-0 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_290px]">
 
           {/* Left — task list scrolls within its column ─────────── */}
-          <div className="flex flex-col min-h-0">
-            <div className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1">
+          <div className="flex flex-col min-h-0 min-w-0">
+            <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-2.5 pr-1">
               <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
               <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
               <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
@@ -481,7 +481,7 @@ export default function TasksPage() {
           </div>
 
           {/* Right — AI Tailored + Breakdown ────────────────────── */}
-          <div className="flex flex-col gap-3 min-h-0 overflow-y-auto">
+          <div className="flex flex-col gap-3 min-h-0 min-w-0 overflow-y-auto">
             <div className="flex-shrink-0 p-4" style={card()}>
               <div className="mb-3 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">

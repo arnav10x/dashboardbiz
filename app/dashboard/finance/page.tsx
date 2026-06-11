@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
 import { createClient } from '@/lib/supabase/client'
 import {
@@ -102,6 +102,151 @@ const ChartTip = ({ active, payload, label }: any) => {
         </div>
       ))}
     </div>
+  )
+}
+
+/* ─── Stripe Card ────────────────────────────────────────────── */
+function StripeCard({
+  status, loading, showForm, stripeKey, stripeDisplayName,
+  stripeConnecting, stripeSyncing, stripeError,
+  onToggleForm, onKeyChange, onDisplayNameChange,
+  onConnect, onDisconnect, onSync, onCancelForm, S,
+}: {
+  status: StripeStatus | null
+  loading: boolean
+  showForm: boolean
+  stripeKey: string
+  stripeDisplayName: string
+  stripeConnecting: boolean
+  stripeSyncing: boolean
+  stripeError: string | null
+  onToggleForm: () => void
+  onKeyChange: (v: string) => void
+  onDisplayNameChange: (v: string) => void
+  onConnect: (e: React.FormEvent) => void
+  onDisconnect: () => void
+  onSync: () => void
+  onCancelForm: () => void
+  S: { label: React.CSSProperties; big: React.CSSProperties }
+}) {
+  return (
+    <Card>
+      <div style={{ padding: '16px 20px' }}>
+        {/* Header row */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 7, background: '#635bff22', border: '1px solid #635bff44', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <CreditCard style={{ width: 13, height: 13, color: '#635bff' }} />
+            </div>
+            <div>
+              <span style={{ ...S.label, display: 'block', marginBottom: 1 }}>Stripe Integration</span>
+              {loading ? (
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Checking connection…</span>
+              ) : status?.connected ? (
+                <span style={{ fontSize: 11, color: '#22c55e', fontWeight: 600 }}>✓ Connected · {status.accountName}</span>
+              ) : (
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Connect once — payments sync automatically</span>
+              )}
+            </div>
+          </div>
+
+          {!loading && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {status?.connected ? (
+                <>
+                  {status.lastSyncedAt && (
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
+                      Last sync: {new Date(status.lastSyncedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    </span>
+                  )}
+                  <button onClick={onSync} disabled={stripeSyncing}
+                    style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg-hover)', color: 'var(--text-primary)', cursor: stripeSyncing ? 'not-allowed' : 'pointer', opacity: stripeSyncing ? 0.6 : 1 }}>
+                    <RefreshCw style={{ width: 11, height: 11 }} />
+                    {stripeSyncing ? 'Syncing…' : 'Sync Now'}
+                  </button>
+                  <button onClick={onDisconnect}
+                    style={{ fontSize: 11, fontWeight: 600, padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                    Disconnect
+                  </button>
+                </>
+              ) : (
+                /* ── Primary CTA: OAuth ── */
+                <a href="/api/stripe/oauth/start"
+                  style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 13, fontWeight: 700, padding: '8px 18px', borderRadius: 8, textDecoration: 'none', background: 'linear-gradient(180deg, #7c72ff, #635bff)', color: '#fff', boxShadow: '0 2px 8px #635bff44' }}>
+                  <CreditCard style={{ width: 14, height: 14 }} />
+                  Connect with Stripe
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Stats row when connected */}
+        {status?.connected && !loading && (
+          <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              Synced payments: <strong style={{ color: 'var(--text-primary)' }}>{status.paymentCount}</strong>
+            </span>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+              Total synced: <strong style={{ color: '#635bff' }}>${status.totalRevenue.toLocaleString()}</strong>
+            </span>
+          </div>
+        )}
+
+        {/* ── Fallback: manual API key ── */}
+        {!status?.connected && !loading && (
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
+            <button onClick={onToggleForm}
+              style={{ fontSize: 11, color: 'var(--text-muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}>
+              {showForm ? 'Hide' : 'Or connect with an API key instead →'}
+            </button>
+
+            {showForm && (
+              <form onSubmit={onConnect} style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 12 }}>
+                  <div>
+                    <label style={{ ...S.label, display: 'block', marginBottom: 6 }}>Account Nickname</label>
+                    <input type="text" placeholder="e.g. My Business"
+                      value={stripeDisplayName} onChange={e => onDisplayNameChange(e.target.value)}
+                      className="input-base" style={{ width: '100%' }} />
+                  </div>
+                  <div>
+                    <label style={{ ...S.label, display: 'block', marginBottom: 6 }}>Stripe Restricted Key *</label>
+                    <input type="password" placeholder="rk_live_… or rk_test_…" required
+                      value={stripeKey} onChange={e => onKeyChange(e.target.value)}
+                      className="input-base" style={{ width: '100%', fontFamily: 'monospace', fontSize: 11 }} />
+                  </div>
+                </div>
+                <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                  Create a Restricted Key in Stripe Dashboard → Developers → API keys with{' '}
+                  <strong style={{ color: 'var(--text-secondary)' }}>Balance (Read)</strong> and{' '}
+                  <strong style={{ color: 'var(--text-secondary)' }}>Charges (Read)</strong>. Stored server-side only.
+                </p>
+                {stripeError && (
+                  <p style={{ fontSize: 12, color: '#f43f5e', background: 'rgba(244,63,94,0.08)', padding: '8px 12px', borderRadius: 6, border: '1px solid rgba(244,63,94,0.2)' }}>
+                    {stripeError}
+                  </p>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+                  <button type="button" onClick={onCancelForm}
+                    style={{ fontSize: 12, fontWeight: 600, padding: '7px 16px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={stripeConnecting}
+                    style={{ fontSize: 12, fontWeight: 700, padding: '7px 20px', borderRadius: 7, border: 'none', background: 'linear-gradient(180deg, #7c72ff, #635bff)', color: '#fff', cursor: stripeConnecting ? 'not-allowed' : 'pointer', opacity: stripeConnecting ? 0.6 : 1 }}>
+                    {stripeConnecting ? 'Connecting…' : 'Connect & Sync'}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
+
+        {status?.connected && stripeError && (
+          <p style={{ marginTop: 10, fontSize: 12, color: '#f43f5e' }}>{stripeError}</p>
+        )}
+      </div>
+    </Card>
   )
 }
 
@@ -335,12 +480,49 @@ export default function FinancePage() {
     </div>
   )
 
+  /* ─── OAuth redirect feedback ─── */
+  const oauthBannerDismissed = useRef(false)
+  const [oauthBanner, setOauthBanner] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
+
+  useEffect(() => {
+    if (oauthBannerDismissed.current) return
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('stripe_connected') === '1') {
+      setOauthBanner({ type: 'success', msg: 'Stripe connected! Your payments have been synced.' })
+      window.history.replaceState({}, '', window.location.pathname)
+      oauthBannerDismissed.current = true
+    } else if (params.get('stripe_error')) {
+      const err = params.get('stripe_error')!
+      if (err !== 'access_denied') {
+        setOauthBanner({ type: 'error', msg: `Stripe connection failed: ${decodeURIComponent(err)}` })
+      }
+      window.history.replaceState({}, '', window.location.pathname)
+      oauthBannerDismissed.current = true
+    }
+  }, [])
+
   /* ─── Render ─── */
   return (
     <div className="flex min-h-full flex-col">
       <TopBar title="Finance" workspaceName={wsName} showGreeting hasData={periods.length > 0} actionLabel="Log period" actionHref="/dashboard/period-entry" />
 
       <div className="fo-page ov-page-padding" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+
+        {/* ── OAuth feedback banner ── */}
+        {oauthBanner && (
+          <div style={{ padding: '11px 16px', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+            background: oauthBanner.type === 'success' ? 'rgba(34,197,94,0.08)' : 'rgba(244,63,94,0.08)',
+            border: `1px solid ${oauthBanner.type === 'success' ? 'rgba(34,197,94,0.25)' : 'rgba(244,63,94,0.25)'}`,
+          }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: oauthBanner.type === 'success' ? '#22c55e' : '#f43f5e' }}>
+              {oauthBanner.msg}
+            </span>
+            <button onClick={() => setOauthBanner(null)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', padding: '2px 4px', borderRadius: 4, flexShrink: 0 }}>
+              <X style={{ width: 12, height: 12 }} />
+            </button>
+          </div>
+        )}
 
         {/* ── Migration notice ── */}
         {!expTableReady && (
@@ -353,123 +535,24 @@ export default function FinancePage() {
         )}
 
         {/* ── Stripe Integration ── */}
-        <Card>
-          <div style={{ padding: '16px 20px' }}>
-            {/* Header row */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 7, background: '#635bff22', border: '1px solid #635bff44', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <CreditCard style={{ width: 13, height: 13, color: '#635bff' }} />
-                </div>
-                <div>
-                  <span style={{ ...S.label, display: 'block', marginBottom: 1 }}>Stripe Integration</span>
-                  {stripeLoading ? (
-                    <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Checking connection…</span>
-                  ) : stripeStatus?.connected ? (
-                    <span style={{ fontSize: 11, color: '#22c55e', fontWeight: 600 }}>✓ Connected · {stripeStatus.accountName}</span>
-                  ) : (
-                    <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Auto-sync your Stripe payments into this dashboard</span>
-                  )}
-                </div>
-              </div>
-
-              {!stripeLoading && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  {stripeStatus?.connected ? (
-                    <>
-                      {stripeStatus.lastSyncedAt && (
-                        <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>
-                          Last sync: {new Date(stripeStatus.lastSyncedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                        </span>
-                      )}
-                      <button
-                        onClick={handleStripeSync} disabled={stripeSyncing}
-                        style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg-hover)', color: 'var(--text-primary)', cursor: stripeSyncing ? 'not-allowed' : 'pointer', opacity: stripeSyncing ? 0.6 : 1 }}
-                      >
-                        <RefreshCw style={{ width: 11, height: 11 }} />
-                        {stripeSyncing ? 'Syncing…' : 'Sync Now'}
-                      </button>
-                      <button
-                        onClick={handleStripeDisconnect}
-                        style={{ fontSize: 11, fontWeight: 600, padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer' }}
-                      >
-                        Disconnect
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => { setShowStripeForm(s => !s); setStripeError(null) }}
-                      style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, padding: '6px 14px', borderRadius: 7, border: 'none', cursor: 'pointer', background: showStripeForm ? 'var(--bg-hover)' : 'linear-gradient(180deg, #7c72ff, #635bff)', color: showStripeForm ? 'var(--text-muted)' : '#fff' }}
-                    >
-                      {showStripeForm ? 'Cancel' : '+ Connect Stripe'}
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-
-            {/* Stats row when connected */}
-            {stripeStatus?.connected && !stripeLoading && (
-              <div style={{ display: 'flex', gap: 20, marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                  Synced payments: <strong style={{ color: 'var(--text-primary)' }}>{stripeStatus.paymentCount}</strong>
-                </span>
-                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-                  Total synced revenue: <strong style={{ color: '#635bff' }}>${stripeStatus.totalRevenue.toLocaleString()}</strong>
-                </span>
-              </div>
-            )}
-
-            {/* Connect form */}
-            {showStripeForm && (
-              <form onSubmit={handleStripeConnect} style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 12 }}>
-                  <div>
-                    <label style={{ ...S.label, display: 'block', marginBottom: 6 }}>Account Nickname</label>
-                    <input
-                      type="text" placeholder="e.g. My Business"
-                      value={stripeDisplayName} onChange={e => setStripeDisplayName(e.target.value)}
-                      className="input-base" style={{ width: '100%' }}
-                    />
-                  </div>
-                  <div>
-                    <label style={{ ...S.label, display: 'block', marginBottom: 6 }}>Stripe Restricted API Key *</label>
-                    <input
-                      type="password" placeholder="rk_live_… or rk_test_…" required
-                      value={stripeKey} onChange={e => setStripeKey(e.target.value)}
-                      className="input-base" style={{ width: '100%', fontFamily: 'monospace', fontSize: 11 }}
-                    />
-                  </div>
-                </div>
-                <p style={{ fontSize: 11, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                  In your <strong style={{ color: 'var(--text-secondary)' }}>Stripe Dashboard → Developers → API keys</strong>, create a Restricted Key with{' '}
-                  <strong style={{ color: 'var(--text-secondary)' }}>Balance (Read)</strong> and{' '}
-                  <strong style={{ color: 'var(--text-secondary)' }}>Charges (Read)</strong> permissions. Your key is stored securely server-side and never exposed to the browser.
-                </p>
-                {stripeError && (
-                  <p style={{ fontSize: 12, color: '#f43f5e', background: 'rgba(244,63,94,0.08)', padding: '8px 12px', borderRadius: 6, border: '1px solid rgba(244,63,94,0.2)' }}>
-                    {stripeError}
-                  </p>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-                  <button type="button" onClick={() => { setShowStripeForm(false); setStripeError(null) }}
-                    style={{ fontSize: 12, fontWeight: 600, padding: '7px 16px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-muted)', cursor: 'pointer' }}>
-                    Cancel
-                  </button>
-                  <button type="submit" disabled={stripeConnecting}
-                    style={{ fontSize: 12, fontWeight: 700, padding: '7px 20px', borderRadius: 7, border: 'none', background: 'linear-gradient(180deg, #7c72ff, #635bff)', color: '#fff', cursor: stripeConnecting ? 'not-allowed' : 'pointer', opacity: stripeConnecting ? 0.6 : 1 }}>
-                    {stripeConnecting ? 'Connecting…' : 'Connect & Sync'}
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* Sync error when connected */}
-            {stripeStatus?.connected && stripeError && !showStripeForm && (
-              <p style={{ marginTop: 10, fontSize: 12, color: '#f43f5e' }}>{stripeError}</p>
-            )}
-          </div>
-        </Card>
+        <StripeCard
+          status={stripeStatus}
+          loading={stripeLoading}
+          showForm={showStripeForm}
+          stripeKey={stripeKey}
+          stripeDisplayName={stripeDisplayName}
+          stripeConnecting={stripeConnecting}
+          stripeSyncing={stripeSyncing}
+          stripeError={stripeError}
+          onToggleForm={() => { setShowStripeForm(s => !s); setStripeError(null) }}
+          onKeyChange={setStripeKey}
+          onDisplayNameChange={setStripeDisplayName}
+          onConnect={handleStripeConnect}
+          onDisconnect={handleStripeDisconnect}
+          onSync={handleStripeSync}
+          onCancelForm={() => { setShowStripeForm(false); setStripeError(null) }}
+          S={S}
+        />
 
         {/* ── No period data ── */}
         {periods.length === 0 && (

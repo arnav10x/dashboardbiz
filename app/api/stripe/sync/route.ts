@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createStripeClient } from '@/lib/stripe'
+import Stripe from 'stripe'
 
 export async function POST() {
   const supabase = createClient()
@@ -9,32 +10,34 @@ export async function POST() {
 
   const { data: conn } = await supabase
     .from('stripe_connections')
-    .select('api_key')
+    .select('api_key, access_token')
     .eq('user_id', user.id)
     .maybeSingle()
 
   if (!conn) return NextResponse.json({ error: 'No Stripe connection found.' }, { status: 404 })
 
+  // OAuth access_token takes priority over a manually supplied api_key
+  const key = (conn.access_token ?? conn.api_key) as string | null
+  if (!key) return NextResponse.json({ error: 'No Stripe credentials found.' }, { status: 404 })
+
   try {
-    const stripe = createStripeClient(conn.api_key)
+    const stripe = createStripeClient(key)
 
-    // Pull up to 100 succeeded charges from last 180 days
-    const since = Math.floor((Date.now() - 180 * 24 * 60 * 60 * 1000) / 1000)
+    const since   = Math.floor((Date.now() - 180 * 24 * 60 * 60 * 1000) / 1000)
     const charges = await stripe.charges.list({ limit: 100, created: { gte: since } })
-
-    const succeeded = charges.data.filter(c => c.status === 'succeeded')
+    const succeeded = charges.data.filter((c: Stripe.Charge) => c.status === 'succeeded')
 
     if (succeeded.length > 0) {
-      const rows = succeeded.map(c => ({
-        user_id: user.id,
+      const rows = succeeded.map((c: Stripe.Charge) => ({
+        user_id:          user.id,
         stripe_charge_id: c.id,
-        amount: c.amount / 100,
-        currency: c.currency,
-        customer_name: c.billing_details?.name ?? null,
-        customer_email: c.billing_details?.email ?? null,
-        description: c.description ?? null,
+        amount:           c.amount / 100,
+        currency:         c.currency,
+        customer_name:    c.billing_details?.name  ?? null,
+        customer_email:   c.billing_details?.email ?? null,
+        description:      c.description            ?? null,
         stripe_created_at: new Date(c.created * 1000).toISOString(),
-        synced_at: new Date().toISOString(),
+        synced_at:        new Date().toISOString(),
       }))
 
       const { error } = await supabase

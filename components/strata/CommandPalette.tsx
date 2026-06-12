@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import {
   LayoutDashboard, CheckSquare, TrendingUp, DollarSign, CalendarDays, Sparkles,
   BarChart2, Trophy, Settings, Search, Plus, UserPlus, SunMoon, LogOut,
-  CornerDownLeft, PenLine, Users, Plug,
+  CornerDownLeft, PenLine,
 } from 'lucide-react'
 
 type Command = {
@@ -60,8 +60,6 @@ export function CommandPalette() {
     { id: 'finance',    label: 'Finance',      keywords: 'finance money pl profit loss expenses revenue burn', section: 'Navigate', icon: DollarSign, perform: () => go('/dashboard/finance') },
     { id: 'calendar',   label: 'Calendar',     keywords: 'calendar schedule events pl daily', section: 'Navigate', icon: CalendarDays, perform: () => go('/dashboard/pl-calendar') },
     { id: 'ai-coach',   label: 'AI Coach',     keywords: 'ai coach copilot chat assistant', section: 'Navigate', icon: Sparkles, perform: () => go('/dashboard/ai-copilot') },
-    { id: 'team',       label: 'Team',         keywords: 'team members invite collaborate chat workspace', section: 'Navigate', icon: Users, perform: () => go('/dashboard/team') },
-    { id: 'integrations', label: 'Integrations', keywords: 'integrations connect google calendar tools sync', section: 'Navigate', icon: Plug, perform: () => go('/dashboard/integrations') },
     { id: 'reports',    label: 'Reports',      keywords: 'reports analytics insights performance', section: 'Navigate', icon: BarChart2, perform: () => go('/dashboard/reports') },
     { id: 'achievements', label: 'Achievements', keywords: 'achievements badges xp rank level streak', section: 'Navigate', icon: Trophy, perform: () => go('/dashboard/achievements') },
     { id: 'settings',   label: 'Settings',     keywords: 'settings profile account preferences theme target', section: 'Navigate', icon: Settings, perform: () => go('/dashboard/settings') },

@@ -514,7 +514,7 @@ export default async function AchievementsPage() {
       `}</style>
       <TopBar title="Achievements" workspaceName={workspace?.name || 'prspectve'} showGreeting />
 
-      <div className="px-5 pb-4 pt-4" style={{ width: '100%', maxWidth: 'none' }}>
+      <div className="px-5 pb-4 pt-4 animate-in" style={{ width: '100%', maxWidth: 'none' }}>
         <div className="grid gap-3" style={{ gridTemplateColumns: '286px 1fr' }}>
           <div className="app-card" style={{ minHeight: 226 }}><div className="app-card-inner" style={{ padding: '24px' }}>
             <p className="kicker">Current Rank</p>

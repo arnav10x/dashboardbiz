@@ -144,8 +144,50 @@
     margin-top: 0.25rem;
   }
 
+  /* ── App-wide page motion ─────────────────────────────────────
+     `.animate-in` fades the page in, then its direct sections rise
+     with a small stagger. `.stagger` applies the same rise to any
+     nested wrapper. `backwards` fill keeps transforms from lingering
+     (a lingering transform would break fixed-position descendants),
+     and `.fixed` overlays (modals, toasts) are excluded. */
   .animate-in {
-    animation: fadeSlideIn 0.2s ease both;
+    animation: pageFade 0.32s ease backwards;
+  }
+  .animate-in > *:not(.fixed),
+  .stagger > *:not(.fixed) {
+    animation: riseIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+  .animate-in > *:nth-child(2):not(.fixed),  .stagger > *:nth-child(2):not(.fixed)  { animation-delay: 0.05s; }
+  .animate-in > *:nth-child(3):not(.fixed),  .stagger > *:nth-child(3):not(.fixed)  { animation-delay: 0.10s; }
+  .animate-in > *:nth-child(4):not(.fixed),  .stagger > *:nth-child(4):not(.fixed)  { animation-delay: 0.15s; }
+  .animate-in > *:nth-child(5):not(.fixed),  .stagger > *:nth-child(5):not(.fixed)  { animation-delay: 0.20s; }
+  .animate-in > *:nth-child(6):not(.fixed),  .stagger > *:nth-child(6):not(.fixed)  { animation-delay: 0.25s; }
+  .animate-in > *:nth-child(n+7):not(.fixed), .stagger > *:nth-child(n+7):not(.fixed) { animation-delay: 0.30s; }
+
+  /* Staggered cards inside KPI/stat grids */
+  .stagger-cards > * { animation: riseIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .stagger-cards > *:nth-child(2) { animation-delay: 0.06s; }
+  .stagger-cards > *:nth-child(3) { animation-delay: 0.12s; }
+  .stagger-cards > *:nth-child(4) { animation-delay: 0.18s; }
+  .stagger-cards > *:nth-child(5) { animation-delay: 0.24s; }
+
+  /* Satisfying checkbox pop on completion */
+  .check-pop { animation: checkPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+  /* Skeleton shimmer for loading states */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: var(--overlay-faint);
+    border-radius: 8px;
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, transparent, var(--overlay-faint), transparent);
+    animation: skeletonSweep 1.4s ease infinite;
   }
 
   /* Heatmap squares */
@@ -258,6 +300,36 @@
   @keyframes slideUp {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pageFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes checkPop {
+    0%   { transform: scale(1); }
+    45%  { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes skeletonSweep {
+    to { transform: translateX(100%); }
+  }
+
+  @keyframes cmdkOverlay {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes cmdkPanel {
+    from { opacity: 0; transform: translateY(-8px) scale(0.985); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .stat-enter   { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both; }
@@ -418,4 +490,57 @@ html.theme-light .app-card {
 }
 @media (min-width: 768px) {
   .topbar-greeting { font-size: 21px; }
+}
+
+/* ── Command palette (⌘K) ── */
+.cmdk-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  padding: 14vh 16px 16px;
+  animation: cmdkOverlay 0.15s ease both;
+}
+.cmdk-panel {
+  width: 100%;
+  max-width: 560px;
+  height: fit-content;
+  max-height: 64vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  background: var(--modal-bg);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 0 0 1px var(--accent-faint), 0 32px 90px rgba(0, 0, 0, 0.55), 0 0 60px -12px var(--accent-glow);
+  overflow: hidden;
+  animation: cmdkPanel 0.18s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.cmdk-item[data-active='true'] {
+  background: var(--accent-faint);
+}
+.cmdk-kbd {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--text-muted);
+  background: var(--overlay-faint);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 2px 6px;
+  line-height: 1.2;
+}
+
+/* ── Accessibility: respect reduced-motion preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

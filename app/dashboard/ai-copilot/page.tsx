@@ -446,7 +446,7 @@ export default function AICopilotPage() {
     <div className="flex flex-col h-full">
       <TopBar title="AI Coach" workspaceName={userData?.workspaceName || 'My Workspace'} hasData={userData?.hasData ?? false} showGreeting />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden animate-in">
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex items-center justify-between px-5 py-2.5 flex-shrink-0"
             style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)' }}>

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
+import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
 import { createClient } from '@/lib/supabase/client'
 import { Check, Plus, X, Flame, Sparkles, RefreshCw, Trash2, ChevronRight, Pencil } from 'lucide-react'
 
@@ -61,14 +62,14 @@ function card(extra: React.CSSProperties = {}): React.CSSProperties {
   }
 }
 
-function TaskRow({ task, onToggle, onRemove, onEdit }: { task: Task; onToggle: (t: Task) => void; onRemove: (t: Task) => void; onEdit: (t: Task) => void }) {
+function TaskRow({ task, onToggle, onRemove, onEdit, popping = false }: { task: Task; onToggle: (t: Task) => void; onRemove: (t: Task) => void; onEdit: (t: Task) => void; popping?: boolean }) {
   const pr = getPriority(task)
   return (
     <div className="group flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-white/[.025]"
       style={{ background: 'transparent' }}>
       <button
         onClick={() => onToggle(task)}
-        className="grid h-6 w-6 flex-shrink-0 place-items-center rounded-full transition-colors"
+        className={`grid h-6 w-6 flex-shrink-0 place-items-center rounded-full transition-colors ${popping ? 'check-pop' : ''}`}
         style={{
           background: task.is_completed ? priorityMeta[pr].color : 'transparent',
           border: task.is_completed ? 'none' : `2px solid ${priorityMeta[pr].color}`,
@@ -108,9 +109,9 @@ function TaskRow({ task, onToggle, onRemove, onEdit }: { task: Task; onToggle: (
   )
 }
 
-function PrioritySection({ label, tasks, priority, onToggle, onRemove, onEdit }: {
+function PrioritySection({ label, tasks, priority, onToggle, onRemove, onEdit, poppingId }: {
   label: string; tasks: Task[]; priority: Priority;
-  onToggle: (t: Task) => void; onRemove: (t: Task) => void; onEdit: (t: Task) => void
+  onToggle: (t: Task) => void; onRemove: (t: Task) => void; onEdit: (t: Task) => void; poppingId?: string | null
 }) {
   if (!tasks.length) return null
   const m = priorityMeta[priority]
@@ -123,7 +124,7 @@ function PrioritySection({ label, tasks, priority, onToggle, onRemove, onEdit }:
           style={{ background: m.bg, color: m.color }}>{tasks.length}</span>
       </div>
       <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
-        {tasks.map(t => <TaskRow key={t.id} task={t} onToggle={onToggle} onRemove={onRemove} onEdit={onEdit} />)}
+        {tasks.map(t => <TaskRow key={t.id} task={t} onToggle={onToggle} onRemove={onRemove} onEdit={onEdit} popping={poppingId === t.id} />)}
       </div>
     </div>
   )
@@ -269,6 +270,25 @@ export default function TasksPage() {
   const [editingTask, setEditingTask]   = useState<Task | null>(null)
   const [completedOpen, setCompletedOpen] = useState(false)
   const [suggestionIndex, setSuggestionIndex] = useState(0)
+  const [streak, setStreak]             = useState(0)
+  const [justCompleted, setJustCompleted] = useState<string | null>(null)
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null)
+
+  // Command palette deep-link: /dashboard/tasks?new=1 opens the create modal
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('new')) {
+      setModalOpen(true)
+      window.history.replaceState(null, '', '/dashboard/tasks')
+    }
+  }, [])
+
+  const loadStreak = useCallback(async () => {
+    try {
+      const res = await fetch('/api/gamification', { cache: 'no-store' })
+      if (res.ok) setStreak(Number((await res.json()).streak) || 0)
+    } catch {}
+  }, [])
+  useEffect(() => { loadStreak() }, [loadStreak])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -307,7 +327,8 @@ export default function TasksPage() {
   const total   = tasks.length
   const done    = completed.length
   const pct     = total ? Math.round((done / total) * 100) : 0
-  const streak  = done > 0 ? 1 : 0
+  // Monday-indexed position of today inside the week strip
+  const todayIdx = (new Date().getDay() + 6) % 7
 
   const addTask = async (title: string, notes: string, priority: Priority) => {
     const supabase = createClient()
@@ -322,11 +343,16 @@ export default function TasksPage() {
 
   const toggleTask = async (task: Task) => {
     const next = !task.is_completed
+    if (next) {
+      setJustCompleted(task.id)
+      setTimeout(() => setJustCompleted(null), 400)
+    }
     setTasks(prev => prev.map(t => t.id === task.id ? { ...t, is_completed: next, completed_at: next ? new Date().toISOString() : null } : t))
     const supabase = createClient()
     await supabase.from('tasks').update({ is_completed: next, completed_at: next ? new Date().toISOString() : null }).eq('id', task.id)
     if (next) {
       await fetch('/api/gamification', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: getPriority(task) === 'High' ? 'complete_high_priority_task' : 'complete_task' }) }).catch(() => null)
+      loadStreak()
     }
   }
 
@@ -334,6 +360,12 @@ export default function TasksPage() {
     setTasks(prev => prev.filter(t => t.id !== task.id))
     const supabase = createClient()
     await supabase.from('tasks').delete().eq('id', task.id)
+  }
+
+  const confirmRemoveTask = () => {
+    if (!taskToDelete) return
+    removeTask(taskToDelete)
+    setTaskToDelete(null)
   }
 
   const editTask = async (id: string, title: string, notes: string, priority: Priority) => {
@@ -371,19 +403,21 @@ export default function TasksPage() {
 
           <div className="flex items-end gap-1.5">
             {DAYS.map((d, i) => {
-              const active = i === 0 && done > 0
+              // Filled when the day falls inside the current streak window ending today
+              const active = i <= todayIdx && todayIdx - i < streak
+              const isToday = i === todayIdx
               return (
                 <div key={d} className="flex flex-col items-center gap-0.5">
                   <div className="grid h-7 w-7 place-items-center rounded-full text-[10px] font-bold transition-all"
                     style={{
                       background: active ? '#f5a623' : 'var(--overlay-faint)',
                       color: active ? 'var(--accent-fg)' : 'var(--text-muted)',
-                      border: `1px solid ${active ? '#f5a623' : 'var(--border)'}`,
+                      border: `1px solid ${active ? '#f5a623' : isToday ? 'rgba(245,166,35,.5)' : 'var(--border)'}`,
                       boxShadow: active ? '0 0 10px rgba(245,166,35,.5)' : 'none',
                     }}>
                     {active ? <Check className="h-3 w-3" strokeWidth={3} /> : d.charAt(0)}
                   </div>
-                  <span className="text-[9px]" style={{ color: 'var(--text-muted)' }}>{d}</span>
+                  <span className="text-[9px]" style={{ color: isToday ? '#f5a623' : 'var(--text-muted)', fontWeight: isToday ? 700 : 400 }}>{d}</span>
                 </div>
               )
             })}
@@ -426,9 +460,9 @@ export default function TasksPage() {
           {/* Left — task list scrolls within its column ─────────── */}
           <div className="flex flex-col min-h-0 min-w-0">
             <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-2.5 pr-1">
-              <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
-              <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
-              <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />
+              <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} poppingId={justCompleted} />
+              <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} poppingId={justCompleted} />
+              <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} poppingId={justCompleted} />
 
               {openTasks.length === 0 && !loading && (
                 <div className="rounded-2xl px-6 py-10 text-center"
@@ -442,8 +476,17 @@ export default function TasksPage() {
                 </div>
               )}
               {loading && openTasks.length === 0 && (
-                <div className="rounded-2xl px-6 py-8 text-center" style={{ border: '1px dashed rgba(255,255,255,.09)' }}>
-                  <p className="text-sm font-bold" style={{ color: 'var(--text-muted)' }}>Loading tasks…</p>
+                <div className="overflow-hidden rounded-2xl" style={{ border: '1px solid rgba(255,255,255,.06)' }}>
+                  {[0, 1, 2].map(i => (
+                    <div key={i} className="flex items-center gap-4 px-5 py-4">
+                      <div className="skeleton h-6 w-6 flex-shrink-0 rounded-full" />
+                      <div className="flex-1 space-y-2">
+                        <div className="skeleton h-3.5" style={{ width: `${62 - i * 12}%` }} />
+                        <div className="skeleton h-2.5" style={{ width: `${30 - i * 5}%` }} />
+                      </div>
+                      <div className="skeleton h-5 w-14 rounded-md" />
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -464,7 +507,7 @@ export default function TasksPage() {
                   </button>
                   {completedOpen && (
                     <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
-                      {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />)}
+                      {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} />)}
                     </div>
                   )}
                 </div>
@@ -554,6 +597,13 @@ export default function TasksPage() {
 
       {modalOpen && <AddTaskModal onClose={() => setModalOpen(false)} onAdd={addTask} />}
       {editingTask && <EditTaskModal task={editingTask} onClose={() => setEditingTask(null)} onSave={editTask} />}
+      <ConfirmDialog
+        open={!!taskToDelete}
+        title="Delete this task?"
+        message={taskToDelete ? `"${taskToDelete.title.length > 60 ? taskToDelete.title.slice(0, 60) + '…' : taskToDelete.title}" will be permanently removed.` : undefined}
+        onConfirm={confirmRemoveTask}
+        onCancel={() => setTaskToDelete(null)}
+      />
     </div>
   )
 }

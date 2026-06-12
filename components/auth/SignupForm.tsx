@@ -79,48 +79,48 @@ export function SignupForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <label className="text-sm font-medium leading-none text-zinc-300" htmlFor="fullName">
+            <label className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }} htmlFor="fullName">
               Full Name
             </label>
             <input
               id="fullName"
-              placeholder="Leo Founder"
+              placeholder="Your full name"
               type="text"
               autoCapitalize="words"
               autoCorrect="off"
               disabled={isLoading}
-              className="flex h-10 w-full rounded-md border border-zinc-800 bg-[#18181b] px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="input-base disabled:cursor-not-allowed disabled:opacity-50"
               {...register("fullName")}
             />
             {errors?.fullName && (
-              <p className="px-1 text-xs text-red-500">
+              <p className="px-1 text-xs" style={{ color: '#f43f5e' }}>
                 {errors.fullName.message}
               </p>
             )}
           </div>
 
           <div className="grid gap-2">
-            <label className="text-sm font-medium leading-none text-zinc-300" htmlFor="username">
+            <label className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }} htmlFor="username">
               Unique Username
             </label>
             <input
               id="username"
-              placeholder="akhil_founder"
+              placeholder="alex_founder"
               type="text"
               autoCapitalize="none"
               autoCorrect="off"
               disabled={isLoading}
-              className="flex h-10 w-full rounded-md border border-zinc-800 bg-[#18181b] px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="input-base disabled:cursor-not-allowed disabled:opacity-50"
               {...register("username")}
             />
             {errors?.username && (
-              <p className="px-1 text-xs text-red-500">
+              <p className="px-1 text-xs" style={{ color: '#f43f5e' }}>
                 {errors.username.message}
               </p>
             )}
           </div>
           <div className="grid gap-2">
-            <label className="text-sm font-medium leading-none text-zinc-300" htmlFor="email">
+            <label className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }} htmlFor="email">
               Email
             </label>
             <input
@@ -131,40 +131,40 @@ export function SignupForm() {
               autoComplete="email"
               autoCorrect="off"
               disabled={isLoading}
-              className="flex h-10 w-full rounded-md border border-zinc-800 bg-[#18181b] px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="input-base disabled:cursor-not-allowed disabled:opacity-50"
               {...register("email")}
             />
             {errors?.email && (
-              <p className="px-1 text-xs text-red-500">
+              <p className="px-1 text-xs" style={{ color: '#f43f5e' }}>
                 {errors.email.message}
               </p>
             )}
           </div>
           <div className="grid gap-2">
-            <label className="text-sm font-medium leading-none text-zinc-300" htmlFor="password">
+            <label className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }} htmlFor="password">
               Password
             </label>
             <input
               id="password"
               type="password"
               disabled={isLoading}
-              className="flex h-10 w-full rounded-md border border-zinc-800 bg-[#18181b] px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="input-base disabled:cursor-not-allowed disabled:opacity-50"
               {...register("password")}
             />
             {errors?.password && (
-              <p className="px-1 text-xs text-red-500">
+              <p className="px-1 text-xs" style={{ color: '#f43f5e' }}>
                 {errors.password.message}
               </p>
             )}
           </div>
           {serverError && (
-             <p className="text-sm text-red-500">{serverError}</p>
+             <p className="text-sm" style={{ color: '#f43f5e' }}>{serverError}</p>
           )}
           <button
             disabled={isLoading}
-            className="inline-flex h-10 items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 disabled:pointer-events-none disabled:opacity-50 mt-2"
+            className="w-full py-2.5 rounded-lg text-sm font-bold transition-all hover:opacity-90 disabled:pointer-events-none disabled:opacity-50 mt-2" style={{ background: 'var(--accent)', color: 'white' }}
           >
-            {isLoading ? "Creating account..." : "Sign Up"}
+            {isLoading ? "Creating account…" : "Start the sprint →"}
           </button>
         </div>
       </form>

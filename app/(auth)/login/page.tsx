@@ -1,7 +1,6 @@
 import { LoginForm } from '@/components/auth/LoginForm'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Zap } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,17 +12,13 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6" style={{ background: 'var(--bg-base)' }}>
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm animate-in stagger">
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-8">
-          <div
-            className="h-8 w-8 rounded-lg flex items-center justify-center"
-            style={{ background: 'var(--accent)' }}
-          >
-            <Zap className="h-4 w-4 text-white" />
-          </div>
+        <Link href="/" className="flex items-center justify-center gap-2.5 mb-8" style={{ textDecoration: 'none' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="prspectve" width={32} height={32} style={{ borderRadius: 8, display: 'block' }} />
           <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>prspectve</span>
-        </div>
+        </Link>
 
         <div
           className="rounded-2xl p-8"

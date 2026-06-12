@@ -8,6 +8,7 @@ import { AICoachPanel } from '@/components/strata/AICoachPanel'
 import { LogoPreloader } from '@/components/strata/LogoPreloader'
 import { ToastProvider } from '@/components/strata/Toast'
 import { AutomationRunner } from '@/components/strata/AutomationRunner'
+import { CommandPalette } from '@/components/strata/CommandPalette'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient()
@@ -47,6 +48,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
         <MobileNav />
         <AutomationRunner />
+        <CommandPalette />
       </div>
     </ToastProvider>
   )

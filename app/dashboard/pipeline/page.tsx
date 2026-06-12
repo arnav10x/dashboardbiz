@@ -2,9 +2,12 @@
 import { useState, useEffect } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
 import {
-  Plus, X, ArrowRight, DollarSign, TrendingUp, Target, ChevronRight, BarChart2, Filter, Grid2X2, Rows3, Search, MessageSquare, Pencil, MoreHorizontal, Trophy, Users,
+  Plus, X, ArrowRight, DollarSign, TrendingUp, Target, ChevronRight, BarChart2, Filter, Grid2X2, Rows3, Search, Pencil, Trash2, Trophy, Users,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { useCountUp } from '@/lib/use-count-up'
+import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
+import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 
 type Stage = 'new_lead' | 'contacted' | 'qualified' | 'proposal' | 'won' | 'lost'
 
@@ -246,7 +249,8 @@ function LeadPanel({ lead, onClose, onMove, onDelete, onSave }: {
         </div>
 
         <div className="p-5" style={{ borderTop: '1px solid var(--border)' }}>
-          <button onClick={() => { onDelete(lead.id); onClose() }}
+          {/* Confirmation happens at page level; the panel closes itself once the lead is gone */}
+          <button onClick={() => onDelete(lead.id)}
             className="w-full py-2 text-xs font-bold transition-all hover:opacity-90"
             style={{ borderRadius: 7, background: 'rgba(244,63,94,0.08)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.18)' }}>
             Remove from pipeline
@@ -354,6 +358,16 @@ export default function PipelinePage() {
   const [stageFilter, setStageFilter] = useState<Stage | 'all'>('all')
   const [visibleColumns, setVisibleColumns] = useState({ value: true, activity: true, nextAction: true, owner: true })
   const [showColumns, setShowColumns] = useState(false)
+  const [tablePage, setTablePage] = useState(0)
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null)
+
+  // Command palette deep-link: /dashboard/pipeline?new=1 opens the add-lead modal
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('new')) {
+      setShowAdd(true)
+      window.history.replaceState(null, '', '/dashboard/pipeline')
+    }
+  }, [])
 
   useEffect(() => {
     const load = async () => {
@@ -430,6 +444,14 @@ export default function PipelinePage() {
     setLeads(prev => prev.filter(l => l.id !== id))
   }
 
+  // All delete entry points route through the confirm dialog first
+  const askDelete = (id: string) => setLeadToDelete(leads.find(l => l.id === id) || null)
+  const confirmDelete = () => {
+    if (!leadToDelete) return
+    handleDelete(leadToDelete.id)
+    setLeadToDelete(null)
+  }
+
   const handleSave = async (id: string, patch: Partial<Lead>) => {
     const supabase = createClient()
     await supabase.from('pipeline_leads').update(patch).eq('id', id)
@@ -462,12 +484,18 @@ export default function PipelinePage() {
   }).length
   const growthPct = prev30 > 0 ? Math.round(((last30 - prev30) / prev30) * 100) : last30 > 0 ? 100 : 0
 
+  const animPipelineVal = useCountUp(totalPipelineVal)
+  const animGrowth      = useCountUp(growthPct)
+  const animWinRate     = useCountUp(winRate ?? 0)
+  const animAvgDeal     = useCountUp(avgDealVal ?? 0)
+  const animWonVal      = useCountUp(totalWonVal)
+
   const stats = [
-    { label: 'Total Pipeline Value', value: totalPipelineVal > 0 ? fmt(totalPipelineVal) : '$0',     sub: `${active.length} active deals`,          color: '#60a5fa', icon: DollarSign  },
-    { label: 'Pipeline Growth',      value: `${growthPct > 0 ? '+' : ''}${growthPct}%`,              sub: 'vs previous 30 days',                    color: 'var(--accent)', icon: TrendingUp  },
-    { label: 'Win Rate',             value: winRate !== null ? `${winRate}%` : '—',                   sub: `${won.length} won · ${lost.length} lost`, color: '#a78bfa', icon: Target      },
-    { label: 'Avg Deal Value',       value: avgDealVal ? fmt(avgDealVal) : '—',                      sub: `from ${leadsWithVal.length} deals`,       color: '#f59e0b', icon: BarChart2   },
-    { label: 'Total Won Value',      value: totalWonVal > 0 ? fmt(totalWonVal) : '$0',               sub: `${won.length} closed deals`,              color: 'var(--accent)', icon: TrendingUp  },
+    { label: 'Total Pipeline Value', value: fmt(animPipelineVal),                                    sub: `${active.length} active deals`,          color: '#60a5fa', icon: DollarSign  },
+    { label: 'Pipeline Growth',      value: `${animGrowth > 0 ? '+' : ''}${animGrowth}%`,            sub: 'vs previous 30 days',                    color: 'var(--accent)', icon: TrendingUp  },
+    { label: 'Win Rate',             value: winRate !== null ? `${animWinRate}%` : '—',              sub: `${won.length} won · ${lost.length} lost`, color: '#a78bfa', icon: Target      },
+    { label: 'Avg Deal Value',       value: avgDealVal ? fmt(animAvgDeal) : '—',                     sub: `from ${leadsWithVal.length} deals`,       color: '#f59e0b', icon: BarChart2   },
+    { label: 'Total Won Value',      value: fmt(animWonVal),                                         sub: `${won.length} closed deals`,              color: 'var(--accent)', icon: TrendingUp  },
   ]
 
   // Display rows: search, filter, and tabs now drive both board and table.
@@ -480,6 +508,23 @@ export default function PipelinePage() {
   })
   const boardLeads = filteredLeads.filter(l => l.stage !== 'lost')
   const tableLeads = filteredLeads
+
+  // Real pagination — previously the table silently cut off at 7 rows
+  const PAGE_SIZE = 8
+  const pageCount = Math.max(1, Math.ceil(tableLeads.length / PAGE_SIZE))
+  const safePage = Math.min(tablePage, pageCount - 1)
+  const pagedLeads = tableLeads.slice(safePage * PAGE_SIZE, safePage * PAGE_SIZE + PAGE_SIZE)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { setTablePage(0) }, [searchQuery, stageFilter, tableTab])
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, draggableId } = result
+    if (!destination) return
+    const destStage = destination.droppableId as Stage
+    const lead = leads.find(l => l.id === draggableId)
+    if (!lead || lead.stage === destStage) return
+    handleMove(draggableId, destStage)
+  }
 
   // Sidebar stats
   const advancedLeads = leads.filter(l => ['contacted','qualified','proposal','won'].includes(l.stage))
@@ -542,7 +587,7 @@ export default function PipelinePage() {
           </div>
         )}
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5 stagger-cards">
           {stats.map((s, idx) => (
             <div key={s.label} className="app-card" style={{ minHeight: 108 }}>
               <div className="app-card-inner" style={{ padding: '16px 18px 14px' }}>
@@ -562,6 +607,7 @@ export default function PipelinePage() {
         </div>
 
         <div className="overflow-x-auto -mx-4 md:-mx-6 mb-5" style={{ display: viewMode === 'board' ? 'block' : 'none' }}>
+        <DragDropContext onDragEnd={onDragEnd}>
         <div className="grid grid-cols-5 gap-2 px-4 md:px-6" style={{ minWidth: 900 }}>
           {KANBAN_STAGES.map(stage => {
             const cfg = STAGE_CFG[stage]
@@ -573,32 +619,58 @@ export default function PipelinePage() {
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full" style={{ background: cfg.color }} />
                     <p className="text-xs font-black" style={{ color: 'var(--text-primary)' }}>{cfg.label}</p>
-                    <ChevronRight className="h-3.5 w-3.5 ml-auto" style={{ color: 'var(--text-muted)' }} />
+                    <span className="ml-auto rounded px-1.5 py-0.5 text-[10px] font-bold" style={{ background: cfg.bg, color: cfg.color }}>{stageLeads.length}</span>
                   </div>
                   <div className="flex items-center justify-between mt-2 text-xs" style={{ color: 'var(--text-muted)' }}>
                     <span>{stageLeads.length} Leads</span><span>{fmt(sv)}</span>
                   </div>
                 </div>
-                <div className="p-2 flex-1 space-y-2 overflow-y-auto">
-                  {stageLeads.length === 0 && stage === 'won' ? (
-                    <div className="h-full min-h-[180px] flex flex-col items-center justify-center text-center px-4">
-                      <Trophy className="h-9 w-9 mb-3" style={{ color: 'var(--text-muted)' }} />
-                      <p className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>No won deals yet.</p>
-                      <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Keep going!</p>
-                    </div>
-                  ) : stageLeads.map(lead => (
-                    <div key={lead.id} onClick={() => setSelected(selected?.id === lead.id ? null : lead)} className="cursor-pointer p-3 fo-card-2 hover:opacity-90 transition-opacity">
-                      <div className="flex items-center gap-2">
-                        <Avatar id={lead.id} name={lead.name} size={26} />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-black truncate" style={{ color: 'var(--text-primary)' }}>{lead.name}</p>
-                          <p className="text-xs fo-num" style={{ color: 'var(--text-secondary)' }}>{lead.value ? fmt(lead.value) : '$0'}</p>
+                <Droppable droppableId={stage}>
+                  {(dropProvided, dropSnapshot) => (
+                    <div
+                      ref={dropProvided.innerRef}
+                      {...dropProvided.droppableProps}
+                      className="p-2 flex-1 space-y-2 overflow-y-auto transition-colors"
+                      style={{ background: dropSnapshot.isDraggingOver ? cfg.bg : 'transparent' }}
+                    >
+                      {stageLeads.length === 0 && stage === 'won' && !dropSnapshot.isDraggingOver && (
+                        <div className="min-h-[160px] flex flex-col items-center justify-center text-center px-4">
+                          <Trophy className="h-9 w-9 mb-3" style={{ color: 'var(--text-muted)' }} />
+                          <p className="text-sm font-semibold" style={{ color: 'var(--text-secondary)' }}>No won deals yet.</p>
+                          <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>Drag a deal here to close it.</p>
                         </div>
-                      </div>
-                      <p className="text-[10px] mt-2" style={{ color: 'var(--text-muted)' }}>{cfg.actionLabel} {fmtDate(lead.created_at)}</p>
+                      )}
+                      {stageLeads.map((lead, idx) => (
+                        <Draggable key={lead.id} draggableId={lead.id} index={idx}>
+                          {(dragProvided, dragSnapshot) => (
+                            <div
+                              ref={dragProvided.innerRef}
+                              {...dragProvided.draggableProps}
+                              {...dragProvided.dragHandleProps}
+                              onClick={() => setSelected(selected?.id === lead.id ? null : lead)}
+                              className="cursor-pointer p-3 fo-card-2 hover:opacity-90 transition-opacity"
+                              style={{
+                                ...dragProvided.draggableProps.style,
+                                opacity: dragSnapshot.isDragging ? 0.92 : undefined,
+                                boxShadow: dragSnapshot.isDragging ? `0 16px 40px rgba(0,0,0,.45), 0 0 0 1px ${cfg.color}55` : undefined,
+                              }}
+                            >
+                              <div className="flex items-center gap-2">
+                                <Avatar id={lead.id} name={lead.name} size={26} />
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-xs font-black truncate" style={{ color: 'var(--text-primary)' }}>{lead.name}</p>
+                                  <p className="text-xs fo-num" style={{ color: 'var(--text-secondary)' }}>{lead.value ? fmt(lead.value) : '$0'}</p>
+                                </div>
+                              </div>
+                              <p className="text-[10px] mt-2" style={{ color: 'var(--text-muted)' }}>{cfg.actionLabel} {fmtDate(lead.created_at)}</p>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {dropProvided.placeholder}
                     </div>
-                  ))}
-                </div>
+                  )}
+                </Droppable>
                 <button onClick={() => setShowAdd(true)} className="m-2 py-2 flex items-center justify-center gap-1 text-xs font-medium hover:bg-white/[.04] rounded-md" style={{ color: 'var(--text-muted)' }}>
                   <Plus className="h-3.5 w-3.5" /> Add Lead
                 </button>
@@ -606,6 +678,7 @@ export default function PipelinePage() {
             )
           })}
         </div>
+        </DragDropContext>
         </div>
 
         <div className="fo-card" style={{ display: viewMode === 'table' ? 'block' : 'none', overflowX: 'auto', borderRadius: 13 }}>
@@ -631,7 +704,36 @@ export default function PipelinePage() {
           <div className="grid grid-cols-[1.4fr_.7fr_.7fr_1fr_1fr_.8fr_.7fr] px-4 py-3 text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--text-muted)', borderBottom: '1px solid var(--border)' }}>
             <span>Lead</span><span>Stage</span><span>{visibleColumns.value ? 'Value' : ''}</span><span>{visibleColumns.activity ? 'Last Activity' : ''}</span><span>{visibleColumns.nextAction ? 'Next Action' : ''}</span><span>{visibleColumns.owner ? 'Owner' : ''}</span><span>Actions</span>
           </div>
-          {tableLeads.slice(0, 7).map(lead => {
+          {loading && [0, 1, 2, 3, 4].map(i => (
+            <div key={i} className="grid grid-cols-[1.4fr_.7fr_.7fr_1fr_1fr_.8fr_.7fr] items-center gap-3 px-4 py-3" style={{ borderBottom: '1px solid var(--border)' }}>
+              <div className="space-y-1.5"><div className="skeleton h-3.5" style={{ width: `${70 - i * 6}%` }} /><div className="skeleton h-2.5 w-1/3" /></div>
+              <div className="skeleton h-6 w-20 rounded-md" />
+              <div className="skeleton h-3.5 w-12" />
+              <div className="skeleton h-3.5 w-16" />
+              <div className="skeleton h-3.5 w-16" />
+              <div className="skeleton h-7 w-7 rounded-full" />
+              <div className="skeleton h-3.5 w-10" />
+            </div>
+          ))}
+          {!loading && tableLeads.length === 0 && (
+            <div className="flex flex-col items-center justify-center gap-3 px-6 py-14 text-center">
+              <Users className="h-8 w-8" style={{ color: 'var(--text-muted)', opacity: 0.4 }} />
+              <div>
+                <p className="text-sm font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {leads.length === 0 ? 'Your pipeline is empty' : 'No leads match this view'}
+                </p>
+                <p className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  {leads.length === 0 ? 'Every closed client starts as a lead. Add your first one.' : 'Try clearing the search or stage filter.'}
+                </p>
+              </div>
+              {leads.length === 0 && (
+                <button onClick={() => setShowAdd(true)} className="mt-1 flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-black fo-green-btn">
+                  <Plus className="h-4 w-4" /> Add your first lead
+                </button>
+              )}
+            </div>
+          )}
+          {!loading && pagedLeads.map(lead => {
             const cfg = STAGE_CFG[lead.stage]
             return (
               <div key={lead.id} onClick={() => setSelected(selected?.id === lead.id ? null : lead)} className="grid grid-cols-[1.4fr_.7fr_.7fr_1fr_1fr_.8fr_.7fr] items-center px-4 py-3 text-xs cursor-pointer hover:bg-white/[.025]" style={{ borderBottom: '1px solid var(--border)' }}>
@@ -641,23 +743,53 @@ export default function PipelinePage() {
                 <span style={{ color: 'var(--text-secondary)' }}>{visibleColumns.activity ? <>{fmtDate(lead.created_at)}<br/><span style={{ color: 'var(--text-muted)' }}>{cfg.actionLabel}</span></> : null}</span>
                 <span style={{ color: 'var(--text-secondary)' }}>{visibleColumns.nextAction ? <>{lead.follow_up_date ? 'Follow up' : 'No follow up'}<br/><span style={{ color: 'var(--accent)' }}>{lead.follow_up_date ? fmtDate(lead.follow_up_date) : 'Set date'}</span></> : null}</span>
                 {visibleColumns.owner ? <Avatar id={lead.id} name={lead.name} size={28} /> : <span />}
-                <span className="flex items-center gap-3" style={{ color: 'var(--text-muted)' }}><MessageSquare className="h-4 w-4"/><Pencil className="h-4 w-4"/><MoreHorizontal className="h-4 w-4"/></span>
+                <span className="flex items-center gap-1">
+                  <button title="Open lead" onClick={e => { e.stopPropagation(); setSelected(lead) }} className="grid h-7 w-7 place-items-center rounded-md hover:bg-white/[.06]" style={{ color: 'var(--text-muted)' }}>
+                    <Pencil className="h-3.5 w-3.5" />
+                  </button>
+                  <button title="Delete lead" onClick={e => { e.stopPropagation(); setLeadToDelete(lead) }} className="grid h-7 w-7 place-items-center rounded-md hover:bg-red-500/10" style={{ color: '#f43f5e' }}>
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </span>
               </div>
             )
           })}
-          <div className="flex items-center justify-between px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>
-            <span>Showing 1 to {Math.min(tableLeads.length, 7)} of {tableLeads.length} leads</span>
-            <div className="flex items-center gap-3"><ChevronRight className="h-4 w-4 rotate-180"/><span className="px-2 py-1 rounded-md" style={{ background: 'var(--accent-muted)', color: 'var(--accent)' }}>1</span><span>2</span><ChevronRight className="h-4 w-4"/></div>
-          </div>
+          {tableLeads.length > 0 && (
+            <div className="flex items-center justify-between px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>
+              <span>Showing {safePage * PAGE_SIZE + 1} to {Math.min(tableLeads.length, (safePage + 1) * PAGE_SIZE)} of {tableLeads.length} leads</span>
+              <div className="flex items-center gap-1.5">
+                <button disabled={safePage === 0} onClick={() => setTablePage(p => Math.max(0, p - 1))} className="grid h-7 w-7 place-items-center rounded-md hover:bg-white/[.05] disabled:opacity-30 disabled:cursor-default">
+                  <ChevronRight className="h-4 w-4 rotate-180" />
+                </button>
+                {Array.from({ length: pageCount }, (_, i) => (
+                  <button key={i} onClick={() => setTablePage(i)} className="h-7 min-w-[28px] rounded-md px-1.5 font-bold"
+                    style={i === safePage ? { background: 'var(--accent-muted)', color: 'var(--accent)' } : { color: 'var(--text-muted)' }}>
+                    {i + 1}
+                  </button>
+                ))}
+                <button disabled={safePage >= pageCount - 1} onClick={() => setTablePage(p => Math.min(pageCount - 1, p + 1))} className="grid h-7 w-7 place-items-center rounded-md hover:bg-white/[.05] disabled:opacity-30 disabled:cursor-default">
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
           </div>
         </div>
       </div>
 
       {selected && (
         <LeadPanel lead={selected} onClose={() => setSelected(null)}
-          onMove={handleMove} onDelete={handleDelete} onSave={handleSave} />
+          onMove={handleMove} onDelete={askDelete} onSave={handleSave} />
       )}
       {showAdd && <AddLeadModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />}
+      <ConfirmDialog
+        open={!!leadToDelete}
+        title="Remove this lead?"
+        message={leadToDelete ? `${leadToDelete.name}${leadToDelete.company ? ` (${leadToDelete.company})` : ''} and their notes, contact info, and follow-ups will be permanently removed.` : undefined}
+        confirmLabel="Remove lead"
+        onConfirm={confirmDelete}
+        onCancel={() => setLeadToDelete(null)}
+      />
     </div>
   )
 }

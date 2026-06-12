@@ -84,7 +84,7 @@ export function SignupForm() {
             </label>
             <input
               id="fullName"
-              placeholder="Leo Founder"
+              placeholder="Your full name"
               type="text"
               autoCapitalize="words"
               autoCorrect="off"
@@ -105,7 +105,7 @@ export function SignupForm() {
             </label>
             <input
               id="username"
-              placeholder="akhil_founder"
+              placeholder="alex_founder"
               type="text"
               autoCapitalize="none"
               autoCorrect="off"

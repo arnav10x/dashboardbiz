@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
+import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
 import { createClient } from '@/lib/supabase/client'
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -101,6 +102,7 @@ export default function FinancePage() {
   const [saving, setSaving]       = useState(false)
 
   // UI toggles
+  const [expToDelete, setExpToDelete]     = useState<ExpenseLog | null>(null)
   const [expFilter, setExpFilter]         = useState('all')
   const [showAllExps, setShowAllExps]     = useState(false)
   const [showAllRevs, setShowAllRevs]     = useState(false)
@@ -177,6 +179,12 @@ export default function FinancePage() {
     const supabase = createClient()
     await supabase.from('expense_logs').delete().eq('id', id)
     setExpLogs(prev => prev.filter(e => e.id !== id))
+  }
+
+  function confirmDeleteExp() {
+    if (!expToDelete) return
+    deleteExp(expToDelete.id)
+    setExpToDelete(null)
   }
 
   /* ─── CSV export ─── */
@@ -682,7 +690,7 @@ export default function FinancePage() {
                                 {money(exp.amount)}
                               </td>
                               <td style={{ padding: '9px 4px', textAlign: 'right' }}>
-                                <button onClick={() => deleteExp(exp.id)}
+                                <button onClick={() => setExpToDelete(exp)}
                                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px', borderRadius: 4, color: 'var(--text-muted)', opacity: 0.45 }}
                                   title="Delete expense">
                                   <X style={{ width: 11, height: 11 }} />
@@ -902,6 +910,14 @@ export default function FinancePage() {
           </>
         )}
       </div>
+
+      <ConfirmDialog
+        open={!!expToDelete}
+        title="Delete this expense?"
+        message={expToDelete ? `${money(expToDelete.amount)}${expToDelete.vendor ? ` to ${expToDelete.vendor}` : ''} on ${new Date(expToDelete.expense_date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} will be permanently removed from your ledger.` : undefined}
+        onConfirm={confirmDeleteExp}
+        onCancel={() => setExpToDelete(null)}
+      />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
+import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
 import { createClient } from '@/lib/supabase/client'
 import { Check, Plus, X, Flame, Sparkles, RefreshCw, Trash2, ChevronRight, Pencil } from 'lucide-react'
 
@@ -271,6 +272,7 @@ export default function TasksPage() {
   const [suggestionIndex, setSuggestionIndex] = useState(0)
   const [streak, setStreak]             = useState(0)
   const [justCompleted, setJustCompleted] = useState<string | null>(null)
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null)
 
   // Command palette deep-link: /dashboard/tasks?new=1 opens the create modal
   useEffect(() => {
@@ -358,6 +360,12 @@ export default function TasksPage() {
     setTasks(prev => prev.filter(t => t.id !== task.id))
     const supabase = createClient()
     await supabase.from('tasks').delete().eq('id', task.id)
+  }
+
+  const confirmRemoveTask = () => {
+    if (!taskToDelete) return
+    removeTask(taskToDelete)
+    setTaskToDelete(null)
   }
 
   const editTask = async (id: string, title: string, notes: string, priority: Priority) => {
@@ -452,9 +460,9 @@ export default function TasksPage() {
           {/* Left — task list scrolls within its column ─────────── */}
           <div className="flex flex-col min-h-0 min-w-0">
             <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden space-y-2.5 pr-1">
-              <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} poppingId={justCompleted} />
-              <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} poppingId={justCompleted} />
-              <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} poppingId={justCompleted} />
+              <PrioritySection label="High Priority"   tasks={highTasks} priority="High"   onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} poppingId={justCompleted} />
+              <PrioritySection label="Medium Priority" tasks={medTasks}  priority="Medium" onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} poppingId={justCompleted} />
+              <PrioritySection label="Low Priority"    tasks={lowTasks}  priority="Low"    onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} poppingId={justCompleted} />
 
               {openTasks.length === 0 && !loading && (
                 <div className="rounded-2xl px-6 py-10 text-center"
@@ -499,7 +507,7 @@ export default function TasksPage() {
                   </button>
                   {completedOpen && (
                     <div className="divide-y" style={{ borderColor: 'rgba(255,255,255,.04)' }}>
-                      {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={removeTask} onEdit={setEditingTask} />)}
+                      {completed.map(t => <TaskRow key={t.id} task={t} onToggle={toggleTask} onRemove={setTaskToDelete} onEdit={setEditingTask} />)}
                     </div>
                   )}
                 </div>
@@ -589,6 +597,13 @@ export default function TasksPage() {
 
       {modalOpen && <AddTaskModal onClose={() => setModalOpen(false)} onAdd={addTask} />}
       {editingTask && <EditTaskModal task={editingTask} onClose={() => setEditingTask(null)} onSave={editTask} />}
+      <ConfirmDialog
+        open={!!taskToDelete}
+        title="Delete this task?"
+        message={taskToDelete ? `"${taskToDelete.title.length > 60 ? taskToDelete.title.slice(0, 60) + '…' : taskToDelete.title}" will be permanently removed.` : undefined}
+        onConfirm={confirmRemoveTask}
+        onCancel={() => setTaskToDelete(null)}
+      />
     </div>
   )
 }

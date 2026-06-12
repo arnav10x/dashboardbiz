@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { TopBar } from '@/components/strata/TopBar'
+import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
 import { createClient } from '@/lib/supabase/client'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Download, Info, Plus, X } from 'lucide-react'
@@ -36,6 +37,7 @@ export default function CalendarPage() {
   const [workspaceName, setWorkspaceName] = useState('prspectve')
   const [plModal, setPLModal] = useState<PLModal | null>(null)
   const [eventModal, setEventModal] = useState<EventModal | null>(null)
+  const [confirmEventDelete, setConfirmEventDelete] = useState(false)
   const [saving, setSaving] = useState(false)
   const [scheduleView, setScheduleView] = useState<'Week' | 'Month' | 'Agenda'>('Week')
   const [eventFilter, setEventFilter] = useState<string>('All')
@@ -139,6 +141,7 @@ export default function CalendarPage() {
     if (!eventModal?.id) return
     const supabase = createClient()
     await supabase.from('calendar_events').delete().eq('id', eventModal.id)
+    setConfirmEventDelete(false)
     setEventModal(null)
     await loadSchedule(); await loadPL()
   }
@@ -233,7 +236,14 @@ export default function CalendarPage() {
       </div>
 
       {plModal && <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background:'rgba(0,0,0,.8)' }}><div className="w-full max-w-sm p-5" style={panel({ background:'var(--modal-bg)' })}><div className="mb-4 flex justify-between"><h3 className="font-black">Daily P&L Entry</h3><button onClick={()=>setPLModal(null)}><X className="h-4 w-4"/></button></div><input className="input-base mb-3" placeholder="Revenue" type="number" value={plModal.revenue} onChange={e=>setPLModal(m=>m?{...m,revenue:e.target.value}:m)}/><input className="input-base mb-3" placeholder="Expenses" type="number" value={plModal.expenses} onChange={e=>setPLModal(m=>m?{...m,expenses:e.target.value}:m)}/><input className="input-base mb-4" placeholder="Notes" value={plModal.notes} onChange={e=>setPLModal(m=>m?{...m,notes:e.target.value}:m)}/><div className="flex gap-2"><button onClick={()=>setPLModal(null)} className="flex-1 rounded-lg py-2" style={panel()}>Cancel</button><button onClick={savePL} disabled={saving} className="flex-1 rounded-lg py-2 font-bold" style={{ background:'var(--accent)', color:'var(--accent-fg)' }}>{saving?'Saving…':'Save'}</button></div></div></div>}
-      {eventModal && <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background:'rgba(0,0,0,.8)' }}><div className="w-full max-w-sm p-5" style={panel({ background:'var(--modal-bg)' })}><div className="mb-4 flex justify-between"><h3 className="font-black">{eventModal.id?'Edit Event':'Add Event'}</h3><button onClick={()=>setEventModal(null)}><X className="h-4 w-4"/></button></div><label className="mb-2 block text-xs font-bold" style={{color:'var(--text-secondary)'}}>Date</label><input className="input-base mb-3" type="date" value={eventModal.date} onChange={e=>setEventModal(m=>m?{...m,date:e.target.value}:m)}/><input className="input-base mb-3" placeholder="Event title" value={eventModal.title} onChange={e=>setEventModal(m=>m?{...m,title:e.target.value}:m)}/><input className="input-base mb-3" placeholder="Description" value={eventModal.description} onChange={e=>setEventModal(m=>m?{...m,description:e.target.value}:m)}/><label className="mb-3 flex gap-2 text-sm"><input type="checkbox" checked={eventModal.all_day} onChange={e=>setEventModal(m=>m?{...m,all_day:e.target.checked}:m)}/> All day</label>{!eventModal.all_day&&<div className="mb-3 grid grid-cols-2 gap-2"><input className="input-base" type="time" value={eventModal.start_time} onChange={e=>setEventModal(m=>m?{...m,start_time:e.target.value}:m)}/><input className="input-base" type="time" value={eventModal.end_time} onChange={e=>setEventModal(m=>m?{...m,end_time:e.target.value}:m)}/></div>}<div className="mb-4 flex gap-2">{EVENT_COLORS.map(c=><button key={c} onClick={()=>setEventModal(m=>m?{...m,color:c}:m)} className="h-7 w-7 rounded-full" style={{ background:c, outline:eventModal.color===c?'2px solid var(--text-primary)':'none', outlineOffset: 2 }}/>)}</div><div className="flex gap-2">{eventModal.id&&<button onClick={deleteEvent} className="rounded-lg px-3 py-2" style={{ color:'#ff4d4d', background:'rgba(255,77,77,.1)' }}>Delete</button>}<button onClick={()=>setEventModal(null)} className="flex-1 rounded-lg py-2" style={panel()}>Cancel</button><button onClick={saveEvent} disabled={saving || !eventModal.title.trim()} className="flex-1 rounded-lg py-2 font-bold" style={{ background:'var(--accent)', color:'var(--accent-fg)' }}>{saving?'Saving…':'Save'}</button></div></div></div>}
+      <ConfirmDialog
+        open={confirmEventDelete}
+        title="Delete this event?"
+        message={eventModal?.title ? `"${eventModal.title}" on ${eventModal.date} will be permanently removed from your calendar.` : undefined}
+        onConfirm={deleteEvent}
+        onCancel={() => setConfirmEventDelete(false)}
+      />
+      {eventModal && <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background:'rgba(0,0,0,.8)' }}><div className="w-full max-w-sm p-5" style={panel({ background:'var(--modal-bg)' })}><div className="mb-4 flex justify-between"><h3 className="font-black">{eventModal.id?'Edit Event':'Add Event'}</h3><button onClick={()=>setEventModal(null)}><X className="h-4 w-4"/></button></div><label className="mb-2 block text-xs font-bold" style={{color:'var(--text-secondary)'}}>Date</label><input className="input-base mb-3" type="date" value={eventModal.date} onChange={e=>setEventModal(m=>m?{...m,date:e.target.value}:m)}/><input className="input-base mb-3" placeholder="Event title" value={eventModal.title} onChange={e=>setEventModal(m=>m?{...m,title:e.target.value}:m)}/><input className="input-base mb-3" placeholder="Description" value={eventModal.description} onChange={e=>setEventModal(m=>m?{...m,description:e.target.value}:m)}/><label className="mb-3 flex gap-2 text-sm"><input type="checkbox" checked={eventModal.all_day} onChange={e=>setEventModal(m=>m?{...m,all_day:e.target.checked}:m)}/> All day</label>{!eventModal.all_day&&<div className="mb-3 grid grid-cols-2 gap-2"><input className="input-base" type="time" value={eventModal.start_time} onChange={e=>setEventModal(m=>m?{...m,start_time:e.target.value}:m)}/><input className="input-base" type="time" value={eventModal.end_time} onChange={e=>setEventModal(m=>m?{...m,end_time:e.target.value}:m)}/></div>}<div className="mb-4 flex gap-2">{EVENT_COLORS.map(c=><button key={c} onClick={()=>setEventModal(m=>m?{...m,color:c}:m)} className="h-7 w-7 rounded-full" style={{ background:c, outline:eventModal.color===c?'2px solid var(--text-primary)':'none', outlineOffset: 2 }}/>)}</div><div className="flex gap-2">{eventModal.id&&<button onClick={()=>setConfirmEventDelete(true)} className="rounded-lg px-3 py-2" style={{ color:'#ff4d4d', background:'rgba(255,77,77,.1)' }}>Delete</button>}<button onClick={()=>setEventModal(null)} className="flex-1 rounded-lg py-2" style={panel()}>Cancel</button><button onClick={saveEvent} disabled={saving || !eventModal.title.trim()} className="flex-1 rounded-lg py-2 font-bold" style={{ background:'var(--accent)', color:'var(--accent-fg)' }}>{saving?'Saving…':'Save'}</button></div></div></div>}
     </div>
   )
 }

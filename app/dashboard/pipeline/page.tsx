@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { useCountUp } from '@/lib/use-count-up'
+import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
 import { DragDropContext, Droppable, Draggable, type DropResult } from '@hello-pangea/dnd'
 
 type Stage = 'new_lead' | 'contacted' | 'qualified' | 'proposal' | 'won' | 'lost'
@@ -248,7 +249,8 @@ function LeadPanel({ lead, onClose, onMove, onDelete, onSave }: {
         </div>
 
         <div className="p-5" style={{ borderTop: '1px solid var(--border)' }}>
-          <button onClick={() => { onDelete(lead.id); onClose() }}
+          {/* Confirmation happens at page level; the panel closes itself once the lead is gone */}
+          <button onClick={() => onDelete(lead.id)}
             className="w-full py-2 text-xs font-bold transition-all hover:opacity-90"
             style={{ borderRadius: 7, background: 'rgba(244,63,94,0.08)', color: '#f43f5e', border: '1px solid rgba(244,63,94,0.18)' }}>
             Remove from pipeline
@@ -357,6 +359,7 @@ export default function PipelinePage() {
   const [visibleColumns, setVisibleColumns] = useState({ value: true, activity: true, nextAction: true, owner: true })
   const [showColumns, setShowColumns] = useState(false)
   const [tablePage, setTablePage] = useState(0)
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null)
 
   // Command palette deep-link: /dashboard/pipeline?new=1 opens the add-lead modal
   useEffect(() => {
@@ -439,6 +442,14 @@ export default function PipelinePage() {
     const supabase = createClient()
     await supabase.from('pipeline_leads').delete().eq('id', id)
     setLeads(prev => prev.filter(l => l.id !== id))
+  }
+
+  // All delete entry points route through the confirm dialog first
+  const askDelete = (id: string) => setLeadToDelete(leads.find(l => l.id === id) || null)
+  const confirmDelete = () => {
+    if (!leadToDelete) return
+    handleDelete(leadToDelete.id)
+    setLeadToDelete(null)
   }
 
   const handleSave = async (id: string, patch: Partial<Lead>) => {
@@ -736,7 +747,7 @@ export default function PipelinePage() {
                   <button title="Open lead" onClick={e => { e.stopPropagation(); setSelected(lead) }} className="grid h-7 w-7 place-items-center rounded-md hover:bg-white/[.06]" style={{ color: 'var(--text-muted)' }}>
                     <Pencil className="h-3.5 w-3.5" />
                   </button>
-                  <button title="Delete lead" onClick={e => { e.stopPropagation(); handleDelete(lead.id) }} className="grid h-7 w-7 place-items-center rounded-md hover:bg-red-500/10" style={{ color: '#f43f5e' }}>
+                  <button title="Delete lead" onClick={e => { e.stopPropagation(); setLeadToDelete(lead) }} className="grid h-7 w-7 place-items-center rounded-md hover:bg-red-500/10" style={{ color: '#f43f5e' }}>
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </span>
@@ -768,9 +779,17 @@ export default function PipelinePage() {
 
       {selected && (
         <LeadPanel lead={selected} onClose={() => setSelected(null)}
-          onMove={handleMove} onDelete={handleDelete} onSave={handleSave} />
+          onMove={handleMove} onDelete={askDelete} onSave={handleSave} />
       )}
       {showAdd && <AddLeadModal onClose={() => setShowAdd(false)} onAdd={handleAdd} />}
+      <ConfirmDialog
+        open={!!leadToDelete}
+        title="Remove this lead?"
+        message={leadToDelete ? `${leadToDelete.name}${leadToDelete.company ? ` (${leadToDelete.company})` : ''} and their notes, contact info, and follow-ups will be permanently removed.` : undefined}
+        confirmLabel="Remove lead"
+        onConfirm={confirmDelete}
+        onCancel={() => setLeadToDelete(null)}
+      />
     </div>
   )
 }

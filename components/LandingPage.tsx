@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { TrendingUp, Users, Brain, BarChart3, Target, Star, Check, ArrowRight, Flame, Shield, Clock, Activity, Zap, Trophy, CalendarCheck, Settings, BarChart2, Award, Calendar, Puzzle } from 'lucide-react'
+import { TrendingUp, Users, Brain, BarChart3, Target, Check, ArrowRight, Flame, Shield, Clock, Activity, Zap, Trophy, CalendarCheck, X, Plus } from 'lucide-react'
 
 const ThreeBackground = dynamic(() => import('./ThreeBackground'), { ssr: false })
 
@@ -486,6 +486,101 @@ function ExecutionTrack() {
   )
 }
 
+// ─── Comparison: the duct-tape stack vs prspectve ─────────────────────────────
+
+const COMPARE_ROWS = [
+  { need: 'Daily revenue tasks',  old: 'A Notion doc you write (and abandon) yourself',          neu: 'Generated for your niche every morning — 1 to 3, never 30' },
+  { need: 'P&L tracking',         old: 'A spreadsheet you forget to update by week two',          neu: 'Logged in 10 seconds. Margins, burn, and trends charted automatically' },
+  { need: 'Lead pipeline',        old: 'Notes app, DM history, and pure memory',                  neu: 'Drag-and-drop kanban with follow-up dates synced to your calendar' },
+  { need: 'Coaching',             old: 'Generic ChatGPT prompts with zero context',               neu: 'An AI coach that reads your real numbers and writes into your workspace' },
+  { need: 'Accountability',       old: 'Nobody notices when you skip a day',                      neu: 'Streaks, XP, ranks — and the system calls out missed days' },
+  { need: 'Monthly cost',         old: '$30+ across Notion, a CRM, and ChatGPT Plus',             neu: 'Free while in beta' },
+]
+
+function CompareSection() {
+  return (
+    <section id="compare" className="lp-test-section" style={{ position: 'relative', zIndex: 1, padding: '90px 28px', background: '#ffffff', borderTop: '1px solid rgba(0,0,0,.06)' }}>
+      <div style={{ maxWidth: 980, margin: '0 auto' }}>
+        <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', textTransform: 'uppercase', color: '#8b5cf6', marginBottom: 16 }}>The honest comparison</div>
+          <h2 style={{ fontSize: 44, fontWeight: 900, letterSpacing: '-.035em', color: '#0f172a', marginBottom: 14 }}>You already have a system.<br />It&rsquo;s duct tape.</h2>
+          <p style={{ fontSize: 16, color: '#64748b', maxWidth: 520, margin: '0 auto', lineHeight: 1.7 }}>A spreadsheet here, a notes app there, twelve ChatGPT tabs. Here&rsquo;s what changes when it all lives in one OS.</p>
+        </div>
+
+        <div className="lp-reveal lp-d1" style={{ borderRadius: 18, border: '1px solid rgba(0,0,0,.07)', overflow: 'hidden', boxShadow: '0 4px 32px rgba(0,0,0,.06)' }}>
+          {/* Header */}
+          <div className="lp-cmp-row lp-cmp-head" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr 1.4fr', background: '#f8fafc', borderBottom: '1px solid rgba(0,0,0,.06)' }}>
+            <div style={{ padding: '16px 20px', fontSize: 11, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', color: '#94a3b8' }}>What you need</div>
+            <div style={{ padding: '16px 20px', fontSize: 11, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', color: '#94a3b8', borderLeft: '1px solid rgba(0,0,0,.05)' }}>The duct-tape stack</div>
+            <div style={{ padding: '16px 20px', fontSize: 11, fontWeight: 800, letterSpacing: '.1em', textTransform: 'uppercase', color: '#8b5cf6', borderLeft: '1px solid rgba(139,92,246,.18)', background: 'rgba(139,92,246,.04)', display: 'flex', alignItems: 'center', gap: 7 }}>
+              <LogoMark size={16} /> prspectve
+            </div>
+          </div>
+          {COMPARE_ROWS.map((row, i) => (
+            <div key={row.need} className="lp-cmp-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr 1.4fr', borderBottom: i < COMPARE_ROWS.length - 1 ? '1px solid rgba(0,0,0,.05)' : 'none', background: '#fff' }}>
+              <div style={{ padding: '15px 20px', fontSize: 13.5, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center' }}>{row.need}</div>
+              <div style={{ padding: '15px 20px', fontSize: 13, color: '#94a3b8', lineHeight: 1.55, borderLeft: '1px solid rgba(0,0,0,.05)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <X size={13} color="#cbd5e1" style={{ flexShrink: 0 }} />{row.old}
+              </div>
+              <div style={{ padding: '15px 20px', fontSize: 13, color: '#475569', fontWeight: 500, lineHeight: 1.55, borderLeft: '1px solid rgba(139,92,246,.14)', background: 'rgba(139,92,246,.03)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Check size={13} color="#8b5cf6" style={{ flexShrink: 0 }} />{row.neu}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── FAQ ──────────────────────────────────────────────────────────────────────
+
+const FAQS = [
+  { q: 'Is it actually free?', a: 'Yes — everything is free while prspectve is in beta, with no credit card required. When paid plans launch, beta users keep a generous free tier. We will never silently paywall data you already logged.' },
+  { q: 'Who is prspectve for?', a: "Solo founders, freelancers, and agency starters who want to get clients — not another course. If you're somewhere between \"I have an idea\" and \"I have a few clients and zero systems,\" it was built for you." },
+  { q: 'Do I need an existing business?', a: 'No. Onboarding asks for your niche, service, and outreach commitment, then generates a 30-day execution roadmap that starts from zero. Day 1 is literally about defining your offer.' },
+  { q: 'How is the AI coach different from ChatGPT?', a: "It's connected to your live workspace. It reads your actual P&L, pipeline, and task history, answers from your real numbers, and can write back — adding tasks, drafting follow-ups, and flagging stalled leads without you pasting context." },
+  { q: 'Does it work on mobile?', a: 'Yes — the full dashboard is responsive with a dedicated mobile navigation, so you can log revenue, check off tasks, and move leads from your phone.' },
+  { q: 'What happens to my data?', a: 'It stays yours. Export your P&L and expenses to CSV anytime, and deleting your account permanently wipes your data. We never sell it.' },
+]
+
+function FAQSection() {
+  const [open, setOpen] = useState<number | null>(0)
+  return (
+    <section id="faq" style={{ position: 'relative', zIndex: 1, padding: '90px 28px', background: '#ffffff', borderTop: '1px solid rgba(0,0,0,.06)' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto' }}>
+        <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 44 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', textTransform: 'uppercase', color: '#8b5cf6', marginBottom: 16 }}>FAQ</div>
+          <h2 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-.035em', color: '#0f172a' }}>Fair questions.</h2>
+        </div>
+        <div className="lp-reveal lp-d1" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {FAQS.map((f, i) => {
+            const isOpen = open === i
+            return (
+              <div key={f.q} style={{ borderRadius: 14, border: `1px solid ${isOpen ? 'rgba(139,92,246,.25)' : 'rgba(0,0,0,.07)'}`, background: isOpen ? 'rgba(139,92,246,.025)' : '#fff', overflow: 'hidden', transition: 'border-color .2s, background .2s', boxShadow: isOpen ? '0 4px 24px rgba(139,92,246,.06)' : 'none' }}>
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, padding: '18px 22px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', letterSpacing: '-.01em' }}>{f.q}</span>
+                  <span style={{ width: 26, height: 26, borderRadius: 8, background: isOpen ? '#8b5cf6' : 'rgba(139,92,246,.08)', border: '1px solid rgba(139,92,246,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background .2s, transform .25s', transform: isOpen ? 'rotate(45deg)' : 'none' }}>
+                    <Plus size={13} color={isOpen ? '#fff' : '#8b5cf6'} />
+                  </span>
+                </button>
+                <div style={{ display: 'grid', gridTemplateRows: isOpen ? '1fr' : '0fr', transition: 'grid-template-rows .3s cubic-bezier(.16,1,.3,1)' }}>
+                  <div style={{ overflow: 'hidden' }}>
+                    <p style={{ padding: '0 22px 20px', margin: 0, fontSize: 14, lineHeight: 1.75, color: '#64748b' }}>{f.a}</p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ─── Landing Page ─────────────────────────────────────────────────────────────
 
 export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
@@ -498,12 +593,6 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
   }, [])
-
-  const TESTIMONIALS = [
-    { name: 'Marcus T.', role: 'SMMA Founder', avatar: 'MT', quote: 'Closed my first $1,500 client on Day 17. The daily tasks and AI coach removed every excuse I had. Nothing else comes close.' },
-    { name: 'Priya S.', role: 'Freelance Dev', avatar: 'PS', quote: "I used to open 12 different tabs every morning. Now I open prspectve, see my tasks, and get to work. Absolutely game-changing." },
-    { name: 'Jake L.', role: 'AI Agency Owner', avatar: 'JL', quote: 'The pipeline board alone is worth it. I can see exactly where every prospect is. Closed 3 clients in my first 30 days.' },
-  ]
 
   return (
     <div style={{ background: '#ffffff', color: '#0f172a', minHeight: '100vh', overflowX: 'hidden' }}>
@@ -551,7 +640,6 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         .lp-navlink:hover{color:#0f172a}
         .lp-hub-card{transition:transform .22s cubic-bezier(.16,1,.3,1),box-shadow .22s ease,border-color .22s ease}
         .lp-hub-card:hover{transform:translateY(-5px) scale(1.02);border-color:rgba(139,92,246,.25)!important;box-shadow:0 20px 40px rgba(0,0,0,.1),0 0 16px rgba(139,92,246,.08)!important}
-        .lp-tcard:hover{border-color:rgba(139,92,246,.25)!important;transform:translateY(-4px);box-shadow:0 24px 48px rgba(0,0,0,.12),0 0 20px rgba(139,92,246,.07)!important}
 
         /* ── Section glass backgrounds (show Three.js) ── */
         .lp-glass-section{background:rgba(248,250,252,0.78)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
@@ -571,10 +659,16 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           .lp-feat-hub-wrap{display:none!important}
           .lp-feat-grid-wrap{display:grid!important;grid-template-columns:repeat(2,1fr);gap:18px}
           .lp-ai-inner{grid-template-columns:1fr!important;padding:40px 32px!important;gap:36px!important}
-          .lp-test-grid{grid-template-columns:repeat(2,1fr)!important}
           .lp-footer-inner{flex-direction:column!important;gap:16px!important;text-align:center!important}
           .lp-exec-grid{grid-template-columns:1fr!important}
           .lp-exec-grid > *{border-radius:16px!important;margin-bottom:16px}
+        }
+        @media(max-width:767px){
+          .lp-cmp-head{display:none!important}
+          .lp-cmp-row{grid-template-columns:1fr!important}
+          .lp-cmp-row > div{border-left:none!important;padding-top:8px!important;padding-bottom:8px!important}
+          .lp-cmp-row > div:first-child{padding-top:16px!important}
+          .lp-cmp-row > div:last-child{padding-bottom:16px!important}
         }
         @media(max-width:639px){
           .lp-sign-in-btn{display:none!important}
@@ -586,7 +680,6 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           .lp-ai-section{padding:64px 20px!important}
           .lp-ai-inner{padding:28px 20px!important}
           .lp-test-section{padding:64px 20px!important}
-          .lp-test-grid{grid-template-columns:1fr!important}
           .lp-cta-section{padding:90px 20px!important}
           .lp-cta-h2{font-size:34px!important}
           .lp-footer{padding:28px 20px!important}
@@ -607,8 +700,8 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
           <span style={{ fontSize: 9, padding: '2px 7px', background: 'rgba(139,92,246,.1)', borderRadius: 5, color: '#8b5cf6', fontWeight: 700, letterSpacing: '.05em', border: '1px solid rgba(139,92,246,.2)' }}>BETA</span>
         </div>
         <div className="lp-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
-          {['Features', 'How it works', 'Reviews'].map((t, i) => (
-            <a key={t} href={['#features', '#how', '#reviews'][i]} className="lp-navlink">{t}</a>
+          {['Features', 'How it works', 'Compare', 'FAQ'].map((t, i) => (
+            <a key={t} href={['#features', '#how', '#compare', '#faq'][i]} className="lp-navlink">{t}</a>
           ))}
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', gap: 8, alignItems: 'center' }}>
@@ -711,10 +804,15 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         </div>
       </section>
 
-      {/* ── SOCIAL PROOF STRIP ── */}
+      {/* ── PRINCIPLES STRIP — honest claims only, no invented numbers ── */}
       <div style={{ position: 'relative', zIndex: 1, borderTop: '1px solid rgba(0,0,0,.06)', borderBottom: '1px solid rgba(0,0,0,.06)', background: 'rgba(255,255,255,.85)', backdropFilter: 'blur(12px)', padding: '22px 28px' }}>
         <div style={{ maxWidth: 960, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 48, flexWrap: 'wrap' }}>
-          {[{ Icon: Shield, label: 'SOC 2 compliant infrastructure' }, { Icon: Users, label: '2,400+ founders onboarded' }, { Icon: Clock, label: 'Average setup: under 3 min' }, { Icon: Star, label: '4.9 / 5.0 average rating' }].map(({ Icon, label }) => (
+          {[
+            { Icon: Clock, label: 'Set up in under 3 minutes' },
+            { Icon: Target, label: '1–3 non-negotiable tasks a day — never 30' },
+            { Icon: Shield, label: 'Your data is yours. Export or delete anytime' },
+            { Icon: Zap, label: 'Free while in beta. No credit card' },
+          ].map(({ Icon, label }) => (
             <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#475569', fontSize: 13, fontWeight: 600 }}>
               <Icon size={14} color="#8b5cf6" />{label}
             </div>
@@ -876,31 +974,11 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ── */}
-      <section id="reviews" className="lp-test-section" style={{ position: 'relative', zIndex: 1, padding: '90px 28px', background: '#ffffff', borderTop: '1px solid rgba(0,0,0,.06)' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-          <div className="lp-reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', textTransform: 'uppercase', color: '#8b5cf6', marginBottom: 16 }}>Testimonials</div>
-            <h2 style={{ fontSize: 44, fontWeight: 900, letterSpacing: '-.035em', color: '#0f172a' }}>Real founders. Real results.</h2>
-          </div>
-          <div className="lp-test-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 20 }}>
-            {TESTIMONIALS.map((t, i) => (
-              <TiltCard key={t.name} style={{ borderRadius: 18, overflow: 'hidden' }}>
-                <div className={`lp-reveal lp-tcard lp-d${i + 1}`} style={{ background: '#ffffff', border: '1px solid rgba(0,0,0,.07)', borderRadius: 18, padding: 28, boxShadow: '0 4px 24px rgba(0,0,0,.06)', transition: 'all .3s' }}>
-                  <div style={{ display: 'flex', marginBottom: 14 }}>
-                    {Array.from({ length: 5 }).map((_, j) => <Star key={j} size={14} fill="#8b5cf6" color="#8b5cf6" />)}
-                  </div>
-                  <p style={{ color: '#475569', fontSize: 14, lineHeight: 1.75, marginBottom: 22, fontStyle: 'italic' }}>"{t.quote}"</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'linear-gradient(135deg,#8b5cf6,#6d28d9)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 800, color: '#fff' }}>{t.avatar}</div>
-                    <div><div style={{ fontSize: 13, fontWeight: 700, color: '#0f172a' }}>{t.name}</div><div style={{ fontSize: 11, color: '#94a3b8', marginTop: 1 }}>{t.role}</div></div>
-                  </div>
-                </div>
-              </TiltCard>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── COMPARISON ── */}
+      <CompareSection />
+
+      {/* ── FAQ ── */}
+      <FAQSection />
 
       {/* ── FINAL CTA ── */}
       <section className="lp-cta-section" style={{ position: 'relative', zIndex: 1, padding: '130px 28px', background: 'linear-gradient(135deg,#faf7ff 0%,#f3f0ff 50%,#ede9fe 100%)', borderTop: '1px solid rgba(139,92,246,.1)', overflow: 'hidden' }}>
@@ -929,7 +1007,7 @@ export default function LandingPage({ isLoggedIn = false }: { isLoggedIn?: boole
             <LogoMark size={28} />
             <span style={{ fontWeight: 900, fontSize: 17, letterSpacing: '-.02em', color: '#0f172a' }}>prspectve</span>
           </div>
-          <div style={{ color: '#94a3b8', fontSize: 13 }}>© 2025 prspectve. Built for founders who mean business.</div>
+          <div style={{ color: '#94a3b8', fontSize: 13 }}>© {new Date().getFullYear()} prspectve. Built for founders who mean business.</div>
           <div style={{ display: 'flex', gap: 20 }}>
             <Link href="/login" style={{ color: '#64748b', textDecoration: 'none', fontSize: 13, transition: 'color .2s' }}>Sign in</Link>
             <Link href="/signup" style={{ color: '#8b5cf6', textDecoration: 'none', fontSize: 13, fontWeight: 700 }}>Get started →</Link>

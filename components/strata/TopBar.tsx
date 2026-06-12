@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { Plus, User, Briefcase, Trash2, LogOut, Settings } from 'lucide-react'
+import { Plus, User, LogOut, Settings, Search } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
@@ -12,52 +12,6 @@ function getGreeting(name: string): string {
   if (h >= 12 && h < 17) return `Good afternoon, ${name}`
   if (h >= 17 && h < 21) return `Good evening, ${name}`
   return `Working late, ${name}`
-}
-
-
-function WorkspaceSwitcher({ currentName }: { currentName: string }) {
-  const [open, setOpen] = useState(false)
-  const [workspaces, setWorkspaces] = useState<any[]>([])
-  const [active, setActive] = useState(currentName)
-  useEffect(() => {
-    const load = async () => {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { data: owned } = await supabase.from('workspaces').select('id,name,business_type').eq('owner_id', user.id)
-      const { data: memberships } = await supabase.from('workspace_members').select('workspace_id,role,status').eq('user_id', user.id).eq('status','active')
-      const joinedIds = (memberships || []).map((m:any)=>m.workspace_id)
-      let joined:any[] = []
-      if (joinedIds.length) {
-        const { data } = await supabase.from('workspaces').select('id,name,business_type').in('id', joinedIds)
-        joined = data || []
-      }
-      const all = [...(owned || []), ...joined].filter((w, i, arr) => arr.findIndex(x => x.id === w.id) === i)
-      setWorkspaces(all)
-      const activeId = localStorage.getItem('active-workspace-id')
-      const found = all.find((w:any)=>w.id===activeId)
-      if (found) setActive(found.name)
-    }
-    load()
-  }, [currentName])
-  const createWorkspace = async () => {
-    const name = prompt('New workspace name')
-    if (!name?.trim()) return
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
-    const { data, error } = await supabase.from('workspaces').insert({ owner_id: user.id, name: name.trim(), business_type: 'Business', stage: 'Early Stage', invite_code: Math.random().toString(36).slice(2,8).toUpperCase() }).select('id,name,business_type').single()
-    if (!error && data) { localStorage.setItem('active-workspace-id', data.id); setActive(data.name); setWorkspaces(prev=>[...prev,data]); location.reload() }
-  }
-  return (
-    <div className="relative">
-      <button onClick={()=>setOpen(o=>!o)} className="rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-2" style={{background:'var(--bg-card)',border:'1px solid var(--border)',color:'var(--text-secondary)'}}><Briefcase className="h-3.5 w-3.5" />{active}</button>
-      {open && <div className="absolute left-0 top-full mt-2 w-56 rounded-xl p-2 z-50" style={{background:'var(--bg-card)',border:'1px solid var(--border-strong)',boxShadow:'0 20px 50px rgba(0,0,0,.4)'}}>
-        {workspaces.map(w=><div key={w.id} className="group flex items-center gap-1 rounded-lg hover:bg-white/[.06]"><button onClick={()=>{localStorage.setItem('active-workspace-id',w.id);setActive(w.name);setOpen(false);location.reload()}} className="flex-1 text-left px-3 py-2 text-xs" style={{color:w.name===active?'var(--accent)':'var(--text-secondary)'}}>{w.name}<span className="block text-[10px]" style={{color:'var(--text-muted)'}}>{w.business_type||'Workspace'}</span></button><button title="Delete workspace" onClick={async(e)=>{e.stopPropagation(); if(!confirm(`Delete workspace ${w.name}?`)) return; const res=await fetch('/api/founderos/workspaces',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({workspaceId:w.id})}); if(res.ok){const left=workspaces.filter(x=>x.id!==w.id); setWorkspaces(left); if(localStorage.getItem('active-workspace-id')===w.id){localStorage.removeItem('active-workspace-id'); location.reload()}} else {alert('Only workspace owners can delete workspaces.')}}} className="mr-1 hidden h-7 w-7 place-items-center rounded-md text-red-400 hover:bg-red-500/10 group-hover:grid"><Trash2 className="h-3.5 w-3.5" /></button></div>)}
-        <button onClick={createWorkspace} className="mt-1 w-full rounded-lg px-3 py-2 text-xs font-bold" style={{border:'1px solid var(--accent-ring)',color:'var(--accent)',background:'var(--accent-faint)'}}>+ Create workspace</button>
-      </div>}
-    </div>
-  )
 }
 
 function ClockPills() {
@@ -157,6 +111,17 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
 
       {/* Right */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+        <button
+          onClick={() => window.dispatchEvent(new Event('prspectve-open-palette'))}
+          title="Search & commands (⌘K)"
+          className="hidden md:flex"
+          style={{ alignItems: 'center', gap: 8, height: 34, padding: '0 10px 0 12px', borderRadius: 9, background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
+        >
+          <Search style={{ width: 13, height: 13, flexShrink: 0 }} />
+          <span style={{ fontWeight: 500 }}>Search</span>
+          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 5, background: 'var(--overlay-faint)', border: '1px solid var(--border)', lineHeight: 1.2 }}>⌘K</span>
+        </button>
+
         <NotificationBell />
 
         {(actionLabel || actionHref) && (

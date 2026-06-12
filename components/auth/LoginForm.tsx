@@ -66,7 +66,7 @@ export function LoginForm() {
       </div>
 
       {error && (
-        <p className="text-xs" style={{ color: 'var(--accent)' }}>{error}</p>
+        <p className="text-xs" style={{ color: '#f43f5e' }}>{error}</p>
       )}
 
       <button

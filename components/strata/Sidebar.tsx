@@ -36,7 +36,9 @@ const TOP_NAV: NavSection[] = [
   {
     label: 'Tools',
     items: [
-      { href: '/dashboard/ai-copilot', icon: Sparkles, label: 'AI Coach' },
+      { href: '/dashboard/ai-copilot',   icon: Sparkles, label: 'AI Coach' },
+      { href: '/dashboard/team',         icon: Users,    label: 'Team' },
+      { href: '/dashboard/integrations', icon: Plug,     label: 'Integrations' },
     ],
   },
 ]
@@ -190,24 +192,6 @@ export function Sidebar({ workspaceName }: SidebarProps) {
             </div>
           </div>
         ))}
-
-        {/* Coming Soon items */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {[
-            { icon: Users, label: 'Team' },
-            { icon: Plug,  label: 'Integrations' },
-          ].map(({ icon: Icon, label }) => (
-            <div
-              key={label}
-              title="Coming soon"
-              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 10px', borderRadius: 7, color: 'var(--text-muted)', opacity: 0.45, cursor: 'default', fontSize: 13, fontWeight: 500 }}
-            >
-              <Icon style={{ width: 16, height: 16, flexShrink: 0 }} />
-              <span style={{ whiteSpace: 'nowrap', lineHeight: 1.2 }}>{label}</span>
-              <span style={{ marginLeft: 'auto', fontSize: 9, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', padding: '2px 5px', borderRadius: 4, background: 'var(--bg-hover)', color: 'var(--text-muted)', border: '1px solid var(--border)', flexShrink: 0 }}>Soon</span>
-            </div>
-          ))}
-        </div>
 
         {/* Quick Links section */}
         <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px 8px' }} />

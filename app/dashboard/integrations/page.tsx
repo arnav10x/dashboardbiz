@@ -104,7 +104,7 @@ export default function IntegrationsPage(){
     <div className="flex flex-col h-full fo-page">
       <TopBar title="Integrations" workspaceName={workspaceName} hasData={connected.length>0} showGreeting />
       {toast&&<div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-xl px-4 py-2 text-sm font-bold max-w-sm text-center" style={{background:'var(--bg-card)',border:'1px solid var(--border-strong)',boxShadow:'0 8px 32px rgba(0,0,0,.4)'}}>{toast}</div>}
-      <div className="flex-1 overflow-y-auto p-7 md:p-8 animate-in"><div className="max-w-[1100px] space-y-6">
+      <div className="flex-1 overflow-y-auto p-7 md:p-8 animate-in"><div className="max-w-[1100px] space-y-6 stagger">
         <div><h1 className="text-3xl font-black tracking-tight">Integrations</h1><p className="text-base mt-2" style={{ color:'var(--text-muted)' }}>Only real connected tools show as connected. Everything else can be requested or opened when setup exists.</p></div>
         <div className="grid grid-cols-3 gap-4">
           <div className="app-card"><div className="app-card-inner" style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: 20 }}><div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background:'var(--accent-muted)' }}><Link2 className="w-7 h-7 text-accent"/></div><div><p className="text-3xl font-black fo-num">{connected.length}</p><p>Connected</p><p className="text-xs" style={{ color:'var(--text-muted)' }}>Real active integrations</p></div></div><div className="app-card-glow" /></div>

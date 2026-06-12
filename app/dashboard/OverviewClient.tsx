@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { TodaysFocus } from '@/components/strata/TodaysFocus'
 import { ProactiveAlerts } from '@/components/strata/ProactiveAlerts'
+import { useCountUp } from '@/lib/use-count-up'
 
 interface Entry {
   period_date: string
@@ -40,28 +41,6 @@ const SUGGESTED_TASKS: Record<string, string[]> = {
 }
 
 type ChartView = 'monthly' | 'yearly'
-
-function useCountUp(to: number, duration = 900): number {
-  const [displayed, setDisplayed] = useState(0)
-  const rafRef = useRef<number>()
-  const prevRef = useRef(0)
-  useEffect(() => {
-    const from = prevRef.current
-    prevRef.current = to
-    let start: number | null = null
-    const animate = (ts: number) => {
-      if (!start) start = ts
-      const p = Math.min((ts - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - p, 3)
-      setDisplayed(Math.round(from + (to - from) * eased))
-      if (p < 1) rafRef.current = requestAnimationFrame(animate)
-    }
-    if (rafRef.current) cancelAnimationFrame(rafRef.current)
-    rafRef.current = requestAnimationFrame(animate)
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
-  }, [to, duration])
-  return displayed
-}
 
 function computeHealth(revenue: number, revenueTarget: number, goalPct: number, margin: number, conversionRate: number, leads: number, completedTasks: number, totalTasks: number) {
   const pacing = revenueTarget > 0
@@ -313,7 +292,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
 
 
   return (
-    <div className="flex-1 overflow-y-auto fo-page ov-page-padding" style={{ display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0 }}>
+    <div className="flex-1 overflow-y-auto fo-page ov-page-padding animate-in" style={{ display: 'flex', flexDirection: 'column', gap: 14, minWidth: 0 }}>
 
       {showModal && <QuickLogModal onClose={() => setShowModal(false)} onSaved={() => { setShowModal(false); window.location.reload() }} />}
 
@@ -348,7 +327,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
       )}
 
       {/* KPI row — each card links to the tab its number comes from */}
-      <div className="ov-kpi-grid">
+      <div className="ov-kpi-grid stagger-cards">
         {[
           { label: 'Revenue', value: `$${animRevenue.toLocaleString()}`, sub: revenueTarget > 0 ? `$${Math.max(0, revenueTarget - revenue).toLocaleString()} to goal` : 'No target set', icon: Target, color: 'var(--text-primary)', bar: revenueTarget > 0, barPct: goalPct, href: '/dashboard/finance' },
           { label: 'Net Profit', value: `$${animProfit.toLocaleString()}`, sub: `${margin}% margin`, icon: TrendingUp, color: profit < 0 ? '#f43f5e' : 'var(--text-primary)', bar: false, href: '/dashboard/finance' },
@@ -600,7 +579,7 @@ export function OverviewClient({ userName, workspaceName, businessType, business
         <span style={{ ...S.label, color: 'var(--text-primary)' }}>AI Alerts</span>
         <span style={{ fontSize: 10, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)', background: conversionRate === 0 && leads > 0 ? 'rgba(251,191,36,.08)' : 'var(--accent-faint)', border: conversionRate === 0 && leads > 0 ? '1px solid rgba(251,191,36,.2)' : '1px solid var(--accent-ring)', borderRadius: 999, padding: '3px 8px' }}>{conversionRate === 0 && leads > 0 ? 'warning' : 'live'}</span>
         <span style={{ fontSize: 12, fontWeight: 800, color: conversionRate === 0 && leads > 0 ? '#fbbf24' : 'var(--accent)' }}>{leads > 0 ? `${conversionRate}% conversion rate across ${leads} logged leads` : tasks.length ? `${completedCount}/${tasks.length} tasks completed today` : 'Log leads, revenue, or tasks to generate alerts'}</span>
-        <ChevronRight style={{ marginLeft: 'auto', width: 14, height: 14, color: 'var(--text-muted)', transform: 'rotate(90deg)' }} />
+        <ChevronRight style={{ marginLeft: 'auto', width: 14, height: 14, color: 'var(--text-muted)', flexShrink: 0 }} />
       </div><div className="app-card-glow" /></div>
 
       {/* Business Health — bottom of dashboard */}

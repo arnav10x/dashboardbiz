@@ -11,7 +11,7 @@ import {
   TrendingUp, DollarSign, CreditCard, Wallet, Target, Flame,
   ArrowUpRight, ArrowDownRight, Plus, ChevronDown, ChevronUp,
   Monitor, Users, Megaphone, Building2, Wrench, MoreHorizontal,
-  ShieldCheck, AlertTriangle, X, Receipt,
+  ShieldCheck, AlertTriangle, X, Receipt, Download,
 } from 'lucide-react'
 
 /* ─── Types ─────────────────────────────────────────────────── */
@@ -179,6 +179,25 @@ export default function FinancePage() {
     setExpLogs(prev => prev.filter(e => e.id !== id))
   }
 
+  /* ─── CSV export ─── */
+  const downloadCSV = (rows: string[], filename: string) => {
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(new Blob([rows.join('\n')], { type: 'text/csv' }))
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(a.href)
+  }
+  const exportPeriods = () => downloadCSV(
+    ['period,revenue,expenses,net_profit,margin_pct,new_leads,new_customers',
+      ...periods.map(e => `${e.period_date},${e.revenue},${e.expenses},${e.revenue - e.expenses},${e.revenue > 0 ? Math.round(((e.revenue - e.expenses) / e.revenue) * 100) : 0},${e.new_leads},${e.new_customers}`)],
+    `prspectve-pl-${new Date().toISOString().slice(0, 10)}.csv`,
+  )
+  const exportExpenses = () => downloadCSV(
+    ['date,vendor,description,category,amount',
+      ...expLogs.map(e => `${e.expense_date},"${(e.vendor || '').replace(/"/g, '""')}","${(e.description || '').replace(/"/g, '""')}",${e.category},${e.amount}`)],
+    `prspectve-expenses-${new Date().toISOString().slice(0, 10)}.csv`,
+  )
+
   /* ─── Derived metrics ─── */
   const latest  = periods[periods.length - 1] ?? null
   const prev    = periods[periods.length - 2] ?? null
@@ -238,8 +257,16 @@ export default function FinancePage() {
   if (loading) return (
     <div className="flex min-h-full flex-col">
       <TopBar title="Finance" workspaceName={wsName} showGreeting hasData={false} actionLabel="Log period" actionHref="/dashboard/period-entry" />
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>Loading financial data…</p>
+      <div className="fo-page ov-page-padding" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <div className="skeleton" style={{ height: 42, borderRadius: 10 }} />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5" style={{ gap: 12 }}>
+          {[0, 1, 2, 3, 4].map(i => <div key={i} className="skeleton" style={{ height: 110, borderRadius: 13 }} />)}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
+          <div className="skeleton" style={{ height: 220, borderRadius: 13 }} />
+          <div className="skeleton" style={{ height: 220, borderRadius: 13 }} />
+        </div>
+        <div className="skeleton" style={{ height: 180, borderRadius: 13 }} />
       </div>
     </div>
   )
@@ -249,7 +276,7 @@ export default function FinancePage() {
     <div className="flex min-h-full flex-col">
       <TopBar title="Finance" workspaceName={wsName} showGreeting hasData={periods.length > 0} actionLabel="Log period" actionHref="/dashboard/period-entry" />
 
-      <div className="fo-page ov-page-padding" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+      <div className="fo-page ov-page-padding animate-in" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
 
         {/* ── Migration notice ── */}
         {!expTableReady && (
@@ -298,7 +325,7 @@ export default function FinancePage() {
             )}
 
             {/* ══ 2. KPI ROW (5 cards) ══════════════════════════════════ */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5" style={{ gap: 12 }}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 stagger-cards" style={{ gap: 12 }}>
               {/* This Month Revenue */}
               <Card>
                 <div style={{ padding: '16px' }}>
@@ -517,20 +544,31 @@ export default function FinancePage() {
                       </span>
                     )}
                   </div>
-                  {expTableReady && (
-                    <button
-                      onClick={() => setShowForm(s => !s)}
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700,
-                        padding: '6px 14px', borderRadius: 7, border: 'none', cursor: 'pointer',
-                        background: showForm ? 'var(--bg-hover)' : 'linear-gradient(180deg, var(--accent-hover), var(--accent))',
-                        color: showForm ? 'var(--text-muted)' : 'var(--accent-fg)',
-                      }}
-                    >
-                      {showForm ? <X style={{ width: 12, height: 12 }} /> : <Plus style={{ width: 12, height: 12 }} />}
-                      {showForm ? 'Cancel' : '+ Add Expense'}
-                    </button>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {expLogs.length > 0 && (
+                      <button
+                        onClick={exportExpenses}
+                        title="Export expenses as CSV"
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, padding: '6px 12px', borderRadius: 7, border: '1px solid var(--border)', cursor: 'pointer', background: 'transparent', color: 'var(--text-muted)' }}
+                      >
+                        <Download style={{ width: 12, height: 12 }} /> Export
+                      </button>
+                    )}
+                    {expTableReady && (
+                      <button
+                        onClick={() => setShowForm(s => !s)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 700,
+                          padding: '6px 14px', borderRadius: 7, border: 'none', cursor: 'pointer',
+                          background: showForm ? 'var(--bg-hover)' : 'linear-gradient(180deg, var(--accent-hover), var(--accent))',
+                          color: showForm ? 'var(--text-muted)' : 'var(--accent-fg)',
+                        }}
+                      >
+                        {showForm ? <X style={{ width: 12, height: 12 }} /> : <Plus style={{ width: 12, height: 12 }} />}
+                        {showForm ? 'Cancel' : '+ Add Expense'}
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Add expense form */}
@@ -793,7 +831,16 @@ export default function FinancePage() {
               <div style={{ padding: '20px', overflowX: 'auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                   <span style={S.label}>Monthly Period Breakdown</span>
-                  <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{periods.length} months</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>{periods.length} months</span>
+                    <button
+                      onClick={exportPeriods}
+                      title="Export P&L as CSV"
+                      style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontWeight: 600, padding: '5px 11px', borderRadius: 7, border: '1px solid var(--border)', cursor: 'pointer', background: 'transparent', color: 'var(--text-muted)' }}
+                    >
+                      <Download style={{ width: 11, height: 11 }} /> Export CSV
+                    </button>
+                  </div>
                 </div>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
                   <thead>

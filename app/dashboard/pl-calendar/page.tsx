@@ -5,7 +5,7 @@ import { TopBar } from '@/components/strata/TopBar'
 import { ConfirmDialog } from '@/components/strata/ConfirmDialog'
 import { createClient } from '@/lib/supabase/client'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { CalendarDays, ChevronDown, ChevronLeft, ChevronRight, Download, Info, Plus, X } from 'lucide-react'
+import { CalendarDays, ChevronLeft, ChevronRight, Download, Info, Plus, X } from 'lucide-react'
 
 type DayEntry = { date: string; revenue: number; expenses: number; notes?: string | null }
 type CalEvent = { id: string; title: string; description?: string | null; event_date: string; start_time?: string | null; end_time?: string | null; all_day: boolean; color: string; source?: string | null }
@@ -27,7 +27,7 @@ function hourLabel(h: number) { return `${h > 12 ? h - 12 : h} ${h >= 12 ? 'PM' 
 
 export default function CalendarPage() {
   const now = new Date()
-  const [activeTab, setActiveTab] = useState<'schedule' | 'pl'>('pl')
+  const [activeTab, setActiveTab] = useState<'schedule' | 'pl'>('schedule')
   const [year, setYear] = useState(now.getFullYear())
   const [month, setMonth] = useState(now.getMonth())
   const [weekOffset, setWeekOffset] = useState(0)
@@ -146,6 +146,12 @@ export default function CalendarPage() {
     await loadSchedule(); await loadPL()
   }
 
+  // Always responds, even when the agenda is already the active view
+  const goToAgenda = () => {
+    setScheduleView('Agenda')
+    document.getElementById('schedule-toolbar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   const exportCSV = () => {
     const rows = ['date,revenue,expenses,net_profit,notes', ...entryList.map(e => `${e.date},${e.revenue},${e.expenses},${e.revenue - e.expenses},"${e.notes || ''}"`)]
     const a = document.createElement('a')
@@ -170,13 +176,13 @@ export default function CalendarPage() {
 
         {activeTab === 'schedule' ? (
           <>
-            <div className="mb-3 flex items-center justify-between">
+            <div id="schedule-toolbar" className="mb-3 flex items-center justify-between">
               <div className="flex rounded-lg" style={panel({ overflow: 'hidden' })}>{(['Week','Month','Agenda'] as const).map(v => <button key={v} onClick={() => setScheduleView(v)} className="px-5 py-2 text-xs font-bold" style={{ color: scheduleView === v ? 'var(--accent)' : 'var(--text-secondary)', background: scheduleView === v ? 'var(--accent-faint)' : 'transparent' }}>{v}</button>)}</div>
               <div className="flex items-center gap-3">
                 <button className="rounded-lg px-4 py-2 text-sm font-bold" style={panel()} onClick={() => setWeekOffset(0)}>Today</button>
                 <button className="grid h-10 w-10 place-items-center rounded-lg" style={panel()} onClick={() => setWeekOffset(v => v - 1)}><ChevronLeft className="h-4 w-4" /></button>
                 <button className="grid h-10 w-10 place-items-center rounded-lg" style={panel()} onClick={() => setWeekOffset(v => v + 1)}><ChevronRight className="h-4 w-4" /></button>
-                <select value={eventFilter} onChange={e=>setEventFilter(e.target.value)} className="rounded-lg px-4 py-2 text-sm font-bold bg-transparent" style={panel()}><option value="All">All events</option><option value="#7c3aed">Meetings</option><option value="#1688ff">Calls</option><option value="#23c767">Focus/Sales</option><option value="#ff7a1a">Personal</option></select><button className="rounded-lg px-4 py-2 text-sm font-bold" style={panel()}>{MONTHS[wDates[0].getMonth()]} {wDates[0].getDate()} – {MONTHS[wDates[6].getMonth()]} {wDates[6].getDate()}, {wDates[6].getFullYear()} <ChevronDown className="ml-2 inline h-3 w-3" /></button>
+                <select value={eventFilter} onChange={e=>setEventFilter(e.target.value)} className="rounded-lg px-4 py-2 text-sm font-bold bg-transparent" style={panel()}><option value="All">All events</option><option value="#7c3aed">Meetings</option><option value="#1688ff">Calls</option><option value="#23c767">Focus/Sales</option><option value="#ff7a1a">Personal</option></select><div className="rounded-lg px-4 py-2 text-sm font-bold" style={panel()}>{MONTHS[wDates[0].getMonth()]} {wDates[0].getDate()} – {MONTHS[wDates[6].getMonth()]} {wDates[6].getDate()}, {wDates[6].getFullYear()}</div>
                 <button onClick={() => openEvent(dateKey(new Date()))} className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-black" style={{ background: 'linear-gradient(180deg, var(--accent-hover), var(--accent))', color: 'var(--accent-fg)' }}><Plus className="h-4 w-4" /> Add Event</button>
               </div>
             </div>
@@ -219,7 +225,7 @@ export default function CalendarPage() {
                   Google Calendar sync coming soon
                 </div>
               </div>
-              <div className="p-5" style={panel()}><div className="mb-4 flex justify-between"><h3 className="font-black">Upcoming Events</h3><button onClick={()=>setScheduleView('Agenda')} className="text-sm font-bold" style={{ color: 'var(--accent)' }}>View full agenda →</button></div>{displayEvents.filter(e=>!e.all_day).slice(0,5).length ? displayEvents.filter(e=>!e.all_day).slice(0,5).map(e=><button key={e.id} onClick={()=>openEvent(e.event_date,e)} className="mb-3 flex w-full items-center gap-3 text-left"><div className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: `${e.color}20`, color: e.color }}><CalendarDays className="h-4 w-4" /></div><p className="flex-1 font-bold">{e.title}</p><span className="text-sm" style={{ color: 'var(--text-muted)' }}>{e.start_time?.slice(0,5)} – {e.end_time?.slice(0,5)}</span><span className="rounded-md px-2 py-1 text-xs" style={{ color: e.color, background: `${e.color}18` }}>Event</span></button>) : <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No upcoming events yet. Double-click any time slot in the week view to create one.</p>}</div>
+              <div className="p-5" style={panel()}><div className="mb-4 flex justify-between"><h3 className="font-black">Upcoming Events</h3><button onClick={goToAgenda} className="text-sm font-bold" style={{ color: 'var(--accent)' }}>View full agenda →</button></div>{displayEvents.filter(e=>!e.all_day).slice(0,5).length ? displayEvents.filter(e=>!e.all_day).slice(0,5).map(e=><button key={e.id} onClick={()=>openEvent(e.event_date,e)} className="mb-3 flex w-full items-center gap-3 text-left"><div className="grid h-8 w-8 place-items-center rounded-lg" style={{ background: `${e.color}20`, color: e.color }}><CalendarDays className="h-4 w-4" /></div><p className="flex-1 font-bold">{e.title}</p><span className="text-sm" style={{ color: 'var(--text-muted)' }}>{e.start_time?.slice(0,5)} – {e.end_time?.slice(0,5)}</span><span className="rounded-md px-2 py-1 text-xs" style={{ color: e.color, background: `${e.color}18` }}>Event</span></button>) : <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No upcoming events yet. Double-click any time slot in the week view to create one.</p>}</div>
             </div>
           </>
         ) : (
@@ -227,7 +233,7 @@ export default function CalendarPage() {
             <div className="mb-5 grid grid-cols-5 gap-3 stagger-cards">{[
               ['Total Net Profit', money(totalProfit), 'This month'], ['Highest Day', high ? money(high.revenue - high.expenses) : '$0', high ? new Date(high.date+'T12:00:00').toLocaleDateString('en-US',{ month:'short', day:'numeric', year:'numeric' }) : ''], ['Lowest Day', low ? money(low.revenue - low.expenses) : '$0', low ? new Date(low.date+'T12:00:00').toLocaleDateString('en-US',{ month:'short', day:'numeric', year:'numeric' }) : ''], ['Profit Days', String(profitDays), `${entryList.length ? Math.round(profitDays / entryList.length * 100) : 0}% of days`], ['Loss Days', String(lossDays), `${entryList.length ? Math.round(lossDays / entryList.length * 100) : 0}% of days`]
             ].map(c => <div key={c[0]} className="app-card" style={{ minHeight: 100 }}><div className="app-card-inner" style={{ padding: '16px 18px 14px' }}><p className="fo-kicker mb-3">{c[0]}</p><p className="text-2xl font-black fo-num" style={{ color: 'var(--text-primary)' }}>{c[1]}</p><p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>{c[2]}</p></div><div className="app-card-glow" /></div>)}</div>
-            <div className="mb-3 flex items-center gap-3" style={panel({ padding: 10 })}><button onClick={() => setMonth(m => m === 0 ? (setYear(y => y - 1), 11) : m - 1)} className="grid h-9 w-9 place-items-center rounded-lg" style={panel()}><ChevronLeft className="h-4 w-4" /></button><button onClick={() => setMonth(m => m === 11 ? (setYear(y => y + 1), 0) : m + 1)} className="grid h-9 w-9 place-items-center rounded-lg" style={panel()}><ChevronRight className="h-4 w-4" /></button><div className="px-4 font-bold">{MONTHS[month]} {year} <ChevronDown className="inline h-4 w-4" /></div><div className="flex-1" /><button className="rounded-lg px-4 py-2 text-sm font-bold" style={panel()}>Month <ChevronDown className="inline h-3 w-3" /></button><button onClick={exportCSV} className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold" style={panel()}><Download className="h-4 w-4" /> Export</button></div>
+            <div className="mb-3 flex items-center gap-3" style={panel({ padding: 10 })}><button onClick={() => setMonth(m => m === 0 ? (setYear(y => y - 1), 11) : m - 1)} className="grid h-9 w-9 place-items-center rounded-lg" style={panel()}><ChevronLeft className="h-4 w-4" /></button><button onClick={() => setMonth(m => m === 11 ? (setYear(y => y + 1), 0) : m + 1)} className="grid h-9 w-9 place-items-center rounded-lg" style={panel()}><ChevronRight className="h-4 w-4" /></button><div className="px-4 font-bold">{MONTHS[month]} {year}</div><div className="flex-1" /><button onClick={exportCSV} className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold" style={panel()}><Download className="h-4 w-4" /> Export</button></div>
             <div className="overflow-hidden" style={panel()}><div className="grid grid-cols-7 border-b" style={{ borderColor:'var(--glass-border)' }}>{DAYS.map(d => <div key={d} className="py-3 text-center text-xs font-black">{d}</div>)}</div><div className="grid grid-cols-7">{cells.map((d,i)=>{ const k=d?keyFor(d):''; const e=d?entries[k]:null; const p=e?e.revenue-e.expenses:0; return <button key={i} disabled={!d} onClick={()=>d&&openPL(d)} className="h-[84px] border-r border-b p-3 text-left transition hover:bg-white/[.03]" style={{ borderColor:'var(--glass-border)', background: d ? (p>0?'var(--accent-faint)':p<0?'rgba(255,77,77,.08)':'var(--overlay-micro)') : 'transparent', outline: d && k===todayKey?'1px solid var(--accent)':'none', outlineOffset: -1 }}><p className="text-sm">{d || ''}</p>{d && <><p className="mt-2 text-base font-black" style={{ color:p>0?'var(--accent)':p<0?'#ff4d4d':'var(--text-primary)' }}>{p===0?'$0':signed(p)}</p><p className="text-xs" style={{ color:'var(--text-secondary)' }}>{events.filter(ev=>ev.event_date===k).length} events</p></>}</button>})}</div></div>
             <div className="mt-4 flex gap-4 text-xs" style={{ color: 'var(--text-secondary)' }}><span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-[var(--accent)]"/> Profit (&gt;$0)</span><span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-[#ff4d4d]"/> Loss (&lt;$0)</span><span className="flex items-center gap-2"><i className="h-2 w-2 rounded-full bg-gray-500"/> Break-even ($0)</span></div>
             <div className="mt-4 grid gap-4 xl:grid-cols-[.75fr_1.25fr]"><div className="p-5" style={panel()}><h3 className="mb-5 font-black">Profit / Loss Insights</h3>{[`Your highest profit day was ${high ? new Date(high.date+'T12:00:00').toLocaleDateString('en-US',{ month:'short', day:'numeric' }) : 'not logged'} with ${high ? money(high.revenue-high.expenses) : '$0'}.`, `You had ${lossDays} loss days this month.`, `Net profit is ${totalProfit >= 0 ? 'up' : 'down'} this month.`].map((t,i)=><p key={i} className="mb-5 text-sm" style={{ color: 'var(--text-secondary)' }}>{t}</p>)}</div><div className="p-5" style={panel()}><h3 className="mb-3 font-black">Daily Net Profit Trend</h3><div className="h-48"><ResponsiveContainer><AreaChart data={trend}><CartesianGrid stroke="var(--chart-grid)" vertical={false}/><XAxis dataKey="day" tick={{ fill:'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false}/><YAxis tick={{ fill:'var(--text-muted)', fontSize: 10 }} axisLine={false} tickLine={false}/><Tooltip contentStyle={{ background:'var(--tooltip-bg)', border:'1px solid var(--tooltip-border)', borderRadius:8 }}/><Area dataKey="profit" stroke="var(--accent)" fill="var(--accent-muted)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></div></div>

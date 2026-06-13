@@ -47,6 +47,12 @@ interface TopBarProps {
 
 export function TopBar({ title, workspaceName, hasData = false, actionLabel, actionHref, onAction, userName, showGreeting = false }: TopBarProps) {
   const router = useRouter()
+  // Default to Ctrl K (most users); swap to ⌘K on Apple devices after mount
+  const [shortcutLabel, setShortcutLabel] = useState('Ctrl K')
+  useEffect(() => {
+    const ua = `${navigator.platform || ''} ${navigator.userAgent || ''}`
+    if (/Mac|iPhone|iPad|iPod/i.test(ua)) setShortcutLabel('⌘K')
+  }, [])
   const [fetchedName, setFetchedName] = useState<string | null>(null)
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
@@ -113,13 +119,13 @@ export function TopBar({ title, workspaceName, hasData = false, actionLabel, act
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
         <button
           onClick={() => window.dispatchEvent(new Event('prspectve-open-palette'))}
-          title="Search & commands (⌘K)"
+          title={`Search & commands (${shortcutLabel})`}
           className="hidden md:flex"
           style={{ alignItems: 'center', gap: 8, height: 34, padding: '0 10px 0 12px', borderRadius: 9, background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-muted)', cursor: 'pointer', fontSize: 12 }}
         >
           <Search style={{ width: 13, height: 13, flexShrink: 0 }} />
           <span style={{ fontWeight: 500 }}>Search</span>
-          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 5, background: 'var(--overlay-faint)', border: '1px solid var(--border)', lineHeight: 1.2 }}>⌘K</span>
+          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 6px', borderRadius: 5, background: 'var(--overlay-faint)', border: '1px solid var(--border)', lineHeight: 1.2 }}>{shortcutLabel}</span>
         </button>
 
         <NotificationBell />

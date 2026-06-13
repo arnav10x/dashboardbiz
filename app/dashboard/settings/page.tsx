@@ -115,6 +115,7 @@ export default function SettingsPage() {
   const [entryCount, setEntryCount] = useState(0)
   const [clearConfirmOpen, setClearConfirmOpen] = useState(false)
   const [clearing, setClearing] = useState(false)
+  const [exporting, setExporting] = useState(false)
   const [clearInput, setClearInput] = useState('')
 
   useEffect(() => {
@@ -367,6 +368,42 @@ export default function SettingsPage() {
     await supabase.auth.signOut()
     localStorage.clear()
     window.location.href = '/signup'
+  }
+
+  const exportAllData = async () => {
+    setExporting(true)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const [periods, calEntries, taskRows, leads, expenses, revenues, events] = await Promise.all([
+        supabase.from('period_entries').select('*').eq('user_id', user.id),
+        supabase.from('cal_entries').select('*').eq('user_id', user.id),
+        supabase.from('tasks').select('*').eq('user_id', user.id),
+        supabase.from('pipeline_leads').select('*').eq('user_id', user.id),
+        supabase.from('expense_logs').select('*').eq('user_id', user.id),
+        supabase.from('revenue_logs').select('*').eq('user_id', user.id),
+        supabase.from('calendar_events').select('*').eq('user_id', user.id),
+      ])
+      const payload = {
+        exported_at: new Date().toISOString(),
+        account: { email: user.email },
+        period_entries: periods.data || [],
+        daily_pl_entries: calEntries.data || [],
+        tasks: taskRows.data || [],
+        pipeline_leads: leads.data || [],
+        expense_logs: expenses.data || [],
+        revenue_logs: revenues.data || [],
+        calendar_events: events.data || [],
+      }
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' }))
+      a.download = `prspectve-export-${new Date().toISOString().slice(0, 10)}.json`
+      a.click()
+      URL.revokeObjectURL(a.href)
+    } finally {
+      setExporting(false)
+    }
   }
 
   const clearAllData = async () => {
@@ -966,8 +1003,8 @@ export default function SettingsPage() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between py-2" style={{ borderBottom: '1px solid var(--border)' }}>
                       <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>Export all data (JSON)</span>
-                      <button className="text-xs font-semibold px-3 py-1.5 rounded-lg" style={{ background: 'var(--bg-raised)', color: 'var(--text-secondary)', border: '1px solid var(--border-strong)' }}>
-                        Export
+                      <button onClick={exportAllData} disabled={exporting} className="text-xs font-semibold px-3 py-1.5 rounded-lg disabled:opacity-50" style={{ background: 'var(--bg-raised)', color: 'var(--text-secondary)', border: '1px solid var(--border-strong)' }}>
+                        {exporting ? 'Exporting…' : 'Export'}
                       </button>
                     </div>
                     <div className="flex items-center justify-between py-2" style={{ borderBottom: '1px solid var(--border)' }}>
